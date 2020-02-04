@@ -1,0 +1,16 @@
+2020-Jan-24 11:15:34[http-nio-8080-exec-52]INFO epam.pratsaunik.tickets.filter.EncodingFIlter-Encoding Filter works!
+2020-Jan-24 11:15:34[http-nio-8080-exec-54]INFO epam.pratsaunik.tickets.filter.EncodingFIlter-Encoding Filter works!
+2020-Jan-24 11:15:34[http-nio-8080-exec-55]INFO epam.pratsaunik.tickets.filter.CurrentPageFilter-Current page filter works!
+2020-Jan-24 11:15:34[http-nio-8080-exec-55]INFO epam.pratsaunik.tickets.filter.CurrentPageFilter-http://localhost:8080/tickets/
+2020-Jan-24 11:15:34[http-nio-8080-exec-55]INFO epam.pratsaunik.tickets.filter.EncodingFIlter-Encoding Filter works!
+2020-Jan-24 11:15:34[http-nio-8080-exec-56]INFO epam.pratsaunik.tickets.filter.CurrentPageFilter-Current page filter works!
+2020-Jan-24 11:15:34[http-nio-8080-exec-56]INFO epam.pratsaunik.tickets.filter.CurrentPageFilter-http://localhost:8080/tickets/
+2020-Jan-24 11:15:34[http-nio-8080-exec-56]INFO epam.pratsaunik.tickets.filter.EncodingFIlter-Encoding Filter works!
+2020-Jan-24 11:15:42[http-nio-8080-exec-57]INFO epam.pratsaunik.tickets.filter.CurrentPageFilter-Current page filter works!
+2020-Jan-24 11:15:42[http-nio-8080-exec-57]INFO epam.pratsaunik.tickets.filter.CurrentPageFilter-http://localhost:8080/tickets/
+2020-Jan-24 11:15:42[http-nio-8080-exec-57]INFO epam.pratsaunik.tickets.filter.EncodingFIlter-Encoding Filter works!
+2020-Jan-24 11:15:42[http-nio-8080-exec-57]INFO epam.pratsaunik.tickets.servlet.MainServlet---------------------------- i n f o ----------------
+2020-Jan-24 11:15:42[http-nio-8080-exec-58]INFO epam.pratsaunik.tickets.filter.CurrentPageFilter-Current page filter works!
+2020-Jan-24 11:15:42[http-nio-8080-exec-58]INFO epam.pratsaunik.tickets.filter.CurrentPageFilter-http://localhost:8080/tickets/
+2020-Jan-24 11:15:42[http-nio-8080-exec-58]INFO epam.pratsaunik.tickets.filter.EncodingFIlter-Encoding Filter works!
+2020-Jan-24 11:15:42[http-nio-8080-exec-58]INFO epam.pratsaunik.tickets.servlet.MainServlet---------------------------- i n f o ----------------

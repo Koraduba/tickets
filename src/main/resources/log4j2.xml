@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="debug" strict="true" name="XMLConfigTest"
+               packages="org.apache.logging.log4j.test">
+    <Properties>
+        <Property name="LOG_DIR">C:/HTP14/tickets/logs</Property>
+        <Property name="ARCHIVE_LOG_DIR">${LOG_DIR}/archive</Property>
+        <Property name="pattern_console">%d{DEFAULT}%-5level%logger{1}-%msg%n</Property>
+        <Property name="pattern_file">%d{yyyy-MMM-dd HH:mm:ss}[%t]%-5level%logger{5}-%msg%n</Property>
+    </Properties>
+
+    <Appenders>
+
+        <Console type="Console" name="Console" target="SYSTEM_OUT">
+            <Patternlayout pattern="${pattern_console}"/>
+        </Console>
+
+        <File name="File1" filename="${LOG_DIR}/text.log" buferredIO="true">
+            <Patternlayout pattern="${pattern_file}"/>
+        </File>
+
+        <RollingFile name="File" filename="${LOG_DIR}/text_arc.log" append="true"
+        filePattern="${ARCHIVE_LOG_DIR}/${date:yyyy-MM-dd}/%d{yyyy-MM-dd_HH-mm}_%i.log">
+            <Patternlayout pattern="${pattern_file}"/>
+            <Policies>
+                <SizeBasedTriggeringPolicy size = "5 KB"/>
+            </Policies>
+            <DefaultRolloverStrategy max="10"/>
+        </RollingFile>
+    </Appenders>
+
+    <Loggers>
+        <Root level="debug">
+
+            <AppenderRef ref="Console" level="info"/>
+            <AppenderRef ref="File"/>
+            <AppenderRef ref="File1" level="trace"/>
+        </Root>
+    </Loggers>
+
+</Configuration>

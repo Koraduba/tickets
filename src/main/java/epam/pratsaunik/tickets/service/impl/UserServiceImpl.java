@@ -1,0 +1,81 @@
+package epam.pratsaunik.tickets.service.impl;
+
+
+import epam.pratsaunik.tickets.dao.EntityTransaction;
+import epam.pratsaunik.tickets.dao.UserDao;
+import epam.pratsaunik.tickets.dao.impl.UserDaoImpl;
+import epam.pratsaunik.tickets.entity.User;
+import epam.pratsaunik.tickets.exception.DaoException;
+import epam.pratsaunik.tickets.exception.ServiceLevelException;
+import epam.pratsaunik.tickets.hash.PasswordHash;
+import epam.pratsaunik.tickets.service.Service;
+import epam.pratsaunik.tickets.service.UserService;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+import java.util.List;
+
+public class UserServiceImpl implements UserService, Service {
+
+    private final static Logger log = LogManager.getLogger();
+
+    @Override
+    public User create(User user) throws ServiceLevelException {
+
+        UserDao userDao = new UserDaoImpl();
+        EntityTransaction entityTransaction = new EntityTransaction();
+        entityTransaction.begin(userDao);
+        try {
+            userDao.create(user);
+            entityTransaction.commit();
+        } catch (DaoException e) {
+            throw new ServiceLevelException(e);
+        } finally {
+            entityTransaction.end();
+        }
+        return user;
+    }
+
+    @Override
+    public List<User> findAllUsers() throws ServiceLevelException {
+        List<User> users;
+        UserDao userDao = new UserDaoImpl();
+        EntityTransaction entityTransaction = new EntityTransaction();
+        entityTransaction.begin(userDao);
+        try {
+            users = userDao.findAll();
+        } catch (DaoException e) {
+            throw new ServiceLevelException(e);
+        }
+        entityTransaction.commit();
+        entityTransaction.end();
+        return users;
+    }
+
+    public List<User> findUserByLogin(String login) throws ServiceLevelException {
+        UserDao userDao = new UserDaoImpl();
+        List<User> user;
+        EntityTransaction entityTransaction = new EntityTransaction();
+        entityTransaction.begin(userDao);
+        try {
+            user = userDao.findUserByLogin(login);
+        } catch (DaoException e) {
+            throw new ServiceLevelException(e);
+        }
+        entityTransaction.commit();
+        entityTransaction.end();
+        return user;
+    }
+
+    public boolean checkUser(String login, String password, User user) {
+        log.debug(user.getPassword());
+        log.debug(PasswordHash.getHash(password));
+        log.debug(login);
+        log.debug(user.getLogin());
+        return login.equalsIgnoreCase(user.getLogin()) && PasswordHash.getHash(password).equals(user.getPassword());
+    }
+
+    ;
+
+
+}
