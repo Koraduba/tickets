@@ -1,91 +1,97 @@
 package epam.pratsaunik.tickets.connection;
 
 import epam.pratsaunik.tickets.exception.ConnectionException;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.util.ArrayDeque;
-import java.util.Queue;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingDeque;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 import static epam.pratsaunik.tickets.connection.DbConfigurationManager.*;
 
 public class ConnectionPoll {
 
-    private static final int DEFAULT_SIZE = 5;
-    private BlockingQueue<ProxyConnection> availableCon;
-    private Queue<ProxyConnection> usedCons;
-    private static ConnectionPoll instance = null;
+    private static final int MAX_SIZE = 5;
+    private BlockingQueue<ProxyConnection> availableCon = new LinkedBlockingDeque<>();
+    private static ConnectionPoll instance;
+    private static AtomicBoolean isNotCreated = new AtomicBoolean(true);
+    private static AtomicInteger consCount=new AtomicInteger(0);
+    private static Lock lock = new ReentrantLock();
+    private final static Logger log = LogManager.getLogger();
 
-    private ConnectionPoll() {
+    private ConnectionPoll() throws ConnectionException {
         try {
             Class.forName(DbConfigurationManager.getInstance().getProperty(DATABASE_DRIVER_NAME));
         } catch (ClassNotFoundException e) {
-            e.printStackTrace(); // FIXME: 1/29/2020
-        }
-        availableCon = new LinkedBlockingDeque<>();
-        usedCons = new ArrayDeque<ProxyConnection>();
-        for (int i = 0; i < DEFAULT_SIZE; i++) {
-            availableCon.add(getConnection());
+            throw new ConnectionException(e);
         }
     }
 
-    public static ConnectionPoll getInstance() {
-        if (instance == null) {
-            instance = new ConnectionPoll();
+    public static ConnectionPoll getInstance() throws ConnectionException {
+        if (isNotCreated.get()) {
+            lock.lock();
+            try {
+                if (instance == null) {
+                    instance = new ConnectionPoll();
+                    isNotCreated.set(false);
+                }
+            } finally {
+                lock.unlock();
+            }
         }
         return instance;
     }
 
-    private ProxyConnection getConnection() {
-        Connection connection = null;
+    private ProxyConnection getConnection() throws ConnectionException {
+        Connection connection;
         try {
             connection = DriverManager.getConnection(DbConfigurationManager.getInstance().getProperty(DATABASE_URL),
                     DbConfigurationManager.getInstance().getProperty(DATABASE_USERNAME),
                     DbConfigurationManager.getInstance().getProperty(DATABASE_PWD));
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new ConnectionException(e);
         }
         return new ProxyConnection(connection);
     }
 
-    //TODO lock
-    public Connection retrieveConnection() {
-        ProxyConnection connection = null;
-        if (availableCon.size() == 0) {
-            connection = getConnection();
-
-        } else {
-            try {
+    public Connection retrieveConnection() throws ConnectionException {
+        ProxyConnection connection;
+        try {
+            connection = availableCon.poll(5, TimeUnit.MILLISECONDS);
+            if (connection == null) {
+                lock.lock();
+                if (consCount.get() < MAX_SIZE) {
+                    availableCon.add(getConnection());
+                    consCount.incrementAndGet();
+                }
+                lock.unlock();
                 connection = availableCon.take();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
             }
-            usedCons.offer(connection);
-            System.out.println("Connection retrieved " + connection.toString());
+        } catch (InterruptedException e) {
+            throw new ConnectionException(e);
         }
-        usedCons.add(connection);
         return connection;
     }
 
-    public synchronized void returnConnection(Connection connection) throws ConnectionException {
-
+    public void returnConnection(Connection connection) throws ConnectionException {
         if (connection.getClass() == ProxyConnection.class) {
-            usedCons.remove(connection);
             availableCon.offer((ProxyConnection) connection);
-            System.out.println("Connection returned " + connection.toString());
-        }else
+            consCount.decrementAndGet();
+            log.info("Connection returned " + connection.toString());
+        } else
             throw new ConnectionException();
     }
 
-    public int getAvailableConnections() {
-        return availableCon.size();
-    }
-
     public void destroyPoll() {
-        for (int i = 0; i < DEFAULT_SIZE; i++) {
+        for (int i = 0; i < consCount.get(); i++) {
             try {
                 availableCon.take().reallyClose();
             } catch (InterruptedException e) {

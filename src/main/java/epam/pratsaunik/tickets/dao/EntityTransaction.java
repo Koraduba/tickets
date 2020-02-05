@@ -4,19 +4,27 @@ package epam.pratsaunik.tickets.dao;
 import epam.pratsaunik.tickets.connection.ConnectionPoll;
 import epam.pratsaunik.tickets.exception.ConnectionException;
 import epam.pratsaunik.tickets.exception.CustomException;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.sql.Connection;
 import java.sql.SQLException;
 
 public class EntityTransaction {
     private Connection connection;
+    private final static Logger log = LogManager.getLogger();
 
     public EntityTransaction() {
     }
 
     public void begin(AbstractDAO... daos) {
         if(connection==null){
-            connection=ConnectionPoll.getInstance().retrieveConnection();
+            try {
+                connection=ConnectionPoll.getInstance().retrieveConnection();
+            } catch (ConnectionException e) {
+               log.error("Connection error"+e);
+               throw new RuntimeException();
+            }
         }
         try {
             connection.setAutoCommit(false);

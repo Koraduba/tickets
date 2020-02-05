@@ -39,7 +39,7 @@ public class UserDaoImpl extends UserDao {
     @Override
     public List<User> findUserByName(String name) throws DaoException {
 
-        List<User> users = new ArrayList<User>();
+        List<User> users = new ArrayList<>();
         PreparedStatement statement=null;
         try {
             statement=connection.prepareStatement(SQL_SELECT_USER_BY_NAME);
@@ -59,7 +59,7 @@ public class UserDaoImpl extends UserDao {
         } catch (SQLException e) {
             throw new DaoException(e);
         }
-        finally { ;
+        finally {
             try {
                 statement.close();
             } catch (SQLException e) {
@@ -77,7 +77,7 @@ public class UserDaoImpl extends UserDao {
     @Override
     public List<User> findUserByLogin(String login) throws DaoException {
 
-        List<User> users = new ArrayList<User>();
+        List<User> users = new ArrayList<>();
         PreparedStatement statement=null;
         try {
             statement=connection.prepareStatement(SQL_SELECT_USER_BY_LOGIN);
@@ -99,7 +99,7 @@ public class UserDaoImpl extends UserDao {
         } catch (SQLException e) {
             throw new DaoException(e);
         }
-        finally { ;
+        finally {
             try {
                 statement.close();
             } catch (SQLException e) {
@@ -111,7 +111,7 @@ public class UserDaoImpl extends UserDao {
 
     @Override
     public List<User> findAll() throws DaoException {
-        List<User> users = new ArrayList<User>();
+        List<User> users = new ArrayList<>();
         Statement statement=null;
         try {
             statement=connection.createStatement();
@@ -130,7 +130,7 @@ public class UserDaoImpl extends UserDao {
         } catch (SQLException e) {
             throw new DaoException(e);
         }
-        finally { ;
+        finally {
             try {
                 statement.close();
             } catch (SQLException e) {
