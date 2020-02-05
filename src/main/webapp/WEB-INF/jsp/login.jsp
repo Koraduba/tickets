@@ -1,11 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ taglib prefix="ctg" uri="/WEB-INF/tld/custom.tld" %>
 <%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-<fmt:setLocale value="en_US" scope="session" />
+<fmt:setLocale value="${locale}" scope="session" />
 <fmt:setBundle basename="property.pagecontent" var="rb" />
 <html><head><title>Login</title></head>
     <body>
-    <ctg:info-time/>
         <form name="loginForm" method="POST" action="mainservlet">
             <input type="hidden" name="command" value="login" />
             <fmt:message key="label.login" bundle="${rb}" /><br/>

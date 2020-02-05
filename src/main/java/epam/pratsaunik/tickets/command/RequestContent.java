@@ -1,9 +1,12 @@
 package epam.pratsaunik.tickets.command;
 
+import epam.pratsaunik.tickets.entity.Role;
+import epam.pratsaunik.tickets.servlet.AttributeName;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -18,16 +21,15 @@ public class RequestContent {
         for (Map.Entry<String, String []> entry : request.getParameterMap().entrySet()) {
             requestParameters.put(entry.getKey(), entry.getValue());
         }
+        String role=(String)request.getSession().getAttribute(AttributeName.USER_ROLE);
+        requestAttributes.put(AttributeName.USER_ROLE,role);
     }
 
     public void insertAttributes(HttpServletRequest request) {
         for (Map.Entry<String, Object> entry : requestAttributes.entrySet()) {
-            log.info(entry);
             request.setAttribute(entry.getKey(), entry.getValue());
         }
         for (Map.Entry<String, Object> entry : sessionAttributes.entrySet()) {
-            log.info(entry);
-            request.setAttribute(entry.getKey(), entry.getValue());
             request.getSession(true).setAttribute(entry.getKey(),entry.getValue());
         }
     }

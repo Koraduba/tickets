@@ -12,6 +12,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.Enumeration;
+import java.util.Locale;
 
 public class MainServlet extends HttpServlet {
     private final static Logger log = LogManager.getLogger();
@@ -30,6 +33,26 @@ public class MainServlet extends HttpServlet {
     public void doPost(HttpServletRequest request, HttpServletResponse response) {
         log.info("--------------------------- i n f o ----------------");
         log.info(request.getParameter(ParameterName.COMMAND));
+        PrintWriter out = null;
+        try {
+            out = response.getWriter();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        Locale userPreferredLocale = request.getLocale();
+        Enumeration userPreferredLocales = request.getLocales();
+
+        out.println("Preferred Locale: " + userPreferredLocale.toString());
+        out.println("");
+        out.print("Preferred Locales: ");
+
+        while (userPreferredLocales.hasMoreElements()) {
+            userPreferredLocale = (Locale) userPreferredLocales.nextElement();
+            out.print(userPreferredLocale.toString() + ", ");
+        }
+        out.println();
+        out.println("");
         RequestContent content = new RequestContent();
         content.extractValues(request);
         String commandName = content.getRequestParameter(ParameterName.COMMAND);

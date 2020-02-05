@@ -1,7 +1,9 @@
 package epam.pratsaunik.tickets.command.impl;
 
+import com.sun.org.apache.xml.internal.utils.ThreadControllerWrapper;
 import epam.pratsaunik.tickets.command.AbstractCommand;
 import epam.pratsaunik.tickets.command.RequestContent;
+import epam.pratsaunik.tickets.entity.Role;
 import epam.pratsaunik.tickets.entity.User;
 import epam.pratsaunik.tickets.exception.ServiceLevelException;
 import epam.pratsaunik.tickets.service.Service;
@@ -16,6 +18,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
+import java.util.Locale;
 
 public class LoginCommand extends AbstractCommand {
 
@@ -44,8 +47,14 @@ public class LoginCommand extends AbstractCommand {
             }
 
             if (hasAccount) {
-                content.setSessionAttribute("role", user.get(0).getRole().toString());
-                page = ConfigurationManager.getInstance().getProperty(ConfigurationManager.CATALOG_PAGE_PATH);
+                Role role=user.get(0).getRole();
+
+                content.setRequestAttribute(AttributeName.USER_ROLE,role.toString());
+                Locale rus = new Locale("ru", "RU");
+                content.setSessionAttribute(AttributeName.LOCALE, rus);
+                content.setSessionAttribute(AttributeName.USER, user.get(0));
+                log.debug(role);
+                page = ConfigurationManager.getInstance().getProperty(ConfigurationManager.LOGIN_PAGE_PATH);
             } else {
                 content.setRequestAttribute("errorLoginPassMessage", MessageManager.NO_SUCH_USER);
                 page = ConfigurationManager.getInstance().getProperty(ConfigurationManager.LOGIN_PAGE_PATH);
