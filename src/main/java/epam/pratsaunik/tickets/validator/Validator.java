@@ -3,6 +3,7 @@ package epam.pratsaunik.tickets.validator;
 import epam.pratsaunik.tickets.command.RequestContent;
 import epam.pratsaunik.tickets.servlet.AttributeName;
 import epam.pratsaunik.tickets.servlet.ParameterName;
+import epam.pratsaunik.tickets.util.MessageType;
 import epam.pratsaunik.tickets.util.MessageManager;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -49,7 +50,7 @@ public class Validator {
             result = false;
         }
         if (!result){
-            content.setRequestAttribute(AttributeName.ERROR_LOGIN_PASS_MESSAGE, MessageManager.getProperty(MessageManager.INPUT_ERROR));
+            content.setRequestAttribute(AttributeName.ERROR_LOGIN_PASS_MESSAGE, MessageManager.INSTANCE.getProperty(MessageType.INPUT_ERROR));
         }
         return result;
     }

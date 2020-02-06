@@ -1,22 +1,18 @@
 package epam.pratsaunik.tickets.command.impl;
 
-import com.sun.org.apache.xml.internal.utils.ThreadControllerWrapper;
 import epam.pratsaunik.tickets.command.AbstractCommand;
 import epam.pratsaunik.tickets.command.RequestContent;
-import epam.pratsaunik.tickets.entity.Role;
 import epam.pratsaunik.tickets.entity.User;
 import epam.pratsaunik.tickets.exception.ServiceLevelException;
 import epam.pratsaunik.tickets.service.Service;
 import epam.pratsaunik.tickets.service.impl.UserServiceImpl;
 import epam.pratsaunik.tickets.servlet.AttributeName;
 import epam.pratsaunik.tickets.util.ConfigurationManager;
+import epam.pratsaunik.tickets.util.MessageType;
 import epam.pratsaunik.tickets.util.MessageManager;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
 
@@ -36,27 +32,21 @@ public class LoginCommand extends AbstractCommand {
         String password = content.getRequestParameter("password");
         boolean hasAccount;
         try {
-            List<User> user = ((UserServiceImpl) service).findUserByLogin(login);//todo
+            List<User> user = ((UserServiceImpl) service).findUserByLogin(login);
             if (user.isEmpty()) {
-                log.debug("not found user with such login");
+                log.info("No user with such login");
                 hasAccount = false;
             } else {
-                log.debug(password);
-                log.debug(user.get(0).getPassword());
                 hasAccount = ((UserServiceImpl) service).checkUser(login, password, user.get(0));
             }
-
             if (hasAccount) {
-                Role role=user.get(0).getRole();
-
-                content.setRequestAttribute(AttributeName.USER_ROLE,role.toString());
+                content.setRequestAttribute(AttributeName.USER_ROLE,user.get(0).getRole().toString());
                 Locale rus = new Locale("ru", "RU");
                 content.setSessionAttribute(AttributeName.LOCALE, rus);
                 content.setSessionAttribute(AttributeName.USER, user.get(0));
-                log.debug(role);
-                page = ConfigurationManager.getInstance().getProperty(ConfigurationManager.LOGIN_PAGE_PATH);
+                page = ConfigurationManager.getInstance().getProperty(ConfigurationManager.CATALOG_PAGE_PATH);
             } else {
-                content.setRequestAttribute("errorLoginPassMessage", MessageManager.NO_SUCH_USER);
+                content.setRequestAttribute("errorLoginPassMessage", MessageManager.INSTANCE.getProperty(MessageType.NO_SUCH_USER));
                 page = ConfigurationManager.getInstance().getProperty(ConfigurationManager.LOGIN_PAGE_PATH);
             }
         } catch (ServiceLevelException e) {

@@ -17,7 +17,7 @@ public class CustomTag extends TagSupport {
         GregorianCalendar gc = new GregorianCalendar();
         String name = "Name: <b>"+((User)pageContext.getSession().getAttribute("user")).getName()+"</b>. ";
         String role = "Role: <b>"+((User)pageContext.getSession().getAttribute("user")).getRole().toString()+"</b>. ";
-        String locale = "Locale : <b> " + Locale.getDefault() + "</b>.";
+        String locale = "Locale : <b> " + pageContext.getSession().getAttribute("locale") + "</b>.";
 
         try {
             JspWriter out = pageContext.getOut();

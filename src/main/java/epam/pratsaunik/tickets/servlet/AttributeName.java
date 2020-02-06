@@ -1,6 +1,8 @@
 package epam.pratsaunik.tickets.servlet;
 
 public class AttributeName {
+    private AttributeName(){}
+
     public final static String USER="user";
     public final static String LOCALE="locale";
     public final static String USERS="users";
