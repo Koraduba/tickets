@@ -1,11 +1,13 @@
 package epam.pratsaunik.tickets.servlet;
 
+import epam.pratsaunik.tickets.connection.ProxyConnection;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import javax.mail.*;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -23,16 +25,11 @@ public class EmailServlet extends HttpServlet {
         final String from = "pradstaunik@gmail.com";
         final String password = "Mis51Dm1";
 
-        Properties props = new Properties();
-        props.setProperty("mail.transport.protocol", "smtp");
-        props.setProperty("mail.host", "smtp.gmail.com");
-        props.put("mail.smtp.auth", "true");
-        props.put("mail.smtp.port", "465");
-        props.put("mail.debug", "true");
-        props.put("mail.smtp.socketFactory.port", "465");
-        props.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
-        props.put("mail.smtp.socketFactory.fallback", "false");
-        Session session = Session.getDefaultInstance(props,
+        Properties properties = new Properties();
+        ServletContext context =getServletContext();
+        String file = context.getInitParameter("mail");
+        properties.load(context.getResourceAsStream(file));
+        Session session = Session.getDefaultInstance(properties,
                 new javax.mail.Authenticator() {
                     protected PasswordAuthentication getPasswordAuthentication() {
                         return new PasswordAuthentication(from, password);
@@ -50,7 +47,8 @@ public class EmailServlet extends HttpServlet {
             msg.setText("Hello, world!\n");
             Transport.send(msg);
         } catch (MessagingException mex) {
-            System.out.println("send failed, exception: " + mex);
+            log.info("send failed, exception: " + mex);
         }
+        request.getRequestDispatcher("/WEB-INF/jsp/send.jsp").forward(request, response);
     }
 }

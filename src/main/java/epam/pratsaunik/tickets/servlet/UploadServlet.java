@@ -16,11 +16,13 @@ import java.io.IOException;
 
 public class UploadServlet extends HttpServlet {
 
+    private final static Logger log = LogManager.getLogger();
     private static final String UPLOAD_PATH = "upload";
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String path = req.getServletContext().getRealPath("/");
+        log.debug(path);
         String absPath = path + File.separator + UPLOAD_PATH;
         File uploadDir = new File(absPath);
         if (!uploadDir.exists()) {

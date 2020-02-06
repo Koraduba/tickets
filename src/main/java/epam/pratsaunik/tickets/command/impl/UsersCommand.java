@@ -10,6 +10,7 @@ import epam.pratsaunik.tickets.service.Service;
 import epam.pratsaunik.tickets.service.impl.UserServiceImpl;
 import epam.pratsaunik.tickets.servlet.AttributeName;
 
+import javax.servlet.ServletContext;
 import java.util.List;
 
 public class UsersCommand extends AbstractCommand {
