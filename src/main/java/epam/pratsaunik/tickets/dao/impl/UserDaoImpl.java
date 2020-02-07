@@ -76,13 +76,15 @@ public class UserDaoImpl extends UserDao {
 
     @Override
     public List<User> findUserByLogin(String login) throws DaoException {
-
         List<User> users = new ArrayList<>();
         PreparedStatement statement=null;
         try {
+            log.debug(login);
             statement=connection.prepareStatement(SQL_SELECT_USER_BY_LOGIN);
             statement.setString(1,login);
+            log.debug(login);
             ResultSet resultSet=statement.executeQuery();
+            log.debug(resultSet);
             while (resultSet.next()){
 
                 User user = new User();

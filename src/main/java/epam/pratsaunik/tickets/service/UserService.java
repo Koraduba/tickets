@@ -9,6 +9,9 @@ public interface UserService {
 
     User create(User user) throws ServiceLevelException;
     List<User> findAllUsers() throws ServiceLevelException;
+    User createAdmin() throws ServiceLevelException;
+    boolean deleteAdmin();
+
 
 
 

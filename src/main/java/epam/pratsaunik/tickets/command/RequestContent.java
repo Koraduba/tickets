@@ -21,8 +21,6 @@ public class RequestContent {
         for (Map.Entry<String, String []> entry : request.getParameterMap().entrySet()) {
             requestParameters.put(entry.getKey(), entry.getValue());
         }
-        String role=(String)request.getSession().getAttribute(AttributeName.USER_ROLE);
-        requestAttributes.put(AttributeName.USER_ROLE,role);
     }
 
     public void insertAttributes(HttpServletRequest request) {

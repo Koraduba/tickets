@@ -18,6 +18,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.util.List;
+import java.util.Locale;
 
 public class RegisterCommand extends AbstractCommand {
 
@@ -40,7 +41,7 @@ public class RegisterCommand extends AbstractCommand {
         user.setName(content.getRequestParameter(ParameterName.USER_NAME));
         user.setSurname(content.getRequestParameter(ParameterName.USER_SURNAME));
         String password=content.getRequestParameter(ParameterName.USER_PASSWORD);
-        user.setPassword(PasswordHash.getHash(password));//FIXME
+        user.setPassword(password);//FIXME
         user.setLogin(content.getRequestParameter(ParameterName.USER_LOGIN));
         user.setRole(Role.valueOf(content.getRequestParameter(ParameterName.USER_ROLE)));
         try {
@@ -48,8 +49,10 @@ public class RegisterCommand extends AbstractCommand {
             log.debug("user created");
             List<User> list = ((UserServiceImpl) service).findAllUsers();
             log.debug("users found");
-            content.setRequestAttribute(AttributeName.USERS, list);
-            page = ConfigurationManager.getInstance().getProperty(ConfigurationManager.USERS_PAGE_PATH);
+            content.setSessionAttribute(AttributeName.USERS, list);//FIXME
+            content.setSessionAttribute(AttributeName.USER, user);
+            content.setSessionAttribute(AttributeName.LOCALE,Locale.getDefault());
+            page = ConfigurationManager.getInstance().getProperty(ConfigurationManager.CATALOG_PAGE_PATH);
         } catch (ServiceLevelException e) {
             log.error("Exception in RegisterCommand "+e);
             page = ConfigurationManager.getInstance().getProperty(ConfigurationManager.ERROR_PAGE_PATH);

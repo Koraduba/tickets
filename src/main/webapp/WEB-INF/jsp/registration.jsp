@@ -1,10 +1,13 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-
+<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<fmt:setLocale value="${locale}" scope="session" />
+<fmt:setBundle basename="property.pagecontent" var="rb" />
 <html>
 <head>
     <meta charset="UTF-8">
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/bootstrap.min.css">
-    <title>$Start Page$</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <title>$Registration$</title>
 </head>
 <body>
 <div class="container">
@@ -42,21 +45,33 @@
                 </div>
                 <br/>
                 ${errorLoginPassMessage}
+
+                <c:if test="${role=='ADMINISTRATOR'}">
                 <div>
                     <fieldset>
                         <legend>Select a user role</legend>
-
                         <div>
                             <input type="radio" id="user" name="role" checked value="USER" />
                             <label for="user">USER</label>
                         </div>
-
+                        <div>
+                            <input type="radio" id="vip_user" name="role" value="VIP_USER" />
+                            <label for="vip_user">VIP USER</label>
+                        </div>
+                        <div>
+                            <input type="radio" id="host" name="role" value="HOST" />
+                            <label for="host">HOST</label>
+                        </div>
                         <div>
                             <input type="radio" id="admin" name="role" value="ADMINISTRATOR" />
-                            <label for="admin">ADMIN</label>
+                            <label for="admin">ADMINISTRATOR</label>
                         </div>
                     </fieldset>
                 </div>
+                </c:if>
+                <c:if test="${role!='ADMINISTRATOR'}">
+                    <input type="hidden" name="role" value="USER" />
+                </c:if>
 
 
                 <button type="submit" class="btn btn-primary">Register</button>
@@ -66,9 +81,4 @@
     </div>
 </div>
 
-
-<script src="${pageContext.request.contextPath}/resources/js/jquery-3.3.1.slim.min.js"></script>
-<script src="${pageContext.request.contextPath}/resources/js/popper.min.js"></script>
-<script src="${pageContext.request.contextPath}/resources/js/bootstrap.min.js"></script>
-</body>
-</html>
+<jsp:include page="footer.jsp"/>

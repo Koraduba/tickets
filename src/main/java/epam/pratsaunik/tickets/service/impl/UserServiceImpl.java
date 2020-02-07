@@ -4,6 +4,7 @@ package epam.pratsaunik.tickets.service.impl;
 import epam.pratsaunik.tickets.dao.EntityTransaction;
 import epam.pratsaunik.tickets.dao.UserDao;
 import epam.pratsaunik.tickets.dao.impl.UserDaoImpl;
+import epam.pratsaunik.tickets.entity.Role;
 import epam.pratsaunik.tickets.entity.User;
 import epam.pratsaunik.tickets.exception.DaoException;
 import epam.pratsaunik.tickets.exception.ServiceLevelException;
@@ -23,6 +24,8 @@ public class UserServiceImpl implements UserService, Service {
     public User create(User user) throws ServiceLevelException {
 
         UserDao userDao = new UserDaoImpl();
+        String passwordEncoded=PasswordHash.getHash(user.getPassword());
+        user.setPassword(passwordEncoded);
         EntityTransaction entityTransaction = new EntityTransaction();
         entityTransaction.begin(userDao);
         try {
@@ -50,6 +53,40 @@ public class UserServiceImpl implements UserService, Service {
         entityTransaction.commit();
         entityTransaction.end();
         return users;
+    }
+
+    @Override
+    public User createAdmin() throws ServiceLevelException {
+        UserDao userDao = new UserDaoImpl();
+        EntityTransaction entityTransaction = new EntityTransaction();
+        entityTransaction.begin(userDao);
+        User admin = null;
+        try {
+            List<User> admins = userDao.findUserByLogin("Admin");
+            if (admins.isEmpty()) {
+                admin = new User();
+                admin.setName("Admin");
+                admin.setSurname("Admin");
+                admin.setLogin("Admin");
+                admin.setRole(Role.ADMINISTRATOR);
+                admin.setPassword("1111");
+                admin.setEmail("admin@admin");
+                create(admin);
+            } else {
+                admin = admins.get(0);
+            }
+
+        } catch (DaoException e) {
+            e.printStackTrace();
+        } finally {
+            entityTransaction.end();
+        }
+        return admin;
+    }
+
+    @Override
+    public boolean deleteAdmin() {
+        return false;
     }
 
     public List<User> findUserByLogin(String login) throws ServiceLevelException {

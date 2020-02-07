@@ -24,12 +24,12 @@
             <fmt:message key="label.enter" bundle="${rb}" var="localizedEnter"/><br/>
             <input type="submit" value="${localizedEnter}"/>
         </form>
-        <form name="register" method="GET" action="mainservlet">
+        <form name="register" method="POST" action="mainservlet">
              <input type="hidden" name="command" value="new_user" />
              <fmt:message key="label.signin" bundle="${rb}" var="localizedSignIn"/><br/>
              <input type="submit" value="${localizedSignIn}"/>
         </form>
-        <form action = "emailservlet" method = "get">
+        <form action = "emailservlet" method = "POST">
              <input type = "submit" value = "Email" />
         </form>
     </div>

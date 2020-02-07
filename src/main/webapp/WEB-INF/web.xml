@@ -58,6 +58,11 @@
     <location>/errors/error.jsp</location>
   </error-page>
 
+  <context-param>
+    <param-name>administrator password</param-name>
+    <param-value>1111</param-value>
+  </context-param>
+
 
 
 
