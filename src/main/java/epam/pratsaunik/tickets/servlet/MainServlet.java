@@ -5,7 +5,9 @@ import epam.pratsaunik.tickets.command.AbstractCommand;
 import epam.pratsaunik.tickets.command.CommandFactory;
 import epam.pratsaunik.tickets.command.CommandType;
 import epam.pratsaunik.tickets.command.RequestContent;
+import epam.pratsaunik.tickets.connection.ConnectionPoll;
 import epam.pratsaunik.tickets.entity.User;
+import epam.pratsaunik.tickets.exception.ConnectionException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

@@ -15,7 +15,7 @@ import java.util.regex.Pattern;
 @WebFilter(urlPatterns = {"/*"})
 public class CurrentPageFilter implements Filter {
     private static final String REFERER = "referer";
-    private static final String PATH_REGEX = "/myservlet.+";
+    private static final String PATH_REGEX = "/mainservlet.+";
     private final static Logger logger= LogManager.getLogger();
 
     public void destroy() {

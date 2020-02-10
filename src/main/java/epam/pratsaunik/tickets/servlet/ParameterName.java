@@ -1,6 +1,7 @@
 package epam.pratsaunik.tickets.servlet;
 
 public class ParameterName {
+    private ParameterName(){};
 
     public final static String COMMAND="command";
     public final static String USER_NAME="name";

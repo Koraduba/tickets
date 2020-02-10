@@ -13,6 +13,8 @@ public abstract class AbstractDAO <K,T extends Entity>{
     protected Connection connection;
 
     public abstract List<T> findAll() throws DaoException;
+    public abstract List<T> findRange(int start, int recordsPerPage) throws DaoException;
+    public abstract int getNumberOfRecords() throws DaoException;
     public abstract boolean delete (K id);
     public abstract boolean delete (T entity);
     public abstract T create (T entity) throws DaoException;

@@ -63,7 +63,9 @@
     <param-value>1111</param-value>
   </context-param>
 
-
+  <listener>
+    <listener-class>epam.pratsaunik.tickets.listener.ContextListenerImpl</listener-class>
+  </listener>
 
 
 </web-app>

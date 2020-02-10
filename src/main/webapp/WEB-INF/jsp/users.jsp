@@ -1,41 +1,56 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <jsp:include page="header.jsp"/>
-<html>
-<head>
-    <meta charset="UTF-8">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
-          integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
-    <title>Users</title>
-</head>
-<body>
-                <div class="row">
-                    <div class="col-md-12">
-                        <table class="table">
-                            <thead>
-                            <tr>
-                                <th scope="col">id</th>
-                                <th scope="col">name</th>
-                                <th scope="col">surname</th>
-                                <th scope="col">e-mail</th>
-                                <th scope="col">role</th>
-                                <th></th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <c:forEach items="${users}" var="user">
-                                <tr>
-                                    <td>${user.userId}</td>
-                                    <td>${user.name}</td>
-                                    <td>${user.surname}</td>
-                                    <td>${user.email}</td>
-                                    <td>${user.role}</td>
-                                </tr>
-
-                            </c:forEach>
-                            </tbody>
-                        </table>
- </div>
+<div class="row col-md-6">
+    <table class="table table-striped table-bordered table-sm">
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Surname</th>
+            <th>Email</th>
+            <th>Role</th>
+        </tr>
+        ${currentPage}
+        ${nOfPages}
+        <c:forEach items="${users}" var="eachUser">
+            <tr>
+                <td>${eachUser.userId}</td>
+                <td>${eachUser.name}</td>
+                <td>${eachUser.surname}</td>
+                <td>${eachUser.email}</td>
+            </tr>
+        </c:forEach>
+    </table>
 </div>
-</body>
-</html>
+
+<nav aria-label="Navigation for users">
+    <ul class="pagination">
+        <c:if test="${currentPage != 1}">
+            <li class="page-item"><a class="page-link"
+                href="mainservlet?command=users&currentPage=${currentPage-1}">Previous</a>
+            </li>
+        </c:if>
+
+        <c:forEach begin="1" end="${nOfPages}" var="i">
+            <c:choose>
+                <c:when test="${currentPage eq i}">
+                    <li class="page-item active"><a class="page-link">
+                            ${i} <span class="sr-only">(current)</span></a>
+                    </li>
+                </c:when>
+                <c:otherwise>
+                    <li class="page-item"><a class="page-link"
+                        href="mainservlet?command=users&currentPage=${i}">${i}</a>
+                    </li>
+                </c:otherwise>
+            </c:choose>
+        </c:forEach>
+
+        <c:if test="${currentPage lt nOfPages}">
+            <li class="page-item"><a class="page-link"
+                href="mainservlet?command=users&currentPage=${currentPage+1}">Next</a>
+            </li>
+        </c:if>
+    </ul>
+</nav>
+<jsp:include page="footer.jsp"/>

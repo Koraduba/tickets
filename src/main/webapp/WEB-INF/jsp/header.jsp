@@ -31,7 +31,7 @@
           <a class="nav-link" href="${pageContext.request.contextPath}">User profile</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="${pageContext.request.contextPath}/users">Search</a>
+          <a class="nav-link" href="${pageContext.request.contextPath}/mainservlet?command=users&currentPage=1">Users</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="${pageContext.request.contextPath}/event">${role}</a>

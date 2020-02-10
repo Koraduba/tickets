@@ -13,12 +13,28 @@ import epam.pratsaunik.tickets.service.Service;
 import epam.pratsaunik.tickets.service.UserService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.graalvm.compiler.lir.LIRInstruction;
 
 import java.util.List;
 
 public class UserServiceImpl implements UserService, Service {
 
     private final static Logger log = LogManager.getLogger();
+
+    @Override
+    public Integer getNumberOfRecords() {
+        Integer number=null;
+        UserDao userDao = new UserDaoImpl();
+        EntityTransaction entityTransaction = new EntityTransaction();
+        entityTransaction.begin(userDao);
+        try {
+            number=userDao.getNumberOfRecords();
+        } catch (DaoException e) {
+            e.printStackTrace();
+        }
+        entityTransaction.commit();
+        return number;
+    }
 
     @Override
     public User create(User user) throws ServiceLevelException {
@@ -37,6 +53,23 @@ public class UserServiceImpl implements UserService, Service {
             entityTransaction.end();
         }
         return user;
+    }
+
+    @Override
+    public List<User> findRange(int currentPage, int recordsPerPage) throws ServiceLevelException {
+        List<User> users;
+        int start = currentPage * recordsPerPage - recordsPerPage;
+        UserDao userDao = new UserDaoImpl();
+        EntityTransaction entityTransaction = new EntityTransaction();
+        entityTransaction.begin(userDao);
+        try {
+            users = userDao.findRange(start,recordsPerPage);
+        } catch (DaoException e) {
+            throw new ServiceLevelException(e);
+        }
+        entityTransaction.commit();
+        entityTransaction.end();
+        return users;
     }
 
     @Override

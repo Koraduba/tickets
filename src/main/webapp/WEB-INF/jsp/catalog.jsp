@@ -5,4 +5,4 @@
 <head><title>Index</title></head>
 <body>
 CATALOG
-</body></html>
+<jsp:include page="footer.jsp"/>

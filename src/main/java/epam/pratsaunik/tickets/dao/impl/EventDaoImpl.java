@@ -5,6 +5,7 @@ import epam.pratsaunik.tickets.entity.Entity;
 import epam.pratsaunik.tickets.entity.Event;
 import epam.pratsaunik.tickets.entity.User;
 import epam.pratsaunik.tickets.entity.Venue;
+import epam.pratsaunik.tickets.exception.DaoException;
 
 import java.sql.Date;
 import java.sql.PreparedStatement;
@@ -51,6 +52,16 @@ public class EventDaoImpl extends EventDao {
     @Override
     public List findAll() {
         return null;
+    }
+
+    @Override
+    public List findRange(int start, int recordsPerPage) throws DaoException {
+        return null;
+    }
+
+    @Override
+    public int getNumberOfRecords() throws DaoException {
+        return 0;
     }
 
     @Override
