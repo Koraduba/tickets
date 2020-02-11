@@ -5,6 +5,15 @@ public class Venue extends Entity {
     private Long venueId;
     private String name;
     private Integer capacity;
+    private String layout;
+
+    public Long getVenueId() {
+        return venueId;
+    }
+
+    public void setVenueId(Long venueId) {
+        this.venueId = venueId;
+    }
 
     public String getName() {
         return name;
@@ -22,11 +31,11 @@ public class Venue extends Entity {
         this.capacity = capacity;
     }
 
-    public Long getVenueId() {
-        return venueId;
+    public String getLayout() {
+        return layout;
     }
 
-    public void setVenueId(Long venueId) {
-        this.venueId = venueId;
+    public void setLayout(String layout) {
+        this.layout = layout;
     }
 }

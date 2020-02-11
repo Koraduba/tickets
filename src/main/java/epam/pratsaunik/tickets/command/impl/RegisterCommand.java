@@ -21,9 +21,7 @@ import java.util.List;
 import java.util.Locale;
 
 public class RegisterCommand extends AbstractCommand {
-
     private final static Logger log = LogManager.getLogger();
-
     public RegisterCommand(Service service) {
         super(service);
     }
@@ -47,12 +45,7 @@ public class RegisterCommand extends AbstractCommand {
         try {
             ((UserServiceImpl) service).create(user);
             log.debug("user created");
-            List<User> list = ((UserServiceImpl) service).findAllUsers();
-            log.debug("users found");
-            content.setSessionAttribute(AttributeName.USERS, list);//FIXME
-            content.setSessionAttribute(AttributeName.USER, user);
-            content.setSessionAttribute(AttributeName.LOCALE,Locale.getDefault());
-            page = ConfigurationManager.getInstance().getProperty(ConfigurationManager.CATALOG_PAGE_PATH);
+            page = ConfigurationManager.getInstance().getProperty(ConfigurationManager.LOGIN_PAGE_PATH);
         } catch (ServiceLevelException e) {
             log.error("Exception in RegisterCommand "+e);
             page = ConfigurationManager.getInstance().getProperty(ConfigurationManager.ERROR_PAGE_PATH);

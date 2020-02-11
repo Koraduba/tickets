@@ -16,6 +16,9 @@ public class ConfigurationManager {
     public static final String REGISTRATION_PAGE_PATH = "registration.page.path";
     public static final String ERROR_PAGE_PATH = "error.page.path";
     public static final String CATALOG_PAGE_PATH = "catalog.page.path";
+    public static final String NEW_EVENT_PAGE_PATH = "newevent.page.path";
+    public static final String NEW_VENUE_PAGE_PATH = "newvenue.page.path";
+
 
 
     public static final String COMMAND_USERS="command.users";

@@ -44,7 +44,13 @@ public class RequestContent {
 
     public String getRequestParameter(String name) {
         log.info("getRequestParameter"+name);
-        return requestParameters.get(name)[0];
+        String[] results=requestParameters.get(name);
+        if (results!=null) {
+            return results[0];
+        }
+            else {
+            return null;
+        }
     }
 
 }

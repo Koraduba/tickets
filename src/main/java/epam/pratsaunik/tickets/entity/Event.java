@@ -1,15 +1,19 @@
 package epam.pratsaunik.tickets.entity;
 
 import javax.naming.ldap.PagedResultsControl;
-import java.sql.Date;
+
+import java.sql.Time;
+import java.util.Date;
+
 
 public class Event extends Entity {
 
     private Long eventId;
     private String name;
-    private String description;
-    private Venue venue;
     private Date date;
+    private String description;
+    private String image;
+    private Venue venue;
 
     public Long getEventId() {
         return eventId;
@@ -19,21 +23,20 @@ public class Event extends Entity {
         this.eventId = eventId;
     }
 
-    public Venue getVenue() {
-        return venue;
-    }
-
-    public void setVenue(Venue venue) {
-        this.venue = venue;
-    }
-
-
     public String getName() {
         return name;
     }
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public Date getDate() {
+        return date;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
     }
 
     public String getDescription() {
@@ -44,12 +47,20 @@ public class Event extends Entity {
         this.description = description;
     }
 
-    public Date getDate() {
-        return date;
+    public String getImage() {
+        return image;
     }
 
-    public void setDate(Date date) {
-        this.date = date;
+    public void setImage(String image) {
+        this.image = image;
+    }
+
+    public Venue getVenue() {
+        return venue;
+    }
+
+    public void setVenue(Venue venue) {
+        this.venue = venue;
     }
 
     @Override

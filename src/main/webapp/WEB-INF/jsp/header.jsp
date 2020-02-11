@@ -33,14 +33,15 @@
         <li class="nav-item">
           <a class="nav-link" href="${pageContext.request.contextPath}/mainservlet?command=users&currentPage=1">Users</a>
         </li>
+        <c:if test="${role=='ADMINISTRATOR'}">
         <li class="nav-item">
-          <a class="nav-link" href="${pageContext.request.contextPath}/event">${role}</a>
+          <a class="nav-link" href="${pageContext.request.contextPath}/mainservlet?command=new_user">New users</a>
         </li>
-
-        <c:if test="${role=='USER'}">
-        <li class="nav-item">
-          <a class="nav-link" href="${pageContext.request.contextPath}/mainservlet?command=new_user">Users</a>
-        </li>
+        </c:if>
+          <c:if test="${role=='HOST'}">
+          <li class="nav-item">
+            <a class="nav-link" href="${pageContext.request.contextPath}/mainservlet?command=new_event">New event</a>
+          </li>
         </c:if>
       </ul>
       <form class="form-inline my-2 my-lg-0" action="${pageContext.request.contextPath}/search">

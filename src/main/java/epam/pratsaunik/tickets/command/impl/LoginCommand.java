@@ -40,7 +40,7 @@ public class LoginCommand extends AbstractCommand {
                 hasAccount = ((UserServiceImpl) service).checkUser(login, password, user.get(0));
             }
             if (hasAccount) {
-                content.setRequestAttribute(AttributeName.USER_ROLE,user.get(0).getRole().toString());
+                content.setSessionAttribute(AttributeName.USER_ROLE,user.get(0).getRole().toString());
                 Locale rus = new Locale("ru", "RU");
                 content.setSessionAttribute(AttributeName.LOCALE, rus);
                 content.setSessionAttribute(AttributeName.USER, user.get(0));
