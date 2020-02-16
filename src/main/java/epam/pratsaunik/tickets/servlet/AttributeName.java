@@ -6,6 +6,7 @@ public class AttributeName {
     public final static String USER = "user";
     public final static String LOCALE = "locale";
     public final static String USERS = "users";
+    public final static String EVENTS = "events";
     public final static String USER_NAME = "name";
     public final static String USER_ROLE = "role";
     public final static String USER_SURNAME = "surname";

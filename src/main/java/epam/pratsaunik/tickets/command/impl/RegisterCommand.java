@@ -4,6 +4,7 @@ package epam.pratsaunik.tickets.command.impl;
 import epam.pratsaunik.tickets.command.AbstractCommand;
 import epam.pratsaunik.tickets.command.RequestContent;
 import epam.pratsaunik.tickets.dao.ColumnName;
+import epam.pratsaunik.tickets.email.EmailSender;
 import epam.pratsaunik.tickets.hash.PasswordHash;
 import epam.pratsaunik.tickets.servlet.ParameterName;
 import epam.pratsaunik.tickets.util.ConfigurationManager;
@@ -17,8 +18,15 @@ import epam.pratsaunik.tickets.validator.Validator;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import javax.mail.*;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.Properties;
 
 public class RegisterCommand extends AbstractCommand {
     private final static Logger log = LogManager.getLogger();
@@ -43,7 +51,11 @@ public class RegisterCommand extends AbstractCommand {
         user.setLogin(content.getRequestParameter(ParameterName.USER_LOGIN));
         user.setRole(Role.valueOf(content.getRequestParameter(ParameterName.USER_ROLE)));
         try {
-            ((UserServiceImpl) service).create(user);
+            long result=((UserServiceImpl) service).create(user);
+            if(result>0){
+                EmailSender emailSender = new EmailSender();
+                emailSender.sendConfirmation(user.getEmail());
+            }
             log.debug("user created");
             page = ConfigurationManager.getInstance().getProperty(ConfigurationManager.LOGIN_PAGE_PATH);
         } catch (ServiceLevelException e) {
@@ -51,6 +63,5 @@ public class RegisterCommand extends AbstractCommand {
             page = ConfigurationManager.getInstance().getProperty(ConfigurationManager.ERROR_PAGE_PATH);
         }
         return page;
-
     }
 }

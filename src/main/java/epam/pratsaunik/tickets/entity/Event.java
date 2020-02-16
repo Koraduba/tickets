@@ -4,13 +4,15 @@ import javax.naming.ldap.PagedResultsControl;
 
 import java.sql.Time;
 import java.util.Date;
+import java.util.GregorianCalendar;
 
 
 public class Event extends Entity {
 
     private Long eventId;
     private String name;
-    private Date date;
+    private String date;
+    private String time;
     private String description;
     private String image;
     private Venue venue;
@@ -31,12 +33,20 @@ public class Event extends Entity {
         this.name = name;
     }
 
-    public Date getDate() {
+    public String getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(String date) {
         this.date = date;
+    }
+
+    public String getTime() {
+        return time;
+    }
+
+    public void setTime(String time) {
+        this.time = time;
     }
 
     public String getDescription() {
@@ -85,5 +95,18 @@ public class Event extends Entity {
         hash=hash*31+(venue==null?0:venue.hashCode());
         hash=hash*31+(date==null?0:date.hashCode());
         return hash;
+    }
+
+    @Override
+    public String toString() {
+        final StringBuffer sb = new StringBuffer("Event{");
+        sb.append("eventId=").append(eventId);
+        sb.append(", name='").append(name).append('\'');
+        sb.append(", date=").append(date);
+        sb.append(", description='").append(description).append('\'');
+        sb.append(", image='").append(image).append('\'');
+        sb.append(", venue=").append(venue);
+        sb.append('}');
+        return sb.toString();
     }
 }

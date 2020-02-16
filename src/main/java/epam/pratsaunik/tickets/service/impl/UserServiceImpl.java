@@ -13,46 +13,47 @@ import epam.pratsaunik.tickets.service.Service;
 import epam.pratsaunik.tickets.service.UserService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.graalvm.compiler.lir.LIRInstruction;
 
 import java.util.List;
 
 public class UserServiceImpl implements UserService, Service {
-
     private final static Logger log = LogManager.getLogger();
 
     @Override
-    public Integer getNumberOfRecords() {
-        Integer number=null;
+    public Integer getNumberOfRecords() throws ServiceLevelException {
+        Integer number = null;
         UserDao userDao = new UserDaoImpl();
         EntityTransaction entityTransaction = new EntityTransaction();
         entityTransaction.begin(userDao);
         try {
-            number=userDao.getNumberOfRecords();
-        } catch (DaoException e) {
-            e.printStackTrace();
-        }
-        entityTransaction.commit();
-        return number;
-    }
-
-    @Override
-    public User create(User user) throws ServiceLevelException {
-
-        UserDao userDao = new UserDaoImpl();
-        String passwordEncoded=PasswordHash.getHash(user.getPassword());
-        user.setPassword(passwordEncoded);
-        EntityTransaction entityTransaction = new EntityTransaction();
-        entityTransaction.begin(userDao);
-        try {
-            userDao.create(user);
+            number = userDao.getNumberOfRecords();
             entityTransaction.commit();
         } catch (DaoException e) {
             throw new ServiceLevelException(e);
         } finally {
             entityTransaction.end();
         }
-        return user;
+
+        return number;
+    }
+
+    @Override
+    public long create(User user) throws ServiceLevelException {
+        long id=0;
+        UserDao userDao = new UserDaoImpl();
+        String passwordEncoded = PasswordHash.getHash(user.getPassword());
+        user.setPassword(passwordEncoded);
+        EntityTransaction entityTransaction = new EntityTransaction();
+        try {
+            entityTransaction.begin(userDao);
+            id=userDao.create(user);
+            entityTransaction.commit();
+        } catch (DaoException e) {
+            throw new ServiceLevelException(e);
+        } finally {
+            entityTransaction.end();
+        }
+        return id;
     }
 
     @Override
@@ -63,12 +64,13 @@ public class UserServiceImpl implements UserService, Service {
         EntityTransaction entityTransaction = new EntityTransaction();
         entityTransaction.begin(userDao);
         try {
-            users = userDao.findRange(start,recordsPerPage);
+            users = userDao.findRange(start, recordsPerPage);
+            entityTransaction.commit();
         } catch (DaoException e) {
             throw new ServiceLevelException(e);
+        } finally {
+            entityTransaction.end();
         }
-        entityTransaction.commit();
-        entityTransaction.end();
         return users;
     }
 
@@ -80,11 +82,12 @@ public class UserServiceImpl implements UserService, Service {
         entityTransaction.begin(userDao);
         try {
             users = userDao.findAll();
+            entityTransaction.commit();
         } catch (DaoException e) {
             throw new ServiceLevelException(e);
+        } finally {
+            entityTransaction.end();
         }
-        entityTransaction.commit();
-        entityTransaction.end();
         return users;
     }
 
@@ -108,9 +111,9 @@ public class UserServiceImpl implements UserService, Service {
             } else {
                 admin = admins.get(0);
             }
-
+            entityTransaction.commit();
         } catch (DaoException e) {
-            e.printStackTrace();
+            throw new ServiceLevelException(e);
         } finally {
             entityTransaction.end();
         }
@@ -129,11 +132,12 @@ public class UserServiceImpl implements UserService, Service {
         entityTransaction.begin(userDao);
         try {
             user = userDao.findUserByLogin(login);
+            entityTransaction.commit();
         } catch (DaoException e) {
             throw new ServiceLevelException(e);
+        } finally {
+            entityTransaction.end();
         }
-        entityTransaction.commit();
-        entityTransaction.end();
         return user;
     }
 
@@ -144,8 +148,6 @@ public class UserServiceImpl implements UserService, Service {
         log.debug(user.getLogin());
         return login.equalsIgnoreCase(user.getLogin()) && PasswordHash.getHash(password).equals(user.getPassword());
     }
-
-    ;
 
 
 }

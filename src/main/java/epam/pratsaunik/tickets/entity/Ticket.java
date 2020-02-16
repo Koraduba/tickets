@@ -1,11 +1,13 @@
 package epam.pratsaunik.tickets.entity;
 
+import java.math.BigDecimal;
+
 public class Ticket extends Entity {
 
     private Long ticketId;
     private TicketCat category;
     private Event event;
-    private Long price;
+    private BigDecimal price;
 
     public TicketCat getCategory() {
         return category;
@@ -23,11 +25,19 @@ public class Ticket extends Entity {
         this.event = event;
     }
 
-    public Long getPrice() {
+    public BigDecimal getPrice() {
         return price;
     }
 
-    public void setPrice(Long price) {
+    public void setPrice(BigDecimal price) {
         this.price = price;
+    }
+
+    public Long getTicketId() {
+        return ticketId;
+    }
+
+    public void setTicketId(Long ticketId) {
+        this.ticketId = ticketId;
     }
 }

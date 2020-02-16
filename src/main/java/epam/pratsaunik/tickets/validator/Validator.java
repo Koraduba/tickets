@@ -14,7 +14,7 @@ import java.util.regex.Pattern;
 public class Validator {
     private final static Logger log = LogManager.getLogger();
     final static String LOGIN_REGEX = "[A-Z][a-z]+";
-    final static String EMAIL_REGEX = "[a-z]+@[a-z]+";
+    final static String EMAIL_REGEX = "[a-z]+@[a-z]+.[a-z]+";
     final static String NAME_REGEX = "[A-Z][a-z]+";
     final static String SURNAME_REGEX = "[A-Z][a-z]+";
 

@@ -10,6 +10,7 @@ import epam.pratsaunik.tickets.servlet.AttributeName;
 import epam.pratsaunik.tickets.util.ConfigurationManager;
 import epam.pratsaunik.tickets.util.MessageType;
 import epam.pratsaunik.tickets.util.MessageManager;
+import jdk.jfr.Event;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -44,7 +45,7 @@ public class LoginCommand extends AbstractCommand {
                 Locale rus = new Locale("ru", "RU");
                 content.setSessionAttribute(AttributeName.LOCALE, rus);
                 content.setSessionAttribute(AttributeName.USER, user.get(0));
-                page = ConfigurationManager.getInstance().getProperty(ConfigurationManager.CATALOG_PAGE_PATH);
+                page = ConfigurationManager.getInstance().getProperty(ConfigurationManager.HOME_PAGE_PATH);
             } else {
                 content.setRequestAttribute("errorLoginPassMessage", MessageManager.INSTANCE.getProperty(MessageType.NO_SUCH_USER));
                 page = ConfigurationManager.getInstance().getProperty(ConfigurationManager.LOGIN_PAGE_PATH);

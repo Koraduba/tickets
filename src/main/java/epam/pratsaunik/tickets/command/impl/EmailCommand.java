@@ -1,6 +1,8 @@
-package epam.pratsaunik.tickets.servlet;
+package epam.pratsaunik.tickets.command.impl;
 
-import epam.pratsaunik.tickets.connection.ProxyConnection;
+import epam.pratsaunik.tickets.command.AbstractCommand;
+import epam.pratsaunik.tickets.command.RequestContent;
+import epam.pratsaunik.tickets.service.Service;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -8,23 +10,23 @@ import javax.mail.*;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import javax.servlet.ServletContext;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Date;
 import java.util.Properties;
 
-public class EmailServlet extends HttpServlet {
+public class EmailCommand extends AbstractCommand {
     private final static Logger log = LogManager.getLogger();
 
-    public void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+    public EmailCommand(Service service) {
+        super(service);
+    }
 
+    @Override
+    public String execute(RequestContent content) {
         final String from = "pradstaunik@gmail.com";
         final String password = "Mis51Dm1";
+        String page=null;
 
         Properties properties = new Properties();
         String file = "/WEB-INF/classes/mail.properties";
@@ -40,7 +42,6 @@ public class EmailServlet extends HttpServlet {
                     }
                 });
         log.info("Session for email OK");
-
         try {
             MimeMessage msg = new MimeMessage(session);
             msg.setFrom(new InternetAddress(from));
@@ -51,8 +52,8 @@ public class EmailServlet extends HttpServlet {
             msg.setText("Hello, world!\n");
             Transport.send(msg);
         } catch (MessagingException mex) {
-            log.info("send failed, exception: " + mex);
+            log.info("send failed, exception: ", mex);
         }
-        request.getRequestDispatcher("/WEB-INF/jsp/send.jsp").forward(request, response);
+        return page;
     }
 }

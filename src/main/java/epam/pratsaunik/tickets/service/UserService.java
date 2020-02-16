@@ -7,11 +7,10 @@ import java.util.List;
 
 public interface UserService {
 
-    User create(User user) throws ServiceLevelException;
+    long create(User user) throws ServiceLevelException;
     List<User> findAllUsers() throws ServiceLevelException;
     List<User> findRange(int currentPage, int recordsPerPage) throws ServiceLevelException;
     User createAdmin() throws ServiceLevelException;
-    Integer getNumberOfRecords();
     boolean deleteAdmin();
 
 

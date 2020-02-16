@@ -18,9 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class UserDaoImpl extends UserDao {
-
     private final static Logger log = LogManager.getLogger();
-
     private final static String SQL_SELECT_USER_BY_NAME = "SELECT user_id, user.name, surname, email, login, " +
             "password, role.name " +
             "FROM user,role WHERE name=? AND user.role=role_id";
@@ -87,7 +85,6 @@ public class UserDaoImpl extends UserDao {
             ResultSet resultSet = statement.executeQuery();
             log.debug(resultSet);
             while (resultSet.next()) {
-
                 User user = new User();
                 user.setUserId(resultSet.getLong(ColumnName.USER_ID));
                 user.setEmail(resultSet.getString(ColumnName.USER_EMAIL));
@@ -209,8 +206,9 @@ public class UserDaoImpl extends UserDao {
     }
 
     @Override
-    public Entity create(Entity entity) throws DaoException {
+    public long create(Entity entity) throws DaoException {
         PreparedStatement statement = null;
+        long id=0;
         try {
             statement = connection.prepareStatement(SQL_CREATE_USER, PreparedStatement.RETURN_GENERATED_KEYS);
 
@@ -224,7 +222,7 @@ public class UserDaoImpl extends UserDao {
             statement.execute();
             ResultSet resultSet = statement.getGeneratedKeys();
             resultSet.next();
-            ((User) entity).setUserId(resultSet.getLong(1));
+            id=resultSet.getLong(1);
         } catch (SQLException e) {
             throw new DaoException(e);
         } finally {
@@ -235,7 +233,7 @@ public class UserDaoImpl extends UserDao {
             }
         }
 
-        return entity;
+        return id;
     }
 
     @Override

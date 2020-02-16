@@ -17,7 +17,7 @@ public abstract class AbstractDAO <K,T extends Entity>{
     public abstract int getNumberOfRecords() throws DaoException;
     public abstract boolean delete (K id);
     public abstract boolean delete (T entity);
-    public abstract T create (T entity) throws DaoException;
+    public abstract long create (T entity) throws DaoException;
     public abstract T update (T entity);
 
     public void close(Statement statement)  {

@@ -29,8 +29,5 @@
              <fmt:message key="label.signin" bundle="${rb}" var="localizedSignIn"/><br/>
              <input type="submit" value="${localizedSignIn}"/>
         </form>
-        <form action = "emailservlet" method = "POST">
-             <input type = "submit" value = "Email" />
-        </form>
     </div>
 <jsp:include page="footer.jsp"/>

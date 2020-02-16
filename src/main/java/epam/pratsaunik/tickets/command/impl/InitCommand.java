@@ -27,7 +27,7 @@ public class InitCommand extends AbstractCommand {
             page=ConfigurationManager.getInstance().getProperty(ConfigurationManager.LOGIN_PAGE_PATH);
 
         } catch (ServiceLevelException e) {
-            log.error("Exception in InitCommand" + e);
+            log.error("Exception in InitCommand" , e);
             page=ConfigurationManager.getInstance().getProperty(ConfigurationManager.ERROR_PAGE_PATH);
         }
         return page;

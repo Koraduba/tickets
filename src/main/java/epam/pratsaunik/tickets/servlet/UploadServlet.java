@@ -7,13 +7,14 @@ import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.ServletException;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
 import java.io.File;
 import java.io.IOException;
-
+@MultipartConfig
 public class UploadServlet extends HttpServlet {
 
     private final static Logger log = LogManager.getLogger();
@@ -29,11 +30,11 @@ public class UploadServlet extends HttpServlet {
             uploadDir.mkdir();
         }
         for (Part part : req.getParts()) {
-            System.out.println(req.getParts().size());
-            System.out.println("UploadServlet");
+            log.debug(absPath);
             if(part.getSubmittedFileName()!=null){
                 part.write(uploadDir + File.separator + part.getSubmittedFileName());
-                resp.getWriter().print(part.getSubmittedFileName());
+//                resp.getWriter().print(part.getSubmittedFileName());//fixme
+
             }
         }
     }

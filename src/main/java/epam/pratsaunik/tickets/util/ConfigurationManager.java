@@ -18,6 +18,7 @@ public class ConfigurationManager {
     public static final String CATALOG_PAGE_PATH = "catalog.page.path";
     public static final String NEW_EVENT_PAGE_PATH = "newevent.page.path";
     public static final String NEW_VENUE_PAGE_PATH = "newvenue.page.path";
+    public static final String HOME_PAGE_PATH="home.page.path";
 
 
 
