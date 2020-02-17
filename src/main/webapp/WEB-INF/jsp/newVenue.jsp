@@ -22,6 +22,7 @@
         <br />
     </form>
   <div class="form-group">
+  <input type="hidden" name="command" value="layout_upload" />
     <div class="col-sm-10">
       <button type="button" onclick="submitForms()">SUBMIT</button>
     </div>

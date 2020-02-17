@@ -1,5 +1,11 @@
 package epam.pratsaunik.tickets.servlet;
 
+import epam.pratsaunik.tickets.command.AbstractCommand;
+import epam.pratsaunik.tickets.command.CommandFactory;
+import epam.pratsaunik.tickets.command.CommandType;
+import epam.pratsaunik.tickets.command.RequestContent;
+import epam.pratsaunik.tickets.util.ConfigurationManager;
+import epam.pratsaunik.tickets.util.ConfigurationManager2;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -21,9 +27,14 @@ public class UploadServlet extends HttpServlet {
     private static final String UPLOAD_PATH = "upload";
 
     @Override
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        getServletContext().getRequestDispatcher(ConfigurationManager2.HOME_PAGE_PATH.getProperty()).forward(req,resp);
+    }
+
+    @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        String page=null;
         String path = req.getServletContext().getRealPath("/");
-        log.debug(path);
         String absPath = path + File.separator + UPLOAD_PATH;
         File uploadDir = new File(absPath);
         if (!uploadDir.exists()) {
@@ -33,9 +44,30 @@ public class UploadServlet extends HttpServlet {
             log.debug(absPath);
             if(part.getSubmittedFileName()!=null){
                 part.write(uploadDir + File.separator + part.getSubmittedFileName());
-//                resp.getWriter().print(part.getSubmittedFileName());//fixme
-
+                req.getSession().setAttribute("path",uploadDir + File.separator + part.getSubmittedFileName());
             }
+        }
+        String commandName = req.getParameter(ParameterName.COMMAND);
+        AbstractCommand commandAction = CommandFactory.instance.getCommand(commandName);
+        log.debug(commandAction);
+        RequestContent requestContent = new RequestContent();
+        requestContent.extractValues(req);
+        log.debug("requestContent is ready");
+        if (commandAction != null) {
+            try {
+                page = commandAction.execute(requestContent);
+                log.info(page);
+                requestContent.insertAttributes(req);
+                if (page != null) {
+                    req.getSession().setAttribute("page", page);
+                    log.debug(req.getContextPath());
+                    resp.sendRedirect(req.getContextPath() + "/uploadservlet");
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        } else {
+            System.out.println("Command does not exist!");
         }
     }
 }

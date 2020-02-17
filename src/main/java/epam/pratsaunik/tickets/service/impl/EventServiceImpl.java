@@ -143,6 +143,56 @@ public class EventServiceImpl implements Service, EventService {
     }
 
     @Override
+    public Event update(Event event) throws ServiceLevelException {
+        EventDao eventDao = new EventDaoImpl();
+        EntityTransaction entityTransaction = new EntityTransaction();
+        entityTransaction.begin(eventDao);
+        try {
+            eventDao.update(event);
+            entityTransaction.commit();
+        } catch (DaoException e) {
+            throw new ServiceLevelException(e);
+        } finally {
+            entityTransaction.end();
+        }
+        return event;
+    }
+
+    @Override
+    public Event findEventById(long id) throws ServiceLevelException {
+        Event event=null;
+        EventDao eventDao = new EventDaoImpl();
+        EntityTransaction entityTransaction = new EntityTransaction();
+        entityTransaction.begin(eventDao);
+        try {
+            event=eventDao.findEventById(id).get(0);
+            entityTransaction.commit();
+        } catch (DaoException e) {
+            throw new ServiceLevelException(e);
+        } finally {
+            entityTransaction.end();
+        }
+        return event;
+    }
+
+    @Override
+    public Venue updateVenue(Venue venue) throws ServiceLevelException {
+        EventDao eventDao = new EventDaoImpl();
+        EntityTransaction entityTransaction = new EntityTransaction();
+        entityTransaction.begin(eventDao);
+        try {
+            eventDao.updateVenue(venue);
+            entityTransaction.commit();
+        } catch (DaoException e) {
+            throw new ServiceLevelException(e);
+        } finally {
+            entityTransaction.end();
+        }
+        return venue;
+    }
+
+
+    @Override
     public Integer getNumberOfRecords() throws ServiceLevelException {
         Integer number = null;
         EventDao eventDao = new EventDaoImpl();

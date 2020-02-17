@@ -11,6 +11,7 @@ import epam.pratsaunik.tickets.service.Service;
 import epam.pratsaunik.tickets.service.impl.EventServiceImpl;
 import epam.pratsaunik.tickets.service.impl.UserServiceImpl;
 import epam.pratsaunik.tickets.util.ConfigurationManager;
+import epam.pratsaunik.tickets.util.ConfigurationManager2;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -38,6 +39,7 @@ public class AddEventCommand extends AbstractCommand {
         event.setDate(content.getRequestParameter("date"));
         event.setTime(content.getRequestParameter("time"));
         event.setDescription(content.getRequestParameter("description"));
+        event.setImage((String) content.getSessionAttribute("path"));
         ticketStd.setCategory(TicketCat.STANDARD);
         ticketVip.setCategory(TicketCat.VIP);
         ticketStd.setPrice(new BigDecimal(content.getRequestParameter("price-standard")));
@@ -48,17 +50,17 @@ public class AddEventCommand extends AbstractCommand {
             if (venue != null) {
                 event.setVenue(((EventServiceImpl) service).findVenueByName(venue));
             }
-            long eventId=((EventServiceImpl) service).create(event);
+            long eventId = ((EventServiceImpl) service).create(event);
             event.setEventId(eventId);
             ticketStd.setEvent(event);
             ticketVip.setEvent(event);
-            ((EventServiceImpl)service).createTicket(ticketStd);
-            ((EventServiceImpl)service).createTicket(ticketVip);
-            log.debug("event created");
-            page = ConfigurationManager.getInstance().getProperty(ConfigurationManager.CATALOG_PAGE_PATH);
+            ((EventServiceImpl) service).createTicket(ticketStd);
+            ((EventServiceImpl) service).createTicket(ticketVip);
+            content.setSessionAttribute("id", eventId);
+            page = ConfigurationManager2.UPLOAD_PAGE_PATH.getProperty();
         } catch (ServiceLevelException e) {
             log.error("Exception in AddEventCommand " + e);
-            page = ConfigurationManager.getInstance().getProperty(ConfigurationManager.ERROR_PAGE_PATH);
+            page = ConfigurationManager2.ERROR_PAGE_PATH.getProperty();
         }
         return page;
     }

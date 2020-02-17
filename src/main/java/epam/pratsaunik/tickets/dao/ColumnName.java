@@ -16,6 +16,15 @@ public class ColumnName {
     public final static String EVENT_VENUE="venue";
     public final static String EVENT_IMAGE="image";
     public final static String EVENT_DATE="date";
+    public final static String VENUE_ID="venue_id";
+    public final static String VENUE_NAME="name";
+    public final static String VENUE_CAPACITY="capacity";
+    public final static String VENUE_LAYOUT="layout";
+    public final static String TICKET_ID="ticket_id";
+    public final static String TICKET_EVENT="event";
+    public final static String TICKET_PRICE="price";
+    public final static String TICKET_CATEGORY="category";
+
 
 
 }

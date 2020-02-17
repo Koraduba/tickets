@@ -1,6 +1,5 @@
 package epam.pratsaunik.tickets.dao;
 
-
 import epam.pratsaunik.tickets.entity.Entity;
 import epam.pratsaunik.tickets.exception.DaoException;
 
@@ -9,28 +8,34 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.List;
 
-public abstract class AbstractDAO <K,T extends Entity>{
+public abstract class AbstractDAO<K, T extends Entity> {
     protected Connection connection;
 
-    public abstract List<T> findAll() throws DaoException;
-    public abstract List<T> findRange(int start, int recordsPerPage) throws DaoException;
     public abstract int getNumberOfRecords() throws DaoException;
-    public abstract boolean delete (K id);
-    public abstract boolean delete (T entity);
-    public abstract long create (T entity) throws DaoException;
-    public abstract T update (T entity);
 
-    public void close(Statement statement)  {
-        if (statement!=null){
+    public abstract long create(T entity) throws DaoException;
+
+    public abstract T update(T entity) throws DaoException;
+
+    public abstract boolean delete(long id) throws DaoException;
+
+    public abstract List<T> findById(long id) throws DaoException;
+
+    public abstract List<T> findAll() throws DaoException;
+
+    public abstract List<T> findRange(int start, int recordsPerPage) throws DaoException;
+
+    public void close(Statement statement) throws DaoException {
+        if (statement != null) {
             try {
                 connection.close();
             } catch (SQLException e) {
-                e.printStackTrace();
+                throw new DaoException(e);
             }
         }
     }
 
-    void set(Connection connection){this.connection=connection;
+    void set(Connection connection) {
+        this.connection = connection;
     }
-
 }

@@ -7,6 +7,7 @@
 NEW EVENT
 
 <form action="${pageContext.request.contextPath}/mainservlet?command=add_event" id="form1" method="post">
+    <input type="hidden" name="command" value="upload" />
   <div class="form-group">
     <label for="name">Name</label>
     <div class="col-sm-10">
@@ -49,21 +50,6 @@ NEW EVENT
       </select>
       <a class="nav-link" href="${pageContext.request.contextPath}/mainservlet?command=new_venue">Add venue</a>
     </div>
+              <button type="submit">SUBMIT</button>
   </form>
-  <form action = "uploadservlet" id="form2" method = "post" enctype = "multipart/form-data">
-            <input type = "file" name = "file" size = "50" />
-        <br />
-  </form>
-  <div class="form-group">
-    <div class="col-sm-10">
-      <button type="button" onclick="submitForms()">SUBMIT</button>
-    </div>
-  </div>
-<script>
-  function submitForms(){
-    document.getElementById("form2").submit();
-    document.getElementById("form1").submit();
-  }
-</script>
-
 <jsp:include page="footer.jsp"/>

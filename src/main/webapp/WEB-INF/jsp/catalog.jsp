@@ -18,7 +18,7 @@
                 <td>${eachEvent.date}</td>
                 <td>${eachEvent.time}</td>
                 <td>${eachEvent.venue.name}</td>
-                <td></td>
+                <td><a class="nav-link" href="${pageContext.request.contextPath}/mainservlet?command=event&eventId=${eachEvent.eventId}">Users</a></td>
             </tr>
         </c:forEach>
     </table>
@@ -28,7 +28,7 @@
     <ul class="pagination">
         <c:if test="${currentPage != 1}">
             <li class="page-item"><a class="page-link"
-                href="mainservlet?command=users&currentPage=${currentPage-1}">Previous</a>
+                href="mainservlet?command=catalog&currentPage=${currentPage-1}">Previous</a>
             </li>
         </c:if>
 
@@ -41,7 +41,7 @@
                 </c:when>
                 <c:otherwise>
                     <li class="page-item"><a class="page-link"
-                        href="mainservlet?command=users&currentPage=${i}">${i}</a>
+                        href="mainservlet?command=catalog&currentPage=${i}">${i}</a>
                     </li>
                 </c:otherwise>
             </c:choose>
@@ -49,7 +49,7 @@
 
         <c:if test="${currentPage lt nOfPages}">
             <li class="page-item"><a class="page-link"
-                href="mainservlet?command=users&currentPage=${currentPage+1}">Next</a>
+                href="mainservlet?command=catalog&currentPage=${currentPage+1}">Next</a>
             </li>
         </c:if>
     </ul>

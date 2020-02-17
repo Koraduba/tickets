@@ -18,8 +18,14 @@ public class RequestContent {
 
     public void extractValues(HttpServletRequest request) {
         request.getParameterMap();
-        for (Map.Entry<String, String []> entry : request.getParameterMap().entrySet()) {
+        for (Map.Entry<String, String[]> entry : request.getParameterMap().entrySet()) {
             requestParameters.put(entry.getKey(), entry.getValue());
+        }
+        Enumeration<String> enumeration = request.getSession().getAttributeNames();
+        while (enumeration.hasMoreElements()) {
+            String key = enumeration.nextElement();
+            log.debug("Session attribute",key);
+            sessionAttributes.put(key, request.getSession().getAttribute(key));
         }
     }
 
@@ -28,7 +34,7 @@ public class RequestContent {
             request.setAttribute(entry.getKey(), entry.getValue());
         }
         for (Map.Entry<String, Object> entry : sessionAttributes.entrySet()) {
-            request.getSession(true).setAttribute(entry.getKey(),entry.getValue());
+            request.getSession(true).setAttribute(entry.getKey(), entry.getValue());
         }
     }
 
@@ -37,18 +43,21 @@ public class RequestContent {
         sessionAttributes.put(name, value);
     }
 
+    public Object getSessionAttribute(String name) {
+        return sessionAttributes.get(name);
+    }
+
     public void setRequestAttribute(String name, Object value) {
         log.info(name);
         requestAttributes.put(name, value);
     }
 
     public String getRequestParameter(String name) {
-        log.info("getRequestParameter"+name);
-        String[] results=requestParameters.get(name);
-        if (results!=null) {
+        log.info("getRequestParameter" + name);
+        String[] results = requestParameters.get(name);
+        if (results != null) {
             return results[0];
-        }
-            else {
+        } else {
             return null;
         }
     }

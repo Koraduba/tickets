@@ -15,4 +15,7 @@ public interface EventService {
     public abstract boolean createVenue(Venue venue) throws ServiceLevelException;
     public abstract boolean createTicket (Ticket ticket) throws ServiceLevelException;
     public abstract List<Event> findEventsByRange (int start, int eventsPerPage) throws ServiceLevelException;
+    public abstract Event update (Event event) throws ServiceLevelException;
+    public abstract Event findEventById(long id) throws ServiceLevelException;
+    public abstract Venue updateVenue (Venue venue) throws ServiceLevelException;
 }

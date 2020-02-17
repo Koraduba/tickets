@@ -32,6 +32,8 @@ public class MainServlet extends HttpServlet {
             doPost(request,response);
         }else{
             String page = (String) request.getSession().getAttribute("page");
+            log.debug(request.getSession().getAttribute("id"));
+            log.debug(request.getSession());
             getServletContext().getRequestDispatcher(page).forward(request, response);
         }
     }
@@ -39,6 +41,7 @@ public class MainServlet extends HttpServlet {
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) {
 
+        log.info("SESSION"+request.getSession());
         RequestContent content = new RequestContent();
         String commandName = request.getParameter(ParameterName.COMMAND);
         content.extractValues(request);

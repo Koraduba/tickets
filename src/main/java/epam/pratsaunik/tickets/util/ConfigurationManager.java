@@ -19,7 +19,11 @@ public class ConfigurationManager {
     public static final String NEW_EVENT_PAGE_PATH = "newevent.page.path";
     public static final String NEW_VENUE_PAGE_PATH = "newvenue.page.path";
     public static final String HOME_PAGE_PATH="home.page.path";
-
+    public static final String EVENT_PAGE_PATH="event.page.path";
+    public static final String CART_PAGE_PATH="cart.page.path";
+    public static final String PROFILE_PAGE_PATH="profile.page.path";
+    public static final String ORDER_PAGE_PATH="order.page.path";
+    public static final String ORDERS_PAGE_PATH="orders.page.path";
 
 
     public static final String COMMAND_USERS="command.users";

@@ -14,7 +14,11 @@ public enum CommandType {
     NEW_VENUE(new NewVenueCommand(new EventServiceImpl())),
     ADD_EVENT(new AddEventCommand(new EventServiceImpl())),
     ADD_VENUE(new AddVenueCommand(new EventServiceImpl())),
-    CATALOG(new CatalogCommand(new EventServiceImpl()));
+    CATALOG(new CatalogCommand(new EventServiceImpl())),
+    EVENT(new EventCommand(new EventServiceImpl())),
+    UPLOAD(new UploadCommand(new EventServiceImpl())),
+    LAYOUT_UPLOAD(new LayoutUploadCommand(new EventServiceImpl()));
+
 
     private AbstractCommand command;
 
