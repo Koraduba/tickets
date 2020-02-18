@@ -29,7 +29,7 @@ public class UsersCommand extends AbstractCommand {
         try {
             int nOfRecords = ((UserServiceImpl)service).getNumberOfRecords();
             int nOfPages = nOfRecords / RECORDS_PER_PAGE;
-            if (nOfPages % RECORDS_PER_PAGE > 0) {
+            if (nOfRecords % RECORDS_PER_PAGE > 0) {
                 nOfPages++;
             }
             int currentPage=Integer.parseInt(content.getRequestParameter("currentPage"));

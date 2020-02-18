@@ -18,6 +18,7 @@
                 <td>${eachUser.name}</td>
                 <td>${eachUser.surname}</td>
                 <td>${eachUser.email}</td>
+                <td>${eachUser.role}</td>
             </tr>
         </c:forEach>
     </table>

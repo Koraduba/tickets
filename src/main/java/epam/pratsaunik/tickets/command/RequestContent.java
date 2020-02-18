@@ -24,7 +24,7 @@ public class RequestContent {
         Enumeration<String> enumeration = request.getSession().getAttributeNames();
         while (enumeration.hasMoreElements()) {
             String key = enumeration.nextElement();
-            log.debug("Session attribute",key);
+ //           log.debug("Session attribute",key);
             sessionAttributes.put(key, request.getSession().getAttribute(key));
         }
     }

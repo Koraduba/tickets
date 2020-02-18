@@ -21,4 +21,5 @@ public abstract class EventDao extends AbstractDAO {
     public abstract long createTicket(Ticket ticket) throws DaoException;
     public abstract boolean deleteTicket(Ticket ticket) throws DaoException;
     public abstract List<Ticket> findTicketById(long id) throws DaoException;
+    public abstract List<Ticket> findTicketsByEvent(Event event) throws DaoException;
 }

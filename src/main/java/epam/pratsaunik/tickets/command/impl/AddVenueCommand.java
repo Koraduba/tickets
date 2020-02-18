@@ -3,10 +3,12 @@ package epam.pratsaunik.tickets.command.impl;
 import epam.pratsaunik.tickets.command.AbstractCommand;
 import epam.pratsaunik.tickets.command.RequestContent;
 import epam.pratsaunik.tickets.entity.Venue;
+import epam.pratsaunik.tickets.exception.CommandException;
 import epam.pratsaunik.tickets.exception.ServiceLevelException;
 import epam.pratsaunik.tickets.service.Service;
 import epam.pratsaunik.tickets.service.impl.EventServiceImpl;
 import epam.pratsaunik.tickets.util.ConfigurationManager;
+import epam.pratsaunik.tickets.util.ConfigurationManager2;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -20,20 +22,20 @@ public class AddVenueCommand extends AbstractCommand {
     }
 
     @Override
-    public String execute(RequestContent content) {
+    public String execute(RequestContent content) throws CommandException {
         String page=null;
         Venue venue = new Venue();
-        List<Venue> venueList = new ArrayList<>();
+        List<Venue> venueList = null;
         venue.setName(content.getRequestParameter("name"));
         venue.setCapacity(Integer.parseInt(content.getRequestParameter("capacity")));
         try {
-            ((EventServiceImpl)service).createVenue(venue);
+            long eventId=((EventServiceImpl)service).createVenue(venue);
             venueList=((EventServiceImpl)service).findAllVenues();
+            content.setSessionAttribute("id", eventId);
             content.setSessionAttribute("venues",venueList);
-            page=ConfigurationManager.getInstance().getProperty(ConfigurationManager.NEW_EVENT_PAGE_PATH);
+            page=ConfigurationManager2.UPLOAD_LAYOUT_PATH.getProperty();
         } catch (ServiceLevelException e) {
-            log.error("Error in AddVenueCommand",e);
-            page=ConfigurationManager.getInstance().getProperty(ConfigurationManager.ERROR_PAGE_PATH);
+            throw new CommandException(e);
         }
         return page;
     }

@@ -23,7 +23,7 @@ public class ColumnName {
     public final static String TICKET_ID="ticket_id";
     public final static String TICKET_EVENT="event";
     public final static String TICKET_PRICE="price";
-    public final static String TICKET_CATEGORY="category";
+    public final static String TICKET_CATEGORY="category.name";
     public final static String ORDER_ID="order_id";
     public final static String ORDER_USER="user";
     public final static String ORDER_DATE="date";

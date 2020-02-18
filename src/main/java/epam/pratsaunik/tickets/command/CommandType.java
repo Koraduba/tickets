@@ -17,7 +17,8 @@ public enum CommandType {
     CATALOG(new CatalogCommand(new EventServiceImpl())),
     EVENT(new EventCommand(new EventServiceImpl())),
     UPLOAD(new UploadCommand(new EventServiceImpl())),
-    LAYOUT_UPLOAD(new LayoutUploadCommand(new EventServiceImpl()));
+    UPLOAD_LAYOUT(new UploadLayoutCommand(new EventServiceImpl())),
+    ORDER_LINE(new OrderLineCommand(new EventServiceImpl()));
 
 
     private AbstractCommand command;

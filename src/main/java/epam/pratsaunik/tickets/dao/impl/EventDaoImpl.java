@@ -23,15 +23,15 @@ public class EventDaoImpl extends EventDao {
     private final static String SQL_UPDATE_EVENT = "UPDATE event SET name=?,date=?,description=?,image=?,venue=? WHERE event_id=?";
     private final static String SQL_DELETE_EVENT_BY_ID = "DELETE FROM event WHERE event_id=?";
     private final static String SQL_FIND_EVENT_BY_ID = "SELECT event_id,name,date,description,image,venue FROM event WHERE event_id=?";
-    private final static String SQL_FIND_ALL_EVENTS = "SELECT event_id,name,date,venue,description " +
+    private final static String SQL_FIND_ALL_EVENTS = "SELECT event_id,name,date,venue,description,image " +
             "FROM event";
-    private final static String SQL_FIND_RANGE_OF_EVENTS = "SELECT event_id,name,date,venue,description " +
+    private final static String SQL_FIND_RANGE_OF_EVENTS = "SELECT event_id,name,date,venue,description,image " +
             "FROM event LIMIT ?,?";
 
     private final static String SQL_FIND_EVENTS_BY_DATE = "SELECT event_id,name,date,description,image,venue FROM event WHERE date<? AND date>=?";
     private final static String SQL_FIND_EVENTS_BY_NAME = "SELECT event_id,name,date,description,image,venue FROM event WHERE name=?";
-    private final static String SQL_CREATE_VENUE = "INSERT INTO venue(name,capacity) " +
-            "VALUES(?,?)";
+    private final static String SQL_CREATE_VENUE = "INSERT INTO venue(name,capacity,layout) " +
+            "VALUES(?,?,?)";
     private final static String SQL_UPDATE_VENUE = "UPDATE venue SET name=?,capacity=?,layout=? WHERE venue_id=?";
     private final static String SQL_DELETE_VENUE = "DELETE FROM venue WHERE venue_id=?";
     private final static String SQL_FIND_ALL_VENUES = "SELECT venue_id,name,capacity,layout FROM venue";
@@ -39,7 +39,10 @@ public class EventDaoImpl extends EventDao {
     private final static String SQL_FIND_VENUE_BY_NAME = "SELECT venue_id,name,capacity,layout FROM venue WHERE name=?";
     private final static String SQL_CREATE_TICKET = "INSERT INTO ticket(event,category,price) VALUES(?,?,?)";
     private final static String SQL_DELETE_TICKET="DELETE FROM ticket WHERE ticket_id=?";
-    private final static String SQL_FIND_TICKET_BY_ID="SELECT ticket_id,event,category,price FROM ticket WHERE ticket_id=?";
+    private final static String SQL_FIND_TICKET_BY_ID="SELECT ticket_id,event,category.name,price, FROM ticket WHERE category_id=ticket.category " +
+            "AND ticket_id=?";
+    private final static String SQL_FIND_TICKETS_BY_EVENT="SELECT ticket_id,event,category.name,price FROM ticket WHERE category_id=ticket.category"+
+            "AND event=?";
 
     @Override
     public int getNumberOfRecords() throws DaoException {
@@ -170,7 +173,6 @@ public class EventDaoImpl extends EventDao {
     public List<Event> findById(long id) throws DaoException {
         List<Event> eventList = new ArrayList<>();
         PreparedStatement statement = null;
-
         try {
             statement = connection.prepareStatement(SQL_FIND_EVENT_BY_ID);
             statement.setLong(1, id);
@@ -197,7 +199,7 @@ public class EventDaoImpl extends EventDao {
             try {
                 statement.close();
             } catch (SQLException e) {
-                e.printStackTrace();
+                throw new DaoException(e);
             }
         }
         return eventList;
@@ -353,12 +355,18 @@ public class EventDaoImpl extends EventDao {
     @Override
     public long createVenue(Venue venue) throws DaoException {
         long id=0;
+        log.debug("EventDaOImpl::createVenue");
+        log.debug(venue.toString());
         PreparedStatement statement = null;
         try {
             statement = connection.prepareStatement(SQL_CREATE_VENUE, PreparedStatement.RETURN_GENERATED_KEYS);
             statement.setString(1, venue.getName());
             statement.setInt(2, venue.getCapacity());
-            statement.setString(3, venue.getLayout());
+            if (venue.getLayout() != null) {
+                statement.setString(3, venue.getLayout());
+            } else {
+                statement.setNull(3, Types.VARCHAR);
+            }
             statement.execute();
             ResultSet resultSet = statement.getGeneratedKeys();
             resultSet.next();
@@ -571,6 +579,35 @@ public class EventDaoImpl extends EventDao {
                 Ticket ticket = new Ticket();
                 ticket.setTicketId(resultSet.getLong(ColumnName.TICKET_ID));
                 Event event =findById(resultSet.getLong(ColumnName.TICKET_EVENT)).get(0);
+                ticket.setEvent(event);
+                ticket.setPrice(resultSet.getBigDecimal(ColumnName.TICKET_PRICE));
+                ticket.setCategory(TicketCat.valueOf(resultSet.getString(ColumnName.TICKET_CATEGORY)));
+                ticketList.add(ticket);
+            }
+            resultSet.close();
+        } catch (SQLException e) {
+            throw new DaoException(e);
+        } finally {
+            try {
+                statement.close();
+            } catch (SQLException e) {
+                throw new DaoException(e);
+            }
+        }
+        return ticketList;
+    }
+
+    @Override
+    public List<Ticket> findTicketsByEvent(Event event) throws DaoException {
+        PreparedStatement statement = null;
+        List<Ticket> ticketList = new ArrayList<>();
+        try {
+            statement = connection.prepareStatement(SQL_FIND_TICKETS_BY_EVENT);
+            statement.setLong(1, event.getEventId());
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                Ticket ticket = new Ticket();
+                ticket.setTicketId(resultSet.getLong(ColumnName.TICKET_ID));
                 ticket.setEvent(event);
                 ticket.setPrice(resultSet.getBigDecimal(ColumnName.TICKET_PRICE));
                 ticket.setCategory(TicketCat.valueOf(resultSet.getString(ColumnName.TICKET_CATEGORY)));

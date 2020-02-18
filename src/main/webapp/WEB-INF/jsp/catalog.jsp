@@ -18,7 +18,7 @@
                 <td>${eachEvent.date}</td>
                 <td>${eachEvent.time}</td>
                 <td>${eachEvent.venue.name}</td>
-                <td><a class="nav-link" href="${pageContext.request.contextPath}/mainservlet?command=event&eventId=${eachEvent.eventId}">Users</a></td>
+                <td><a class="nav-link" href="${pageContext.request.contextPath}/mainservlet?command=event&eventId=${eachEvent.eventId}">Details</a></td>
             </tr>
         </c:forEach>
     </table>

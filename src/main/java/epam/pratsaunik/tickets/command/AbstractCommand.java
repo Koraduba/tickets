@@ -1,6 +1,7 @@
 package epam.pratsaunik.tickets.command;
 
 
+import epam.pratsaunik.tickets.exception.CommandException;
 import epam.pratsaunik.tickets.service.Service;
 
 import javax.servlet.http.HttpServletRequest;
@@ -12,5 +13,5 @@ public abstract class AbstractCommand {
     public AbstractCommand(Service service){
         this.service=service;
     }
-    public abstract String execute(RequestContent content);
+    public abstract String execute(RequestContent content) throws CommandException;
 }

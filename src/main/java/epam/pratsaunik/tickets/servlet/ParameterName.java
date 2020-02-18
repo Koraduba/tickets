@@ -10,4 +10,8 @@ public class ParameterName {
     public final static String USER_PASSWORD="password";
     public final static String USER_LOGIN="login";
     public final static String USER_ROLE="role";
+    public final static String ORDER_LINE_QUANTITY="quantity";
+    public final static String ORDER_LINE_TICKET="ticket";
+
+
 }
