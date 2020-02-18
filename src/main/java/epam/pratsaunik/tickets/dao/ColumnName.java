@@ -24,6 +24,15 @@ public class ColumnName {
     public final static String TICKET_EVENT="event";
     public final static String TICKET_PRICE="price";
     public final static String TICKET_CATEGORY="category";
+    public final static String ORDER_ID="order_id";
+    public final static String ORDER_USER="user";
+    public final static String ORDER_DATE="date";
+    public final static String ORDER_LINE_ID="order_line_id";
+    public final static String ORDER_LINE_ORDER="order";
+    public final static String ORDER_LINE_TICKET="ticket";
+    public final static String ORDER_LINE_QUANTITY="quantity";
+
+
 
 
 

@@ -35,9 +35,9 @@ public class UserDaoImpl extends UserDao {
             "FROM user,role WHERE name=? AND user.role=role_id";
     private final static String SQL_FIND_USERS_BY_EVENT ="SELECT user_id, user.name,surname,email, login," +
             "password,role.name FROM user INNER JOIN role ON order.role=role.role_id " +
-            "INNER JOIN order ON user_id=order.user" +
-            "INNER JOIN order_line ON order.order_id=order_line.order=" +
-            "INNER JOIN ticket ON order_line.ticket=ticket.ticket_id" +
+            "INNER JOIN order ON user_id=order.user " +
+            "INNER JOIN order_line ON order.order_id=order_line.order " +
+            "INNER JOIN ticket ON order_line.ticket=ticket.ticket_id " +
             "INNER JOIN event ON ticket.event=event.event_id WHERE event_id=?";
     private final static String SQL_FIND_USER_BY_LOGIN = "SELECT user_id, user.name, surname, email, login, " +
             "password, role.name " +

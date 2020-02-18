@@ -4,6 +4,15 @@ public class OrderLine extends Entity {
 
     private Long orderLineId;
     private Ticket ticket;
+
+    public Long getOrderLineId() {
+        return orderLineId;
+    }
+
+    public void setOrderLineId(Long orderLineId) {
+        this.orderLineId = orderLineId;
+    }
+
     private Integer ticketQuantity;
     private Order order;
 
