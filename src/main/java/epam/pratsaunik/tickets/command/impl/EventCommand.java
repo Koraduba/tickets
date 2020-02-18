@@ -9,10 +9,13 @@ import epam.pratsaunik.tickets.service.Service;
 import epam.pratsaunik.tickets.service.impl.EventServiceImpl;
 import epam.pratsaunik.tickets.util.ConfigurationManager;
 import epam.pratsaunik.tickets.util.ConfigurationManager2;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.List;
 
 public class EventCommand extends AbstractCommand {
+    private final static Logger log = LogManager.getLogger();
     public EventCommand(Service service) {
         super(service);
     }
@@ -25,6 +28,7 @@ public class EventCommand extends AbstractCommand {
         try {
             event=((EventServiceImpl) service).findEventById(Long.parseLong(content.getRequestParameter("eventId")));
             ticketList=((EventServiceImpl)service).findTicketsByEvent(event);
+            log.debug("SIZE"+ticketList.size());
             content.setSessionAttribute("event",event);
             content.setSessionAttribute("tickets",ticketList);
         } catch (ServiceLevelException e) {

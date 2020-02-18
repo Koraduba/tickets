@@ -130,7 +130,7 @@ public class EventServiceImpl implements Service, EventService {
         EntityTransaction entityTransaction = new EntityTransaction();
         try {
             entityTransaction.begin(eventDao);
-            eventDao.findTicketsByEvent(event);
+            ticketList=eventDao.findTicketsByEvent(event);
             entityTransaction.commit();
         } catch (DaoException e) {
             e.printStackTrace();

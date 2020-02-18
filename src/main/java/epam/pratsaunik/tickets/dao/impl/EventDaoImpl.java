@@ -39,10 +39,9 @@ public class EventDaoImpl extends EventDao {
     private final static String SQL_FIND_VENUE_BY_NAME = "SELECT venue_id,name,capacity,layout FROM venue WHERE name=?";
     private final static String SQL_CREATE_TICKET = "INSERT INTO ticket(event,category,price) VALUES(?,?,?)";
     private final static String SQL_DELETE_TICKET="DELETE FROM ticket WHERE ticket_id=?";
-    private final static String SQL_FIND_TICKET_BY_ID="SELECT ticket_id,event,category.name,price, FROM ticket WHERE category_id=ticket.category " +
+    private final static String SQL_FIND_TICKET_BY_ID="SELECT ticket_id,event,category.name,price, FROM ticket,category WHERE category_id=ticket.category " +
             "AND ticket_id=?";
-    private final static String SQL_FIND_TICKETS_BY_EVENT="SELECT ticket_id,event,category.name,price FROM ticket WHERE category_id=ticket.category"+
-            "AND event=?";
+    private final static String SQL_FIND_TICKETS_BY_EVENT="SELECT ticket_id,event,category.name,price FROM ticket,category WHERE category_id=ticket.category AND event=?";
 
     @Override
     public int getNumberOfRecords() throws DaoException {

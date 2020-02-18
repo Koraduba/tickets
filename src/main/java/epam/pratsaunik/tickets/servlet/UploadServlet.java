@@ -46,7 +46,7 @@ public class UploadServlet extends HttpServlet {
             log.debug(absPath);
             if (part.getSubmittedFileName() != null) {
                 part.write(uploadDir + File.separator + part.getSubmittedFileName());
-                req.getSession().setAttribute("path", uploadDir + File.separator + part.getSubmittedFileName());
+                req.getSession().setAttribute("path", UPLOAD_PATH + File.separator + part.getSubmittedFileName());
             }
         }
         String commandName = req.getParameter(ParameterName.COMMAND);
