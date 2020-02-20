@@ -3,7 +3,6 @@ package epam.pratsaunik.tickets.dao;
 
 import epam.pratsaunik.tickets.connection.ConnectionPoll;
 import epam.pratsaunik.tickets.exception.ConnectionException;
-import epam.pratsaunik.tickets.exception.CustomException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -22,7 +21,7 @@ public class EntityTransaction {
             try {
                 connection=ConnectionPoll.getInstance().retrieveConnection();
             } catch (ConnectionException e) {
-               log.error("Connection error"+e);
+               log.fatal("Connection error"+e);
                throw new RuntimeException();
             }
         }
@@ -33,12 +32,16 @@ public class EntityTransaction {
         }
         for (AbstractDAO dao : daos) {
             dao.set(connection);
+            log.debug(dao.toString());
+            log.debug(connection.toString());
         }
+        log.debug("TRANSACTION BEGIN");
     }
 
     public void end() {
         try {
             connection.setAutoCommit(true);
+            log.debug("TRANSACTION END");
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -53,7 +56,9 @@ public class EntityTransaction {
 
     public void commit() {
         try {
+
             connection.commit();
+            log.debug("TRANSACTION COMMIT");
         } catch (SQLException e) {
             e.printStackTrace();
         }

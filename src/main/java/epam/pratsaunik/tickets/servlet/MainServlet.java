@@ -3,12 +3,9 @@ package epam.pratsaunik.tickets.servlet;
 
 import epam.pratsaunik.tickets.command.AbstractCommand;
 import epam.pratsaunik.tickets.command.CommandFactory;
-import epam.pratsaunik.tickets.command.CommandType;
+import epam.pratsaunik.tickets.command.CommandResult;
 import epam.pratsaunik.tickets.command.RequestContent;
-import epam.pratsaunik.tickets.connection.ConnectionPoll;
-import epam.pratsaunik.tickets.entity.User;
 import epam.pratsaunik.tickets.exception.CommandException;
-import epam.pratsaunik.tickets.exception.ConnectionException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -28,13 +25,13 @@ public class MainServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        log.debug("doGet");
         String commandName = request.getParameter(ParameterName.COMMAND);
+        log.debug("command: " + commandName);
         if (commandName != null) {
             doPost(request, response);
         } else {
             String page = (String) request.getSession().getAttribute("page");
-            log.debug(request.getSession().getAttribute("id"));
-            log.debug(request.getSession());
             getServletContext().getRequestDispatcher(page).forward(request, response);
         }
     }
@@ -42,28 +39,34 @@ public class MainServlet extends HttpServlet {
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         RequestContent content = new RequestContent();
-        String commandName = request.getParameter(ParameterName.COMMAND);
         content.extractValues(request);
-        System.out.println(commandName);
-        log.debug("Command came to mainservlet: ", commandName);
+        String commandName = request.getParameter(ParameterName.COMMAND);
+        log.debug("Command came to mainservlet: " + commandName);
         AbstractCommand commandAction = CommandFactory.instance.getCommand(commandName);
         if (commandAction != null) {
-            String page = null;
+            CommandResult commandResult = null;
             try {
-                page = commandAction.execute(content);
-                log.debug("Page received from command: ", page);
+                commandResult = commandAction.execute(content);
             } catch (CommandException e) {
-                getServletContext().getRequestDispatcher(page).forward(request, response);
+                log.error(e);
+                throw new ServletException(e);
             }
             content.insertAttributes(request);
-            if (page != null) {
-                request.getSession().setAttribute("page", page);
-                log.debug(request.getContextPath());
-                response.sendRedirect(request.getContextPath() + "/mainservlet");
+            switch (commandResult.getResponseType()) {
+                case FORWARD:
+                    getServletContext().getRequestDispatcher(commandResult.getResponsePage()).forward(request, response);
+                    break;
+                case REDIRECT:
+                    response.sendRedirect(request.getContextPath() + "/mainservlet");
+                    request.getSession().setAttribute("page", commandResult.getResponsePage());
+                    break;
+                default:
+                    throw new ServletException("Command error!");
             }
 
         } else {
-            log.info("Command does not exist!");
+            log.warn("Command does not exist!");
+            throw new ServletException("Command does not exist!");
         }
     }
 

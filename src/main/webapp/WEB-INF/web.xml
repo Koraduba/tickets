@@ -54,9 +54,11 @@
   </servlet-mapping>
 
   <error-page>
-    <exception-type>java.lang.Exception</exception-type>
+    <exception-type>epam.pratsaunik.tickets.exception.CommandException</exception-type>
     <location>/errors/error.jsp</location>
   </error-page>
+
+
 
   <context-param>
     <param-name>administrator password</param-name>

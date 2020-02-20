@@ -2,6 +2,7 @@ package epam.pratsaunik.tickets.command.impl;
 
 
 import epam.pratsaunik.tickets.command.AbstractCommand;
+import epam.pratsaunik.tickets.command.CommandResult;
 import epam.pratsaunik.tickets.command.RequestContent;
 import epam.pratsaunik.tickets.util.ConfigurationManager;
 import epam.pratsaunik.tickets.entity.User;
@@ -9,10 +10,10 @@ import epam.pratsaunik.tickets.exception.ServiceLevelException;
 import epam.pratsaunik.tickets.service.Service;
 import epam.pratsaunik.tickets.service.impl.UserServiceImpl;
 import epam.pratsaunik.tickets.servlet.AttributeName;
+import epam.pratsaunik.tickets.util.ConfigurationManager2;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import javax.servlet.ServletContext;
 import java.util.List;
 
 public class UsersCommand extends AbstractCommand {
@@ -23,8 +24,8 @@ public class UsersCommand extends AbstractCommand {
         super(service);
     }
     @Override
-    public String execute(RequestContent content) {
-
+    public CommandResult execute(RequestContent content) {
+        CommandResult commandResult=new CommandResult();
         List<User> list = null;
         try {
             int nOfRecords = ((UserServiceImpl)service).getNumberOfRecords();
@@ -41,6 +42,8 @@ public class UsersCommand extends AbstractCommand {
         } catch (ServiceLevelException e) {
             e.printStackTrace();
         }
-        return ConfigurationManager.getInstance().getProperty(ConfigurationManager.USERS_PAGE_PATH);
+        commandResult.setResponsePage(ConfigurationManager2.USERS_PAGE_PATH.getProperty());
+        commandResult.setResponseType(CommandResult.ResponseType.FORWARD);
+        return commandResult;
     }
 }

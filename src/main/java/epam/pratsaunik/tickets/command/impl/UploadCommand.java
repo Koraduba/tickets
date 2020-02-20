@@ -1,6 +1,7 @@
 package epam.pratsaunik.tickets.command.impl;
 
 import epam.pratsaunik.tickets.command.AbstractCommand;
+import epam.pratsaunik.tickets.command.CommandResult;
 import epam.pratsaunik.tickets.command.RequestContent;
 import epam.pratsaunik.tickets.entity.Event;
 import epam.pratsaunik.tickets.entity.Venue;
@@ -18,7 +19,8 @@ public class UploadCommand extends AbstractCommand {
         super(service);
     }
     @Override
-    public String execute(RequestContent content) throws CommandException {
+    public CommandResult execute(RequestContent content) throws CommandException {
+        CommandResult commandResult=new CommandResult();
         log.debug("UploadCommand launched");
         log.debug("Current page",content.getSessionAttribute("current_page").toString());
 
@@ -34,6 +36,8 @@ public class UploadCommand extends AbstractCommand {
         } catch (ServiceLevelException e) {
             e.printStackTrace();
         }
-        return ConfigurationManager2.HOME_PAGE_PATH.getProperty();
+        commandResult.setResponsePage(ConfigurationManager2.HOME_PAGE_PATH.getProperty());
+        commandResult.setResponseType(CommandResult.ResponseType.FORWARD);
+        return commandResult;
     }
 }

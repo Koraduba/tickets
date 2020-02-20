@@ -1,9 +1,6 @@
 package epam.pratsaunik.tickets.servlet;
 
-import epam.pratsaunik.tickets.command.AbstractCommand;
-import epam.pratsaunik.tickets.command.CommandFactory;
-import epam.pratsaunik.tickets.command.CommandType;
-import epam.pratsaunik.tickets.command.RequestContent;
+import epam.pratsaunik.tickets.command.*;
 import epam.pratsaunik.tickets.exception.CommandException;
 import epam.pratsaunik.tickets.util.ConfigurationManager;
 import epam.pratsaunik.tickets.util.ConfigurationManager2;
@@ -35,7 +32,7 @@ public class UploadServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String page = null;
+        CommandResult commandResult=null;
         String path = req.getServletContext().getRealPath("/");
         String absPath = path + File.separator + UPLOAD_PATH;
         File uploadDir = new File(absPath);
@@ -55,22 +52,29 @@ public class UploadServlet extends HttpServlet {
         requestContent.extractValues(req);
         if (commandAction != null) {
             try {
-                page = commandAction.execute(requestContent);
+                commandResult = commandAction.execute(requestContent);
             } catch (CommandException e) {
                 log.info(e);
             }
             try {
                 requestContent.insertAttributes(req);
-                if (page != null) {
-                    req.getSession().setAttribute("page", page);
-                    log.debug(req.getContextPath());
-                    resp.sendRedirect(req.getContextPath() + "/uploadservlet");
+                switch (commandResult.getResponseType()) {
+                    case FORWARD:
+                        getServletContext().getRequestDispatcher(commandResult.getResponsePage()).forward(req, resp);
+                        break;
+                    case REDIRECT:
+                        resp.sendRedirect(req.getContextPath() + "/uploadservlet");
+                        req.getSession().setAttribute("page", commandResult.getResponsePage());
+                        break;
+                    default:
+                        throw new ServletException("Command error!");
                 }
             } catch (Exception e) {
-                e.printStackTrace();
+                throw new ServletException(e);
             }
         } else {
             log.info("Command does not exist!");
+            throw new ServletException();
     }
     }
 }

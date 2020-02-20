@@ -4,7 +4,7 @@
 EVENT
 
 <div class="row col-md-6">
-    <table class="table table-striped table-bordered table-sm">
+	<table class="table table-striped table-bordered table-sm">
             <tr>
                 <td>${event.name}</td>
             </tr>
@@ -26,21 +26,17 @@ EVENT
 
             <c:forEach items="${tickets}" var="ticket">
             <tr>
-                <td>${ticket.category}</td>
-                <td>${ticket.price}</td>
-                <td><a class="nav-link" href="${pageContext.request.contextPath}/mainservlet?command=add_order_line&eventId=${eachEvent.eventId}&ticket=${ticket.ticketId}">To cart</a></td>
+            <form name="to_cart" method="POST" action="mainservlet">
+				<td>${ticket.category}</td>
+				<td>${ticket.price}</td>
+				<td><input type="number" class="form-control" id="quantity" name="quantity"></td>
+				<td><input type="submit" value="to Cart"/></td>
+                <input type="hidden" name="command" value="order_line" />
+                <input type="hidden" name="event" value="${eachEvent.eventId}" />
+                <input type="hidden" name="ticket" value="${ticket.ticketId}" />
+            </form>
             </tr>
-            </c:forEach>
-    </table>
+			</c:forEach>
+	</table>
  </div>
- <form action="${pageContext.request.contextPath}/mainservlet?command=add_order_line&eventId=${event.eventId}" method="post">
-
-          <div class="form-group row">
-            <label for="quantity" class="col-sm-2 col-form-label">Quantity</label>
-            <div class="col-sm-10">
-              <input type="number" class="form-control" id="quantity" name="quantity">
-            </div>
-</form>
-
-
 <jsp:include page="footer.jsp"/>

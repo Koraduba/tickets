@@ -2,6 +2,7 @@ package epam.pratsaunik.tickets.command;
 
 import epam.pratsaunik.tickets.command.impl.*;
 import epam.pratsaunik.tickets.service.impl.EventServiceImpl;
+import epam.pratsaunik.tickets.service.impl.OrderServiceImpl;
 import epam.pratsaunik.tickets.service.impl.UserServiceImpl;
 
 public enum CommandType {
@@ -18,8 +19,13 @@ public enum CommandType {
     EVENT(new EventCommand(new EventServiceImpl())),
     UPLOAD(new UploadCommand(new EventServiceImpl())),
     UPLOAD_LAYOUT(new UploadLayoutCommand(new EventServiceImpl())),
-    ORDER_LINE(new OrderLineCommand(new EventServiceImpl()));
-
+    ORDER_LINE(new OrderLineCommand(new EventServiceImpl())),
+    CART(new CartCommand(new OrderServiceImpl())),
+    ORDER(new OrderCommand(new OrderServiceImpl())),
+    HOME(new HomeCommand(new OrderServiceImpl())),
+    ORDERS(new OrdersCommand(new OrderServiceImpl())),
+    PROFILE(new ProfileCommand(new UserServiceImpl())),
+    STATISTIC(new StatisticCommand(new OrderServiceImpl()));
 
     private AbstractCommand command;
 

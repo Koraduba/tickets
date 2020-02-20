@@ -27,15 +27,15 @@ public class ConnectionPoll {
     private static Lock lock = new ReentrantLock();
     private final static Logger log = LogManager.getLogger();
 
-    private ConnectionPoll() throws ConnectionException {
+    private ConnectionPoll() {
         try {
             Class.forName(DbConfigurationManager.getInstance().getProperty(DATABASE_DRIVER_NAME));
         } catch (ClassNotFoundException e) {
-            throw new ConnectionException(e);
+            throw new RuntimeException("Database driver cannot be found",e);
         }
     }
 
-    public static ConnectionPoll getInstance() throws ConnectionException {
+    public static ConnectionPoll getInstance() {
         if (isNotCreated.get()) {
             lock.lock();
             try {
@@ -59,6 +59,7 @@ public class ConnectionPoll {
         } catch (SQLException e) {
             throw new ConnectionException(e);
         }
+        log.debug("CONNECTION POLL:"+connection);
         return new ProxyConnection(connection);
     }
 
@@ -90,12 +91,12 @@ public class ConnectionPoll {
             throw new ConnectionException();
     }
 
-    public void destroyPoll() {
+    public void destroyPoll() throws ConnectionException {
         for (int i = 0; i < consCount.get(); i++) {
             try {
                 availableCon.take().reallyClose();
             } catch (InterruptedException e) {
-                e.printStackTrace();
+                throw new ConnectionException(e);
             }
         }
     }

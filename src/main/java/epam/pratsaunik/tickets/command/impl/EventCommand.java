@@ -1,9 +1,11 @@
 package epam.pratsaunik.tickets.command.impl;
 
 import epam.pratsaunik.tickets.command.AbstractCommand;
+import epam.pratsaunik.tickets.command.CommandResult;
 import epam.pratsaunik.tickets.command.RequestContent;
 import epam.pratsaunik.tickets.entity.Event;
 import epam.pratsaunik.tickets.entity.Ticket;
+import epam.pratsaunik.tickets.exception.CommandException;
 import epam.pratsaunik.tickets.exception.ServiceLevelException;
 import epam.pratsaunik.tickets.service.Service;
 import epam.pratsaunik.tickets.service.impl.EventServiceImpl;
@@ -21,20 +23,20 @@ public class EventCommand extends AbstractCommand {
     }
 
     @Override
-    public String execute(RequestContent content) {
-        String page = null;
+    public CommandResult execute(RequestContent content) throws CommandException {
+        CommandResult commandResult=new CommandResult();
         Event event = null;
         List<Ticket> ticketList= null;
         try {
             event=((EventServiceImpl) service).findEventById(Long.parseLong(content.getRequestParameter("eventId")));
             ticketList=((EventServiceImpl)service).findTicketsByEvent(event);
-            log.debug("SIZE"+ticketList.size());
             content.setSessionAttribute("event",event);
             content.setSessionAttribute("tickets",ticketList);
         } catch (ServiceLevelException e) {
-
+            throw new CommandException(e);
         }
-
-        return ConfigurationManager2.EVENT_PAGE_PATH.getProperty();
+        commandResult.setResponsePage(ConfigurationManager2.EVENT_PAGE_PATH.getProperty());
+        commandResult.setResponseType(CommandResult.ResponseType.FORWARD);
+        return commandResult;
     }
 }

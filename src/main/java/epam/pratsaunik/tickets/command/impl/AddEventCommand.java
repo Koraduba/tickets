@@ -1,24 +1,22 @@
 package epam.pratsaunik.tickets.command.impl;
 
 import epam.pratsaunik.tickets.command.AbstractCommand;
+import epam.pratsaunik.tickets.command.CommandResult;
 import epam.pratsaunik.tickets.command.RequestContent;
 import epam.pratsaunik.tickets.entity.Event;
 import epam.pratsaunik.tickets.entity.Ticket;
 import epam.pratsaunik.tickets.entity.TicketCat;
-import epam.pratsaunik.tickets.entity.Venue;
+import epam.pratsaunik.tickets.exception.CommandException;
 import epam.pratsaunik.tickets.exception.ServiceLevelException;
 import epam.pratsaunik.tickets.service.Service;
 import epam.pratsaunik.tickets.service.impl.EventServiceImpl;
-import epam.pratsaunik.tickets.service.impl.UserServiceImpl;
-import epam.pratsaunik.tickets.util.ConfigurationManager;
+import epam.pratsaunik.tickets.servlet.ParameterName;
 import epam.pratsaunik.tickets.util.ConfigurationManager2;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.lang.reflect.Parameter;
 import java.math.BigDecimal;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class AddEventCommand extends AbstractCommand {
@@ -29,23 +27,22 @@ public class AddEventCommand extends AbstractCommand {
     }
 
     @Override
-    public String execute(RequestContent content) {
-        String page = null;
+    public CommandResult execute(RequestContent content) throws CommandException {
+        CommandResult commandResult=new CommandResult();
         Event event = new Event();
         Ticket ticketStd = new Ticket();
         Ticket ticketVip = new Ticket();
         Date date = null;
-        event.setName(content.getRequestParameter("name"));
-        event.setDate(content.getRequestParameter("date"));
-        event.setTime(content.getRequestParameter("time"));
-        event.setDescription(content.getRequestParameter("description"));
-        event.setImage((String) content.getSessionAttribute("path"));
+        event.setName(content.getRequestParameter(ParameterName.EVENT_NAME));
+        event.setDate(content.getRequestParameter(ParameterName.EVENT_DATE));
+        event.setTime(content.getRequestParameter(ParameterName.EVENT_TIME));
+        event.setDescription(content.getRequestParameter(ParameterName.EVENT_DESCRIPTION));
+        event.setImage((String) content.getSessionAttribute(ParameterName.EVENT_IMAGE));
         ticketStd.setCategory(TicketCat.STANDARD);
         ticketVip.setCategory(TicketCat.VIP);
-        ticketStd.setPrice(new BigDecimal(content.getRequestParameter("price-standard")));
-        ticketVip.setPrice(new BigDecimal(content.getRequestParameter("price-vip")));
-
-        String venue = content.getRequestParameter("venue");
+        ticketStd.setPrice(new BigDecimal(content.getRequestParameter(ParameterName.TICKET_PRICE_STANDARD)));
+        ticketVip.setPrice(new BigDecimal(content.getRequestParameter(ParameterName.TICKET_PRICE_VIP)));
+        String venue = content.getRequestParameter(ParameterName.EVENT_VENUE);
         try {
             if (venue != null) {
                 event.setVenue(((EventServiceImpl) service).findVenueByName(venue));
@@ -57,11 +54,11 @@ public class AddEventCommand extends AbstractCommand {
             ((EventServiceImpl) service).createTicket(ticketStd);
             ((EventServiceImpl) service).createTicket(ticketVip);
             content.setSessionAttribute("id", eventId);
-            page = ConfigurationManager2.UPLOAD_PAGE_PATH.getProperty();
+            commandResult.setResponsePage(ConfigurationManager2.UPLOAD_PAGE_PATH.getProperty());
+            commandResult.setResponseType(CommandResult.ResponseType.FORWARD);
         } catch (ServiceLevelException e) {
-            log.error("Exception in AddEventCommand " + e);
-            page = ConfigurationManager2.ERROR_PAGE_PATH.getProperty();
+            throw new CommandException(e);
         }
-        return page;
+        return commandResult;
     }
 }

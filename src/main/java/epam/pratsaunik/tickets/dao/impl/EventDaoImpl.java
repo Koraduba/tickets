@@ -16,7 +16,7 @@ import java.util.Date;
 
 public class EventDaoImpl extends EventDao {
     private final static Logger log = LogManager.getLogger();
-    private final static long MILLISECONDS_PER_DAY=86400000;
+    private final static long MILLISECONDS_PER_DAY = 86400000;
     private final static String SQL_GET_NUMBER_OF_RECORDS = "SELECT count(event_id) FROM event";
     private final static String SQL_CREATE_EVENT = "INSERT INTO event(name,date,description,image,venue) " +
             "VALUES(?,?,?,?,?)";
@@ -38,10 +38,12 @@ public class EventDaoImpl extends EventDao {
     private final static String SQL_FIND_VENUE_BY_ID = "SELECT venue_id,name,capacity,layout FROM venue WHERE venue_id=?";
     private final static String SQL_FIND_VENUE_BY_NAME = "SELECT venue_id,name,capacity,layout FROM venue WHERE name=?";
     private final static String SQL_CREATE_TICKET = "INSERT INTO ticket(event,category,price) VALUES(?,?,?)";
-    private final static String SQL_DELETE_TICKET="DELETE FROM ticket WHERE ticket_id=?";
-    private final static String SQL_FIND_TICKET_BY_ID="SELECT ticket_id,event,category.name,price, FROM ticket,category WHERE category_id=ticket.category " +
+    private final static String SQL_DELETE_TICKET = "DELETE FROM ticket WHERE ticket_id=?";
+    private final static String SQL_FIND_TICKET_BY_ID = "SELECT ticket_id,event,category.name,price FROM ticket,category " +
+            "WHERE category_id=ticket.category " +
             "AND ticket_id=?";
-    private final static String SQL_FIND_TICKETS_BY_EVENT="SELECT ticket_id,event,category.name,price FROM ticket,category WHERE category_id=ticket.category AND event=?";
+    private final static String SQL_FIND_TICKETS_BY_EVENT = "SELECT ticket_id,event,category.name,price FROM ticket,category " +
+            "WHERE category_id=ticket.category AND event=?";
 
     @Override
     public int getNumberOfRecords() throws DaoException {
@@ -61,7 +63,7 @@ public class EventDaoImpl extends EventDao {
                 resultSet.close();
                 statement.close();
             } catch (SQLException e) {
-                throw new DaoException();
+                log.warn(e);
             }
         }
         return result;
@@ -70,8 +72,8 @@ public class EventDaoImpl extends EventDao {
     @Override
     public long create(Entity entity) throws DaoException {
         Event event = (Event) entity;
-        PreparedStatement statement = null;
-        ResultSet resultSet = null;
+        PreparedStatement statement=null;
+        ResultSet resultSet=null;
         long id = -1;
         try {
             statement = connection.prepareStatement(SQL_CREATE_EVENT, PreparedStatement.RETURN_GENERATED_KEYS);
@@ -104,7 +106,7 @@ public class EventDaoImpl extends EventDao {
                 resultSet.close();
                 statement.close();
             } catch (SQLException e) {
-                throw new DaoException(e);
+                log.warn(e);
             }
         }
         return id;
@@ -142,7 +144,7 @@ public class EventDaoImpl extends EventDao {
             try {
                 statement.close();
             } catch (SQLException e) {
-                throw new DaoException(e);
+                log.warn(e);
             }
         }
         return oldEvent;
@@ -162,7 +164,7 @@ public class EventDaoImpl extends EventDao {
             try {
                 statement.close();
             } catch (SQLException e) {
-                throw new DaoException(e);
+                log.warn(e);
             }
         }
         return true;
@@ -172,10 +174,11 @@ public class EventDaoImpl extends EventDao {
     public List<Event> findById(long id) throws DaoException {
         List<Event> eventList = new ArrayList<>();
         PreparedStatement statement = null;
+        ResultSet resultSet=null;
         try {
             statement = connection.prepareStatement(SQL_FIND_EVENT_BY_ID);
             statement.setLong(1, id);
-            ResultSet resultSet = statement.executeQuery();
+            resultSet = statement.executeQuery();
             while (resultSet.next()) {
                 Event event = new Event();
                 event.setEventId(resultSet.getLong(ColumnName.EVENT_ID));
@@ -191,14 +194,14 @@ public class EventDaoImpl extends EventDao {
                 event.setVenue(venue);
                 eventList.add(event);
             }
-            resultSet.close();
         } catch (SQLException e) {
             throw new DaoException(e);
         } finally {
             try {
+                resultSet.close();
                 statement.close();
             } catch (SQLException e) {
-                throw new DaoException(e);
+                log.warn(e);
             }
         }
         return eventList;
@@ -208,10 +211,11 @@ public class EventDaoImpl extends EventDao {
     @Override
     public List findAll() throws DaoException {
         Statement statement = null;
+        ResultSet resultSet=null;
         List<Event> eventList = new ArrayList<>();
         try {
             statement = connection.createStatement();
-            ResultSet resultSet = statement.executeQuery(SQL_FIND_ALL_EVENTS);
+            resultSet = statement.executeQuery(SQL_FIND_ALL_EVENTS);
             while (resultSet.next()) {
                 Event event = new Event();
                 event.setEventId(resultSet.getLong(ColumnName.EVENT_ID));
@@ -226,14 +230,14 @@ public class EventDaoImpl extends EventDao {
                 event.setVenue(findVenueById(resultSet.getLong(ColumnName.EVENT_VENUE)).get(0));
                 eventList.add(event);
             }
-            resultSet.close();
         } catch (SQLException e) {
             throw new DaoException(e);
         } finally {
             try {
+                resultSet.close();
                 statement.close();
             } catch (SQLException e) {
-                throw new DaoException(e);
+                log.warn(e);
             }
         }
         return eventList;
@@ -243,11 +247,12 @@ public class EventDaoImpl extends EventDao {
     public List findRange(int start, int recordsPerPage) throws DaoException {
         List<Event> events = new ArrayList<>();
         PreparedStatement statement = null;
+        ResultSet resultSet=null;
         try {
             statement = connection.prepareStatement(SQL_FIND_RANGE_OF_EVENTS);
             statement.setInt(1, start);
             statement.setInt(2, recordsPerPage);
-            ResultSet resultSet = statement.executeQuery();
+            resultSet = statement.executeQuery();
             while (resultSet.next()) {
                 Event event = new Event();
                 event.setEventId(resultSet.getLong(ColumnName.EVENT_ID));
@@ -263,14 +268,14 @@ public class EventDaoImpl extends EventDao {
                 event.setVenue(venue);
                 events.add(event);
             }
-            resultSet.close();
         } catch (SQLException e) {
             throw new DaoException(e);
         } finally {
             try {
+                resultSet.close();
                 statement.close();
             } catch (SQLException e) {
-                throw new DaoException(e);
+                log.warn(e);
             }
         }
         return events;
@@ -281,12 +286,13 @@ public class EventDaoImpl extends EventDao {
     public List<Event> findEventsByDate(Date dateOfEvent) throws DaoException {
         List<Event> eventList = new ArrayList<>();
         PreparedStatement statement = null;
-        long time=dateOfEvent.getTime();
+        ResultSet resultSet=null;
+        long time = dateOfEvent.getTime();
         try {
             statement = connection.prepareStatement(SQL_FIND_EVENTS_BY_DATE);
-            statement.setLong(1, time/MILLISECONDS_PER_DAY*MILLISECONDS_PER_DAY);
-            statement.setLong(2,time/MILLISECONDS_PER_DAY*MILLISECONDS_PER_DAY+MILLISECONDS_PER_DAY);
-            ResultSet resultSet = statement.executeQuery();
+            statement.setLong(1, time / MILLISECONDS_PER_DAY * MILLISECONDS_PER_DAY);
+            statement.setLong(2, time / MILLISECONDS_PER_DAY * MILLISECONDS_PER_DAY + MILLISECONDS_PER_DAY);
+            resultSet = statement.executeQuery();
             while (resultSet.next()) {
                 Event event = new Event();
                 event.setEventId(resultSet.getLong(ColumnName.EVENT_ID));
@@ -302,14 +308,14 @@ public class EventDaoImpl extends EventDao {
                 event.setVenue(venue);
                 eventList.add(event);
             }
-            resultSet.close();
         } catch (SQLException e) {
             throw new DaoException(e);
         } finally {
             try {
+                resultSet.close();
                 statement.close();
             } catch (SQLException e) {
-                throw new DaoException(e);
+                log.warn(e);
             }
         }
         return eventList;
@@ -319,10 +325,11 @@ public class EventDaoImpl extends EventDao {
     public List<Event> findEventByName(String name) throws DaoException {
         List<Event> eventList = new ArrayList<>();
         PreparedStatement statement = null;
+        ResultSet resultSet=null;
         try {
             statement = connection.prepareStatement(SQL_FIND_EVENTS_BY_NAME);
-            statement.setString(1,name);
-            ResultSet resultSet = statement.executeQuery();
+            statement.setString(1, name);
+            resultSet = statement.executeQuery();
             while (resultSet.next()) {
                 Event event = new Event();
                 event.setEventId(resultSet.getLong(ColumnName.EVENT_ID));
@@ -338,14 +345,14 @@ public class EventDaoImpl extends EventDao {
                 event.setVenue(venue);
                 eventList.add(event);
             }
-            resultSet.close();
         } catch (SQLException e) {
             throw new DaoException(e);
         } finally {
             try {
+                resultSet.close();
                 statement.close();
             } catch (SQLException e) {
-                throw new DaoException(e);
+                log.warn(e);
             }
         }
         return eventList;
@@ -353,10 +360,11 @@ public class EventDaoImpl extends EventDao {
 
     @Override
     public long createVenue(Venue venue) throws DaoException {
-        long id=0;
+        long id = 0;
         log.debug("EventDaOImpl::createVenue");
         log.debug(venue.toString());
         PreparedStatement statement = null;
+        ResultSet resultSet=null;
         try {
             statement = connection.prepareStatement(SQL_CREATE_VENUE, PreparedStatement.RETURN_GENERATED_KEYS);
             statement.setString(1, venue.getName());
@@ -367,18 +375,18 @@ public class EventDaoImpl extends EventDao {
                 statement.setNull(3, Types.VARCHAR);
             }
             statement.execute();
-            ResultSet resultSet = statement.getGeneratedKeys();
+            resultSet = statement.getGeneratedKeys();
             resultSet.next();
-            id=resultSet.getLong(1);
+            id = resultSet.getLong(1);
             venue.setVenueId(id);
-            resultSet.close();
         } catch (SQLException e) {
             throw new DaoException(e);
         } finally {
             try {
+                resultSet.close();
                 statement.close();
             } catch (SQLException e) {
-                throw new DaoException(e);
+                log.warn(e);
             }
         }
         return id;
@@ -397,7 +405,7 @@ public class EventDaoImpl extends EventDao {
             } else {
                 statement.setNull(3, Types.VARCHAR);
             }
-            statement.setLong(4,venue.getVenueId());
+            statement.setLong(4, venue.getVenueId());
             statement.execute();
         } catch (SQLException e) {
             throw new DaoException(e);
@@ -405,7 +413,7 @@ public class EventDaoImpl extends EventDao {
             try {
                 statement.close();
             } catch (SQLException e) {
-                throw new DaoException(e);
+                log.warn(e);
             }
         }
         return oldVenue;
@@ -425,7 +433,7 @@ public class EventDaoImpl extends EventDao {
             try {
                 statement.close();
             } catch (SQLException e) {
-                throw new DaoException(e);
+                log.warn(e);
             }
         }
         return true;
@@ -435,10 +443,11 @@ public class EventDaoImpl extends EventDao {
     @Override
     public List<Venue> findAllVenues() throws DaoException {
         Statement statement = null;
+        ResultSet resultSet=null;
         List<Venue> venueList = new ArrayList<>();
         try {
             statement = connection.createStatement();
-            ResultSet resultSet = statement.executeQuery(SQL_FIND_ALL_VENUES);
+            resultSet = statement.executeQuery(SQL_FIND_ALL_VENUES);
             while (resultSet.next()) {
                 Venue venue = new Venue();
                 venue.setVenueId(resultSet.getLong(ColumnName.VENUE_ID));
@@ -447,14 +456,14 @@ public class EventDaoImpl extends EventDao {
                 venue.setLayout(resultSet.getString(ColumnName.VENUE_NAME));
                 venueList.add(venue);
             }
-            resultSet.close();
         } catch (SQLException e) {
             throw new DaoException(e);
         } finally {
             try {
+                resultSet.close();
                 statement.close();
             } catch (SQLException e) {
-                throw new DaoException(e);
+                log.warn(e);
             }
         }
         return venueList;
@@ -463,11 +472,12 @@ public class EventDaoImpl extends EventDao {
     @Override
     public List<Venue> findVenueById(Long id) throws DaoException {
         PreparedStatement statement = null;
+        ResultSet resultSet=null;
         List<Venue> venueList = new ArrayList<>();
         try {
             statement = connection.prepareStatement(SQL_FIND_VENUE_BY_ID);
             statement.setLong(1, id);
-            ResultSet resultSet = statement.executeQuery();
+            resultSet = statement.executeQuery();
             while (resultSet.next()) {
                 Venue venue = new Venue();
                 venue.setVenueId(resultSet.getLong(ColumnName.VENUE_ID));
@@ -476,14 +486,14 @@ public class EventDaoImpl extends EventDao {
                 venue.setLayout(resultSet.getString(ColumnName.VENUE_LAYOUT));//todo
                 venueList.add(venue);
             }
-            resultSet.close();
         } catch (SQLException e) {
             throw new DaoException(e);
         } finally {
             try {
+                resultSet.close();
                 statement.close();
             } catch (SQLException e) {
-                throw new DaoException(e);
+                log.warn(e);
             }
         }
         return venueList;
@@ -492,11 +502,12 @@ public class EventDaoImpl extends EventDao {
     @Override
     public List<Venue> findVenueByName(String name) throws DaoException {
         PreparedStatement statement = null;
+        ResultSet resultSet=null;
         List<Venue> venueList = new ArrayList<>();
         try {
             statement = connection.prepareStatement(SQL_FIND_VENUE_BY_NAME);
             statement.setString(1, name);
-            ResultSet resultSet = statement.executeQuery();
+            resultSet = statement.executeQuery();
             while (resultSet.next()) {
                 Venue venue = new Venue();
                 venue.setVenueId(resultSet.getLong(ColumnName.VENUE_ID));
@@ -505,14 +516,14 @@ public class EventDaoImpl extends EventDao {
                 venue.setLayout(resultSet.getString(ColumnName.VENUE_LAYOUT));
                 venueList.add(venue);
             }
-            resultSet.close();
         } catch (SQLException e) {
             throw new DaoException(e);
         } finally {
             try {
+                resultSet.close();
                 statement.close();
             } catch (SQLException e) {
-                throw new DaoException(e);
+                log.warn(e);
             }
         }
         return venueList;
@@ -521,25 +532,26 @@ public class EventDaoImpl extends EventDao {
     @Override
     public long createTicket(Ticket ticket) throws DaoException {
         PreparedStatement statement = null;
-        long id=0;
+        ResultSet resultSet=null;
+        long id = 0;
         try {
             statement = connection.prepareStatement(SQL_CREATE_TICKET, PreparedStatement.RETURN_GENERATED_KEYS);
             statement.setLong(1, ticket.getEvent().getEventId());
             statement.setInt(2, ticket.getCategory().ordinal() + 1);
             statement.setBigDecimal(3, ticket.getPrice());
             statement.execute();
-            ResultSet resultSet = statement.getGeneratedKeys();
+            resultSet = statement.getGeneratedKeys();
             resultSet.next();
-            id=resultSet.getLong(1);
+            id = resultSet.getLong(1);
             ticket.setTicketId(id);
-            resultSet.close();
         } catch (SQLException e) {
             throw new DaoException(e);
         } finally {
             try {
+                resultSet.close();
                 statement.close();
             } catch (SQLException e) {
-                throw new DaoException(e);
+                log.warn(e);
             }
         }
 
@@ -560,7 +572,7 @@ public class EventDaoImpl extends EventDao {
             try {
                 statement.close();
             } catch (SQLException e) {
-                throw new DaoException(e);
+                log.warn(e);
             }
         }
         return true;
@@ -569,28 +581,30 @@ public class EventDaoImpl extends EventDao {
     @Override
     public List<Ticket> findTicketById(long id) throws DaoException {
         PreparedStatement statement = null;
+        ResultSet resultSet=null;
         List<Ticket> ticketList = new ArrayList<>();
         try {
             statement = connection.prepareStatement(SQL_FIND_TICKET_BY_ID);
             statement.setLong(1, id);
-            ResultSet resultSet = statement.executeQuery();
+            log.debug("Statement:" +statement);
+            resultSet = statement.executeQuery();
             while (resultSet.next()) {
                 Ticket ticket = new Ticket();
                 ticket.setTicketId(resultSet.getLong(ColumnName.TICKET_ID));
-                Event event =findById(resultSet.getLong(ColumnName.TICKET_EVENT)).get(0);
+                Event event = findById(resultSet.getLong(ColumnName.TICKET_EVENT)).get(0);
                 ticket.setEvent(event);
                 ticket.setPrice(resultSet.getBigDecimal(ColumnName.TICKET_PRICE));
                 ticket.setCategory(TicketCat.valueOf(resultSet.getString(ColumnName.TICKET_CATEGORY)));
                 ticketList.add(ticket);
             }
-            resultSet.close();
         } catch (SQLException e) {
             throw new DaoException(e);
         } finally {
             try {
+                resultSet.close();
                 statement.close();
             } catch (SQLException e) {
-                throw new DaoException(e);
+                log.warn(e);
             }
         }
         return ticketList;
@@ -599,11 +613,12 @@ public class EventDaoImpl extends EventDao {
     @Override
     public List<Ticket> findTicketsByEvent(Event event) throws DaoException {
         PreparedStatement statement = null;
+        ResultSet resultSet=null;
         List<Ticket> ticketList = new ArrayList<>();
         try {
             statement = connection.prepareStatement(SQL_FIND_TICKETS_BY_EVENT);
             statement.setLong(1, event.getEventId());
-            ResultSet resultSet = statement.executeQuery();
+            resultSet = statement.executeQuery();
             while (resultSet.next()) {
                 Ticket ticket = new Ticket();
                 ticket.setTicketId(resultSet.getLong(ColumnName.TICKET_ID));
@@ -612,14 +627,14 @@ public class EventDaoImpl extends EventDao {
                 ticket.setCategory(TicketCat.valueOf(resultSet.getString(ColumnName.TICKET_CATEGORY)));
                 ticketList.add(ticket);
             }
-            resultSet.close();
         } catch (SQLException e) {
             throw new DaoException(e);
         } finally {
             try {
+                resultSet.close();
                 statement.close();
             } catch (SQLException e) {
-                throw new DaoException(e);
+                log.warn(e);
             }
         }
         return ticketList;

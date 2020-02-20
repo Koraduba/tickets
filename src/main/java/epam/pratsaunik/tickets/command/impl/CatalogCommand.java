@@ -1,6 +1,7 @@
 package epam.pratsaunik.tickets.command.impl;
 
 import epam.pratsaunik.tickets.command.AbstractCommand;
+import epam.pratsaunik.tickets.command.CommandResult;
 import epam.pratsaunik.tickets.command.RequestContent;
 import epam.pratsaunik.tickets.entity.Event;
 import epam.pratsaunik.tickets.entity.Role;
@@ -28,7 +29,8 @@ public class CatalogCommand extends AbstractCommand {
     }
 
     @Override
-    public String execute(RequestContent content) {
+    public CommandResult execute(RequestContent content) {
+        CommandResult commandResult=new CommandResult();
         List<Event> list;
         try {
             int nOfRecords =  service.getNumberOfRecords();
@@ -46,6 +48,8 @@ public class CatalogCommand extends AbstractCommand {
         } catch (ServiceLevelException e) {
             e.printStackTrace();
         }
-        return ConfigurationManager2.CATALOG_PAGE_PATH.getProperty();
+        commandResult.setResponsePage(ConfigurationManager2.CATALOG_PAGE_PATH.getProperty());
+        commandResult.setResponseType(CommandResult.ResponseType.FORWARD);
+        return commandResult;
     }
 }

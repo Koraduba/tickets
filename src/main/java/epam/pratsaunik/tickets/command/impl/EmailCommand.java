@@ -1,6 +1,7 @@
 package epam.pratsaunik.tickets.command.impl;
 
 import epam.pratsaunik.tickets.command.AbstractCommand;
+import epam.pratsaunik.tickets.command.CommandResult;
 import epam.pratsaunik.tickets.command.RequestContent;
 import epam.pratsaunik.tickets.service.Service;
 import org.apache.logging.log4j.LogManager;
@@ -23,10 +24,11 @@ public class EmailCommand extends AbstractCommand {
     }
 
     @Override
-    public String execute(RequestContent content) {
+    public CommandResult execute(RequestContent content) {
+
+        CommandResult commandResult=new CommandResult();
         final String from = "pradstaunik@gmail.com";
         final String password = "Mis51Dm1";
-        String page=null;
 
         Properties properties = new Properties();
         String file = "/WEB-INF/classes/mail.properties";
@@ -54,6 +56,6 @@ public class EmailCommand extends AbstractCommand {
         } catch (MessagingException mex) {
             log.info("send failed, exception: ", mex);
         }
-        return page;
+        return commandResult;
     }
 }

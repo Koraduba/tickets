@@ -13,10 +13,14 @@ import java.util.regex.Pattern;
 
 public class Validator {
     private final static Logger log = LogManager.getLogger();
-    final static String LOGIN_REGEX = "[A-Z][a-z]+";
-    final static String EMAIL_REGEX = "[a-z]+@[a-z]+.[a-z]+";
-    final static String NAME_REGEX = "[A-Z][a-z]+";
-    final static String SURNAME_REGEX = "[A-Z][a-z]+";
+    private final static String LOGIN_REGEX = "[A-Z][a-z]+";
+    private final static String EMAIL_REGEX = "[a-z]+@[a-z]+.[a-z]+";
+    private final static String NAME_REGEX = "[A-Z][a-z]+";
+    private final static String SURNAME_REGEX = "[A-Z][a-z]+";
+    private final static String EVENT_NAME_REGEX="\\w{1,120}";
+    private final static String EVENT_DESCRIPTION_REGEX="\\w{1,120}";
+    private final static String TICKET_PRICE_REGEX="\\d{1,5}";
+
 
     public static boolean validateLogin(String login) {
 
@@ -53,5 +57,10 @@ public class Validator {
             content.setRequestAttribute(AttributeName.ERROR_LOGIN_PASS_MESSAGE, MessageManager.INSTANCE.getProperty(MessageType.INPUT_ERROR));
         }
         return result;
+    }
+
+    public static boolean validateEvent(RequestContent content){
+
+        return false;
     }
 }

@@ -8,7 +8,7 @@ import java.util.List;
 public interface OrderService {
 
     public abstract List<Order> findOrdersByUser (User user);
-    public abstract long createOrderLine(OrderLine orderLine);
+    public abstract long createOrderLine(OrderLine orderLine) throws ServiceLevelException;
     public abstract OrderLine update (OrderLine orderLine);
     public abstract boolean deleteOrderLine (OrderLine orderLine);
     public abstract List<OrderLine> findOrderLinesByOrder (Order order);

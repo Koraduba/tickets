@@ -33,7 +33,7 @@ public class UserDaoImpl extends UserDao {
     private final static String SQL_FIND_USER_BY_NAME = "SELECT user_id, user.name, surname, email, login, " +
             "password, role.name " +
             "FROM user,role WHERE name=? AND user.role=role_id";
-    private final static String SQL_FIND_USERS_BY_EVENT ="SELECT user_id, user.name,surname,email, login," +
+    private final static String SQL_FIND_USERS_BY_EVENT = "SELECT user_id, user.name,surname,email, login," +
             "password,role.name FROM user INNER JOIN role ON order.role=role.role_id " +
             "INNER JOIN order ON user_id=order.user " +
             "INNER JOIN order_line ON order.order_id=order_line.order " +
@@ -48,20 +48,21 @@ public class UserDaoImpl extends UserDao {
     public int getNumberOfRecords() throws DaoException {
         int result = 0;
         Statement statement = null;
+        ResultSet resultSet = null;
         try {
             statement = connection.createStatement();
-            ResultSet resultSet = statement.executeQuery(SQL_GET_NUMBER_OF_RECORDS);
+            resultSet = statement.executeQuery(SQL_GET_NUMBER_OF_RECORDS);
             while (resultSet.next()) {
                 result = resultSet.getInt(1);
             }
-            resultSet.close();
         } catch (SQLException e) {
             throw new DaoException(e);
         } finally {
             try {
+                resultSet.close();
                 statement.close();
             } catch (SQLException e) {
-                throw new DaoException();
+                log.warn(e);
             }
         }
         return result;
@@ -69,8 +70,9 @@ public class UserDaoImpl extends UserDao {
 
     @Override
     public long create(Entity entity) throws DaoException {
-        User user=(User)entity;
+        User user = (User) entity;
         PreparedStatement statement = null;
+        ResultSet resultSet=null;
         long id = 0;
         try {
             statement = connection.prepareStatement(SQL_CREATE_USER, PreparedStatement.RETURN_GENERATED_KEYS);
@@ -81,17 +83,17 @@ public class UserDaoImpl extends UserDao {
             statement.setString(5, user.getLogin());
             statement.setString(6, user.getPassword());
             statement.execute();
-            ResultSet resultSet = statement.getGeneratedKeys();
+            resultSet = statement.getGeneratedKeys();
             resultSet.next();
             id = resultSet.getLong(1);
-            resultSet.close();
         } catch (SQLException e) {
             throw new DaoException(e);
         } finally {
             try {
+                resultSet.close();
                 statement.close();
             } catch (SQLException e) {
-                throw new DaoException(e);
+                log.warn(e);
             }
         }
         return id;
@@ -99,8 +101,8 @@ public class UserDaoImpl extends UserDao {
 
     @Override
     public User update(Entity entity) throws DaoException {
-        User user=(User)entity;
-        User oldUser=findById(user.getUserId()).get(0);
+        User user = (User) entity;
+        User oldUser = findById(user.getUserId()).get(0);
         PreparedStatement statement = null;
         try {
             statement = connection.prepareStatement(SQL_UPDATE_USER);
@@ -131,8 +133,8 @@ public class UserDaoImpl extends UserDao {
             statement = connection.prepareStatement(SQL_DELETE_USER_BY_ID);
             statement.setLong(1, id);
             statement.execute();
-        } catch (SQLException e){
-            log.info("User cannot be deleted",e);
+        } catch (SQLException e) {
+            log.info("User cannot be deleted", e);
             return false;
         } finally {
             try {
@@ -149,10 +151,11 @@ public class UserDaoImpl extends UserDao {
     public List<User> findById(long id) throws DaoException {
         List<User> users = new ArrayList<>();
         PreparedStatement statement = null;
+        ResultSet resultSet=null;
         try {
             statement = connection.prepareStatement(SQL_FIND_USER_BY_ID);
             statement.setLong(1, id);
-            ResultSet resultSet = statement.executeQuery();
+            resultSet = statement.executeQuery();
             while (resultSet.next()) {
                 User user = new User();
                 user.setUserId(resultSet.getLong(ColumnName.USER_ID));
@@ -162,25 +165,27 @@ public class UserDaoImpl extends UserDao {
                 user.setRole(Role.valueOf(resultSet.getString(ColumnName.USER_ROLE)));
                 users.add(user);
             }
-            resultSet.close();
         } catch (SQLException e) {
             throw new DaoException(e);
         } finally {
             try {
+                resultSet.close();
                 statement.close();
             } catch (SQLException e) {
-                e.printStackTrace();
+                log.warn(e);
             }
         }
         return users;
     }
+
     @Override
     public List<User> findAll() throws DaoException {
         List<User> users = new ArrayList<>();
         Statement statement = null;
+        ResultSet resultSet=null;
         try {
             statement = connection.createStatement();
-            ResultSet resultSet = statement.executeQuery(SQL_FIND_ALL_USERS);
+            resultSet = statement.executeQuery(SQL_FIND_ALL_USERS);
             while (resultSet.next()) {
                 User user = new User();
                 user.setUserId(resultSet.getLong(ColumnName.USER_ID));
@@ -190,14 +195,14 @@ public class UserDaoImpl extends UserDao {
                 user.setRole(Role.valueOf(resultSet.getString(ColumnName.USER_ROLE)));
                 users.add(user);
             }
-            resultSet.close();
         } catch (SQLException e) {
             throw new DaoException(e);
         } finally {
             try {
+                resultSet.close();
                 statement.close();
             } catch (SQLException e) {
-                throw new DaoException();
+                log.warn(e);
             }
         }
         return users;
@@ -207,11 +212,12 @@ public class UserDaoImpl extends UserDao {
     public List<User> findRange(int start, int recordsPerPage) throws DaoException {
         List<User> users = new ArrayList<>();
         PreparedStatement statement = null;
+        ResultSet resultSet=null;
         try {
             statement = connection.prepareStatement(SQL_FIND_RANGE_OF_USERS);
             statement.setInt(1, start);
             statement.setInt(2, recordsPerPage);
-            ResultSet resultSet = statement.executeQuery();
+            resultSet = statement.executeQuery();
             while (resultSet.next()) {
                 User user = new User();
                 user.setUserId(resultSet.getLong(ColumnName.USER_ID));
@@ -223,14 +229,14 @@ public class UserDaoImpl extends UserDao {
                 user.setPassword(resultSet.getString(ColumnName.USER_PASSWORD));
                 users.add(user);
             }
-            resultSet.close();
         } catch (SQLException e) {
             throw new DaoException(e);
         } finally {
             try {
+                resultSet.close();
                 statement.close();
             } catch (SQLException e) {
-                throw new DaoException(e);
+                log.warn(e);
             }
         }
         return users;
@@ -240,10 +246,11 @@ public class UserDaoImpl extends UserDao {
     public List<User> findUserByName(String name) throws DaoException {
         List<User> users = new ArrayList<>();
         PreparedStatement statement = null;
+        ResultSet resultSet=null;
         try {
             statement = connection.prepareStatement(SQL_FIND_USER_BY_NAME);
             statement.setString(1, name);
-            ResultSet resultSet = statement.executeQuery();
+            resultSet = statement.executeQuery();
             while (resultSet.next()) {
 
                 User user = new User();
@@ -254,14 +261,14 @@ public class UserDaoImpl extends UserDao {
                 user.setRole(Role.valueOf(resultSet.getString(ColumnName.USER_ROLE)));
                 users.add(user);
             }
-            resultSet.close();
         } catch (SQLException e) {
             throw new DaoException(e);
         } finally {
             try {
+                resultSet.close();
                 statement.close();
             } catch (SQLException e) {
-                throw new DaoException(e);
+                log.warn(e);
             }
         }
         return users;
@@ -271,11 +278,12 @@ public class UserDaoImpl extends UserDao {
     public List<User> findUsersByEvent(Event event) throws DaoException {
         List<User> users = new ArrayList<>();
         PreparedStatement statement = null;
-        Long eventId=event.getEventId();
+        ResultSet resultSet = null;
+        Long eventId = event.getEventId();
         try {
             statement = connection.prepareStatement(SQL_FIND_USERS_BY_EVENT);
             statement.setLong(1, eventId);
-            ResultSet resultSet = statement.executeQuery();
+            resultSet = statement.executeQuery();
             while (resultSet.next()) {
 
                 User user = new User();
@@ -286,14 +294,14 @@ public class UserDaoImpl extends UserDao {
                 user.setRole(Role.valueOf(resultSet.getString(ColumnName.USER_ROLE)));
                 users.add(user);
             }
-            resultSet.close();
         } catch (SQLException e) {
             throw new DaoException(e);
         } finally {
             try {
+                resultSet.close();
                 statement.close();
             } catch (SQLException e) {
-                throw new DaoException(e);
+                log.warn(e);
             }
         }
         return users;
@@ -303,12 +311,13 @@ public class UserDaoImpl extends UserDao {
     public List<User> findUserByLogin(String login) throws DaoException {
         List<User> users = new ArrayList<>();
         PreparedStatement statement = null;
+        ResultSet resultSet = null;
         try {
             log.debug(login);
             statement = connection.prepareStatement(SQL_FIND_USER_BY_LOGIN);
             statement.setString(1, login);
             log.debug(login);
-            ResultSet resultSet = statement.executeQuery();
+            resultSet = statement.executeQuery();
             log.debug(resultSet);
             while (resultSet.next()) {
                 User user = new User();
@@ -321,14 +330,14 @@ public class UserDaoImpl extends UserDao {
                 user.setPassword(resultSet.getString(ColumnName.USER_PASSWORD));
                 users.add(user);
             }
-            resultSet.close();
         } catch (SQLException e) {
             throw new DaoException(e);
         } finally {
             try {
+                resultSet.close();
                 statement.close();
             } catch (SQLException e) {
-                throw new DaoException(e);
+                log.warn(e);
             }
         }
         return users;

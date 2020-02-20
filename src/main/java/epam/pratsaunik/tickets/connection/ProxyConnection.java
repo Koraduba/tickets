@@ -1,6 +1,9 @@
 package epam.pratsaunik.tickets.connection;
 
+import epam.pratsaunik.tickets.exception.CommandException;
 import epam.pratsaunik.tickets.exception.ConnectionException;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.sql.*;
 import java.util.Map;
@@ -9,6 +12,7 @@ import java.util.concurrent.Executor;
 
 public class ProxyConnection implements Connection {
     private Connection connection;
+    public static Logger log = LogManager.getLogger();
 
     ProxyConnection(Connection coonnection) {
         this.connection = coonnection;
@@ -56,18 +60,20 @@ public class ProxyConnection implements Connection {
 
     @Override
     public void close(){
+
         try {
             ConnectionPoll.getInstance().returnConnection(this);
         } catch (ConnectionException e) {
-            e.printStackTrace();
+            log.warn(e);//fixme
         }
+
     }
 
-    void reallyClose(){
+    void reallyClose() throws ConnectionException {
         try {
             connection.close();
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new ConnectionException(e);
         }
     }
 

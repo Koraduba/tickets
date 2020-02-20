@@ -1,13 +1,16 @@
 package epam.pratsaunik.tickets.command.impl;
 
 import epam.pratsaunik.tickets.command.AbstractCommand;
+import epam.pratsaunik.tickets.command.CommandResult;
 import epam.pratsaunik.tickets.command.RequestContent;
 import epam.pratsaunik.tickets.entity.User;
+import epam.pratsaunik.tickets.exception.CommandException;
 import epam.pratsaunik.tickets.exception.ServiceLevelException;
 import epam.pratsaunik.tickets.service.Service;
 import epam.pratsaunik.tickets.service.impl.UserServiceImpl;
 import epam.pratsaunik.tickets.servlet.AttributeName;
 import epam.pratsaunik.tickets.util.ConfigurationManager;
+import epam.pratsaunik.tickets.util.ConfigurationManager2;
 import epam.pratsaunik.tickets.util.MessageType;
 import epam.pratsaunik.tickets.util.MessageManager;
 import jdk.jfr.Event;
@@ -26,9 +29,9 @@ public class LoginCommand extends AbstractCommand {
     }
 
     @Override
-    public String execute(RequestContent content) {
+    public CommandResult execute(RequestContent content) throws CommandException {
+        CommandResult commandResult=new CommandResult();
         log.info("LoginCommand");
-        String page;
         String login = content.getRequestParameter("login");
         String password = content.getRequestParameter("password");
         boolean hasAccount;
@@ -45,16 +48,17 @@ public class LoginCommand extends AbstractCommand {
                 Locale rus = new Locale("ru", "RU");
                 content.setSessionAttribute(AttributeName.LOCALE, rus);
                 content.setSessionAttribute(AttributeName.USER, user.get(0));
-                page = ConfigurationManager.getInstance().getProperty(ConfigurationManager.HOME_PAGE_PATH);
+                commandResult.setResponsePage(ConfigurationManager2.HOME_PAGE_PATH.getProperty());
+                commandResult.setResponseType(CommandResult.ResponseType.FORWARD);
             } else {
                 content.setRequestAttribute("errorLoginPassMessage", MessageManager.INSTANCE.getProperty(MessageType.NO_SUCH_USER));
-                page = ConfigurationManager.getInstance().getProperty(ConfigurationManager.LOGIN_PAGE_PATH);
+                commandResult.setResponsePage(ConfigurationManager2.LOGIN_PAGE_PATH.getProperty());
+                commandResult.setResponseType(CommandResult.ResponseType.FORWARD);
             }
         } catch (ServiceLevelException e) {
-            log.error("Exception in LoginCommand"+e);
-            page = ConfigurationManager.getInstance().getProperty(ConfigurationManager.ERROR_PAGE_PATH);
+            throw new CommandException(e);
         }
-        return page;
+        return commandResult;
 
     }
 }

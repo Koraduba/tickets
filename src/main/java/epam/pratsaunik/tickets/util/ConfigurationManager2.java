@@ -17,7 +17,8 @@ public enum ConfigurationManager2 {
     ORDER_PAGE_PATH("order.page.path"),
     ORDERS_PAGE_PATH("orders.page.path"),
     UPLOAD_PAGE_PATH("upload.page.path"),
-    UPLOAD_LAYOUT_PATH("uploadlayout.page.path");
+    UPLOAD_LAYOUT_PATH("uploadlayout.page.path"),
+    STATISTIC_PAGE_PATH("statistic.page.path");
 
     private String key;
     private ResourceBundle resourceBundle;

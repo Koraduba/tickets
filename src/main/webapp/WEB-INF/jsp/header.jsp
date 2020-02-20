@@ -30,12 +30,16 @@
         <li class="nav-item">
           <a class="nav-link" href="${pageContext.request.contextPath}">User profile</a>
         </li>
+
         <li class="nav-item">
           <a class="nav-link" href="${pageContext.request.contextPath}/mainservlet?command=users&currentPage=1">Users</a>
         </li>
          <li class="nav-item">
            <a class="nav-link" href="${pageContext.request.contextPath}/mainservlet?command=catalog&currentPage=1">Events</a>
          </li>
+         <li class="nav-item">
+            <a class="nav-link" href="${pageContext.request.contextPath}/mainservlet?command=cart">Cart</a>
+        </li>
         <c:if test="${role=='ADMINISTRATOR'}">
         <li class="nav-item">
           <a class="nav-link" href="${pageContext.request.contextPath}/mainservlet?command=new_user">New users</a>

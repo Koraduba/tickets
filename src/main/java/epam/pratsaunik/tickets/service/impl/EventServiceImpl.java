@@ -22,7 +22,6 @@ public class EventServiceImpl implements Service, EventService {
     @Override
     public long create(Event event) throws ServiceLevelException {
         long id=0;
-        Event savedEvent = null;
         EventDao eventDao = new EventDaoImpl();
         EntityTransaction entityTransaction = new EntityTransaction();
         entityTransaction.begin(eventDao);
