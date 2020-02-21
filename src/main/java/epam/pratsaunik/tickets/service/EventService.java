@@ -8,27 +8,27 @@ import epam.pratsaunik.tickets.exception.ServiceLevelException;
 import java.util.List;
 
 public interface EventService {
-    public abstract long create(Event event) throws ServiceLevelException;
+    long create(Event event) throws ServiceLevelException;
 
-    public abstract Venue findVenueById(Long id) throws ServiceLevelException;
+    Venue findVenueById(Long id) throws ServiceLevelException;
 
-    public abstract Venue findVenueByName(String name) throws ServiceLevelException;
+    Venue findVenueByName(String name) throws ServiceLevelException;
 
-    public abstract List<Venue> findAllVenues() throws ServiceLevelException;
+    List<Venue> findAllVenues() throws ServiceLevelException;
 
-    public abstract long createVenue(Venue venue) throws ServiceLevelException;
+    long createVenue(Venue venue) throws ServiceLevelException;
 
-    public abstract boolean createTicket(Ticket ticket) throws ServiceLevelException;
+    boolean createTicket(Ticket ticket) throws ServiceLevelException;
 
-    public abstract List<Ticket> findTicketsByEvent(Event event);
+    List<Ticket> findTicketsByEvent(Event event) throws ServiceLevelException;
 
-    public abstract Ticket findTicketById(long id);
+    Ticket findTicketById(long id) throws ServiceLevelException;
 
-    public abstract List<Event> findEventsByRange(int start, int eventsPerPage) throws ServiceLevelException;
+    List<Event> findEventsByRange(int start, int eventsPerPage) throws ServiceLevelException;
 
-    public abstract Event update(Event event) throws ServiceLevelException;
+    Event update(Event event) throws ServiceLevelException;
 
-    public abstract Event findEventById(long id) throws ServiceLevelException;
+    Event findEventById(long id) throws ServiceLevelException;
 
-    public abstract Venue updateVenue(Venue venue) throws ServiceLevelException;
+    Venue updateVenue(Venue venue) throws ServiceLevelException;
 }

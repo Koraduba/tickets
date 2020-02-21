@@ -60,8 +60,12 @@ public class EventDaoImpl extends EventDao {
             throw new DaoException(e);
         } finally {
             try {
-                resultSet.close();
-                statement.close();
+                if (resultSet != null) {
+                    resultSet.close();
+                }
+                if (statement != null) {
+                    statement.close();
+                }
             } catch (SQLException e) {
                 log.warn(e);
             }
@@ -86,7 +90,12 @@ public class EventDaoImpl extends EventDao {
             } catch (ParseException e) {
                 e.printStackTrace();
             }
-            statement.setLong(2, (date.getTime()));
+            if (date != null) {
+                statement.setLong(2, (date.getTime()));
+            }
+            else{
+                statement.setNull(2,Types.BIGINT);
+            }
             statement.setString(3, event.getDescription());
             statement.setString(4, event.getImage());
             Venue venue = event.getVenue();
@@ -103,8 +112,12 @@ public class EventDaoImpl extends EventDao {
             throw new DaoException(e);
         } finally {
             try {
-                resultSet.close();
-                statement.close();
+                if (resultSet != null) {
+                    resultSet.close();
+                }
+                if (statement != null) {
+                    statement.close();
+                }
             } catch (SQLException e) {
                 log.warn(e);
             }
@@ -142,7 +155,9 @@ public class EventDaoImpl extends EventDao {
             throw new DaoException(e);
         } finally {
             try {
-                statement.close();
+                if (statement != null) {
+                    statement.close();
+                }
             } catch (SQLException e) {
                 log.warn(e);
             }
@@ -162,7 +177,9 @@ public class EventDaoImpl extends EventDao {
             return false;
         } finally {
             try {
-                statement.close();
+                if (statement != null) {
+                    statement.close();
+                }
             } catch (SQLException e) {
                 log.warn(e);
             }
@@ -198,8 +215,12 @@ public class EventDaoImpl extends EventDao {
             throw new DaoException(e);
         } finally {
             try {
-                resultSet.close();
-                statement.close();
+                if (resultSet != null) {
+                    resultSet.close();
+                }
+                if (statement != null) {
+                    statement.close();
+                }
             } catch (SQLException e) {
                 log.warn(e);
             }
@@ -234,8 +255,12 @@ public class EventDaoImpl extends EventDao {
             throw new DaoException(e);
         } finally {
             try {
-                resultSet.close();
-                statement.close();
+                if (resultSet != null) {
+                    resultSet.close();
+                }
+                if (statement != null) {
+                    statement.close();
+                }
             } catch (SQLException e) {
                 log.warn(e);
             }
@@ -272,8 +297,12 @@ public class EventDaoImpl extends EventDao {
             throw new DaoException(e);
         } finally {
             try {
-                resultSet.close();
-                statement.close();
+                if (resultSet != null) {
+                    resultSet.close();
+                }
+                if (statement != null) {
+                    statement.close();
+                }
             } catch (SQLException e) {
                 log.warn(e);
             }
@@ -312,8 +341,12 @@ public class EventDaoImpl extends EventDao {
             throw new DaoException(e);
         } finally {
             try {
-                resultSet.close();
-                statement.close();
+                if (resultSet != null) {
+                    resultSet.close();
+                }
+                if (statement != null) {
+                    statement.close();
+                }
             } catch (SQLException e) {
                 log.warn(e);
             }
@@ -349,8 +382,12 @@ public class EventDaoImpl extends EventDao {
             throw new DaoException(e);
         } finally {
             try {
-                resultSet.close();
-                statement.close();
+                if (resultSet != null) {
+                    resultSet.close();
+                }
+                if (statement != null) {
+                    statement.close();
+                }
             } catch (SQLException e) {
                 log.warn(e);
             }
@@ -383,8 +420,12 @@ public class EventDaoImpl extends EventDao {
             throw new DaoException(e);
         } finally {
             try {
-                resultSet.close();
-                statement.close();
+                if (resultSet != null) {
+                    resultSet.close();
+                }
+                if (statement != null) {
+                    statement.close();
+                }
             } catch (SQLException e) {
                 log.warn(e);
             }
@@ -411,7 +452,9 @@ public class EventDaoImpl extends EventDao {
             throw new DaoException(e);
         } finally {
             try {
-                statement.close();
+                if (statement != null) {
+                    statement.close();
+                }
             } catch (SQLException e) {
                 log.warn(e);
             }
@@ -431,7 +474,9 @@ public class EventDaoImpl extends EventDao {
             return false;
         } finally {
             try {
-                statement.close();
+                if (statement != null) {
+                    statement.close();
+                }
             } catch (SQLException e) {
                 log.warn(e);
             }
@@ -460,8 +505,12 @@ public class EventDaoImpl extends EventDao {
             throw new DaoException(e);
         } finally {
             try {
-                resultSet.close();
-                statement.close();
+                if (resultSet != null) {
+                    resultSet.close();
+                }
+                if (statement != null) {
+                    statement.close();
+                }
             } catch (SQLException e) {
                 log.warn(e);
             }
@@ -490,8 +539,12 @@ public class EventDaoImpl extends EventDao {
             throw new DaoException(e);
         } finally {
             try {
-                resultSet.close();
-                statement.close();
+                if (resultSet != null) {
+                    resultSet.close();
+                }
+                if (statement != null) {
+                    statement.close();
+                }
             } catch (SQLException e) {
                 log.warn(e);
             }
@@ -520,8 +573,12 @@ public class EventDaoImpl extends EventDao {
             throw new DaoException(e);
         } finally {
             try {
-                resultSet.close();
-                statement.close();
+                if (resultSet != null) {
+                    resultSet.close();
+                }
+                if (statement != null) {
+                    statement.close();
+                }
             } catch (SQLException e) {
                 log.warn(e);
             }
@@ -548,8 +605,12 @@ public class EventDaoImpl extends EventDao {
             throw new DaoException(e);
         } finally {
             try {
-                resultSet.close();
-                statement.close();
+                if (resultSet != null) {
+                    resultSet.close();
+                }
+                if (statement != null) {
+                    statement.close();
+                }
             } catch (SQLException e) {
                 log.warn(e);
             }
@@ -570,7 +631,9 @@ public class EventDaoImpl extends EventDao {
             return false;
         } finally {
             try {
-                statement.close();
+                if (statement != null) {
+                    statement.close();
+                }
             } catch (SQLException e) {
                 log.warn(e);
             }
@@ -601,8 +664,12 @@ public class EventDaoImpl extends EventDao {
             throw new DaoException(e);
         } finally {
             try {
-                resultSet.close();
-                statement.close();
+                if (resultSet != null) {
+                    resultSet.close();
+                }
+                if (statement != null) {
+                    statement.close();
+                }
             } catch (SQLException e) {
                 log.warn(e);
             }
@@ -631,8 +698,12 @@ public class EventDaoImpl extends EventDao {
             throw new DaoException(e);
         } finally {
             try {
-                resultSet.close();
-                statement.close();
+                if (resultSet != null) {
+                    resultSet.close();
+                }
+                if (statement != null) {
+                    statement.close();
+                }
             } catch (SQLException e) {
                 log.warn(e);
             }

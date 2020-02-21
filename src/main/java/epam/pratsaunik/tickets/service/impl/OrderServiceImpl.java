@@ -31,6 +31,7 @@ public class OrderServiceImpl implements OrderService, Service {
             orderList = orderDao.findOrdersByUser(user);
             entityTransaction.commit();
         } catch (DaoException e) {
+            entityTransaction.rollback();
             throw new ServiceLevelException(e);
         } finally {
             entityTransaction.end();
@@ -92,6 +93,7 @@ public class OrderServiceImpl implements OrderService, Service {
             id = orderDao.createOrderLine(orderLine);
             entityTransaction.commit();
         } catch (DaoException e) {
+            entityTransaction.rollback();
             throw new ServiceLevelException(e);
         } finally {
             entityTransaction.end();
@@ -143,6 +145,7 @@ public class OrderServiceImpl implements OrderService, Service {
             id = orderDao.create(order);
             entityTransaction.commit();
         } catch (DaoException e) {
+            entityTransaction.rollback();
             throw new ServiceLevelException(e);
         } finally {
             entityTransaction.end();
@@ -185,6 +188,7 @@ public class OrderServiceImpl implements OrderService, Service {
             number = orderDao.getNumberOfRecords();
             entityTransaction.commit();
         } catch (DaoException e) {
+            entityTransaction.rollback();
             throw new ServiceLevelException(e);
         } finally {
             entityTransaction.end();

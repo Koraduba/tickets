@@ -78,8 +78,12 @@ public class OrderDaoImpl extends OrderDao {
             throw new DaoException(e);
         } finally {
             try {
-                resultSet.close();
-                statement.close();
+                if (resultSet != null) {
+                    resultSet.close();
+                }
+                if (statement != null) {
+                    statement.close();
+                }
             } catch (SQLException e) {
                 log.warn(e);
             }
@@ -112,8 +116,12 @@ public class OrderDaoImpl extends OrderDao {
             throw new DaoException(e);
         } finally {
             try {
-                resultSet.close();
-                statement.close();
+                if (resultSet != null) {
+                    resultSet.close();
+                }
+                if (statement != null) {
+                    statement.close();
+                }
             } catch (SQLException e) {
                 log.warn(e);
             }
@@ -147,8 +155,12 @@ public class OrderDaoImpl extends OrderDao {
             throw new DaoException(e);
         } finally {
             try {
-                resultSet.close();
-                statement.close();
+                if (resultSet != null) {
+                    resultSet.close();
+                }
+                if (statement != null) {
+                    statement.close();
+                }
             } catch (SQLException e) {
                 log.warn(e);
             }
@@ -179,8 +191,12 @@ public class OrderDaoImpl extends OrderDao {
             throw new DaoException(e);
         } finally {
             try {
-                resultSet.close();
-                statement.close();
+                if (resultSet != null) {
+                    resultSet.close();
+                }
+                if (statement != null) {
+                    statement.close();
+                }
             } catch (SQLException e) {
                 log.warn(e);
             }
@@ -209,8 +225,12 @@ public class OrderDaoImpl extends OrderDao {
             throw new DaoException(e);
         } finally {
             try {
-                resultSet.close();
-                statement.close();
+                if (resultSet != null) {
+                    resultSet.close();
+                }
+                if (statement != null) {
+                    statement.close();
+                }
             } catch (SQLException e) {
                 log.warn(e);
             }
@@ -233,7 +253,9 @@ public class OrderDaoImpl extends OrderDao {
             throw new DaoException(e);
         } finally {
             try {
-                statement.close();
+                if (statement != null) {
+                    statement.close();
+                }
             } catch (SQLException e) {
                 log.warn(e);
             }
@@ -253,7 +275,9 @@ public class OrderDaoImpl extends OrderDao {
             return false;
         } finally {
             try {
-                statement.close();
+                if (statement != null) {
+                    statement.close();
+                }
             } catch (SQLException e) {
                 log.warn(e);
             }
@@ -286,8 +310,12 @@ public class OrderDaoImpl extends OrderDao {
             throw new DaoException(e);
         } finally {
             try {
-                resultSet.close();
-                statement.close();
+                if (resultSet != null) {
+                    resultSet.close();
+                }
+                if (statement != null) {
+                    statement.close();
+                }
             } catch (SQLException e) {
                 log.warn(e);
             }
@@ -323,7 +351,9 @@ public class OrderDaoImpl extends OrderDao {
                 if (resultSet != null) {
                     resultSet.close();
                 }
-                statement.close();
+                if (statement != null) {
+                    statement.close();
+                }
             } catch (SQLException e) {
                 log.warn(e);
             }
@@ -350,8 +380,12 @@ public class OrderDaoImpl extends OrderDao {
             throw new DaoException(e);
         } finally {
             try {
-                resultSet.close();
-                statement.close();
+                if (resultSet != null) {
+                    resultSet.close();
+                }
+                if (statement != null) {
+                    statement.close();
+                }
             } catch (SQLException e) {
                 log.warn(e);
             }
@@ -389,8 +423,12 @@ public class OrderDaoImpl extends OrderDao {
             throw new DaoException(e);
         } finally {
             try {
-                resultSet.close();
-                statement.close();
+                if (resultSet != null) {
+                    resultSet.close();
+                }
+                if (statement != null) {
+                    statement.close();
+                }
             } catch (SQLException e) {
                 log.warn(e);
             }
@@ -421,7 +459,9 @@ public class OrderDaoImpl extends OrderDao {
             throw new DaoException(e);
         } finally {
             try {
-                statement.close();
+                if (statement != null) {
+                    statement.close();
+                }
             } catch (SQLException e) {
                 log.warn(e);
             }
@@ -441,7 +481,9 @@ public class OrderDaoImpl extends OrderDao {
             return false;
         } finally {
             try {
-                statement.close();
+                if (statement != null) {
+                    statement.close();
+                }
             } catch (SQLException e) {
                 log.warn(e);
             }
@@ -474,8 +516,12 @@ public class OrderDaoImpl extends OrderDao {
             throw new DaoException(e);
         } finally {
             try {
-                resultSet.close();
-                statement.close();
+                if (resultSet != null) {
+                    resultSet.close();
+                }
+                if (statement != null) {
+                    statement.close();
+                }
             } catch (SQLException e) {
                 log.warn(e);
             }
@@ -507,8 +553,12 @@ public class OrderDaoImpl extends OrderDao {
             throw new DaoException(e);
         } finally {
             try {
-                resultSet.close();
-                statement.close();
+                if (resultSet != null) {
+                    resultSet.close();
+                }
+                if (statement != null) {
+                    statement.close();
+                }
             } catch (SQLException e) {
                 log.warn(e);
             }
@@ -540,8 +590,12 @@ public class OrderDaoImpl extends OrderDao {
             throw new DaoException(e);
         } finally {
             try {
-                resultSet.close();
-                statement.close();
+                if (resultSet != null) {
+                    resultSet.close();
+                }
+                if (statement != null) {
+                    statement.close();
+                }
             } catch (SQLException e) {
                 log.warn(e);
             }

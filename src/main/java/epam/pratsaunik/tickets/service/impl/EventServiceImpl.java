@@ -21,16 +21,17 @@ public class EventServiceImpl implements Service, EventService {
 
     @Override
     public long create(Event event) throws ServiceLevelException {
-        long id=0;
+        long id = 0;
         EventDao eventDao = new EventDaoImpl();
         EntityTransaction entityTransaction = new EntityTransaction();
         entityTransaction.begin(eventDao);
         try {
-            id=eventDao.create(event);
+            id = eventDao.create(event);
             entityTransaction.commit();
         } catch (DaoException e) {
+            entityTransaction.rollback();
             throw new ServiceLevelException(e);
-        }finally {
+        } finally {
             entityTransaction.end();
         }
         return id;
@@ -46,8 +47,9 @@ public class EventServiceImpl implements Service, EventService {
             venue = eventDao.findVenueById(id).get(0);
             entityTransaction.commit();
         } catch (DaoException e) {
+            entityTransaction.rollback();
             throw new ServiceLevelException(e);
-        }finally {
+        } finally {
             entityTransaction.end();
         }
         return venue;
@@ -63,8 +65,9 @@ public class EventServiceImpl implements Service, EventService {
             venue = eventDao.findVenueByName(name).get(0);
             entityTransaction.commit();
         } catch (DaoException e) {
+            entityTransaction.rollback();
             throw new ServiceLevelException(e);
-        }finally {
+        } finally {
             entityTransaction.end();
         }
         return venue;
@@ -77,12 +80,12 @@ public class EventServiceImpl implements Service, EventService {
         EntityTransaction entityTransaction = new EntityTransaction();
         entityTransaction.begin(eventDao);
         try {
-            venueList=eventDao.findAllVenues();
+            venueList = eventDao.findAllVenues();
             entityTransaction.commit();
         } catch (DaoException e) {
+            entityTransaction.rollback();
             throw new ServiceLevelException(e);
-        }
-        finally {
+        } finally {
             entityTransaction.end();
         }
         return venueList;
@@ -90,16 +93,17 @@ public class EventServiceImpl implements Service, EventService {
 
     @Override
     public long createVenue(Venue venue) throws ServiceLevelException {
-        long id=0;
+        long id = 0;
         EventDao eventDao = new EventDaoImpl();
         EntityTransaction entityTransaction = new EntityTransaction();
         try {
             entityTransaction.begin(eventDao);
-            id=eventDao.createVenue(venue);
+            id = eventDao.createVenue(venue);
             entityTransaction.commit();
         } catch (DaoException e) {
+            entityTransaction.rollback();
             throw new ServiceLevelException(e);
-        }finally {
+        } finally {
             entityTransaction.end();
         }
         return id;
@@ -115,42 +119,45 @@ public class EventServiceImpl implements Service, EventService {
             eventDao.createTicket(ticket);
             entityTransaction.commit();
         } catch (DaoException e) {
+            entityTransaction.rollback();
             throw new ServiceLevelException(e);
-        }finally {
+        } finally {
             entityTransaction.end();
         }
         return true;
     }
 
     @Override
-    public List<Ticket> findTicketsByEvent(Event event) {
-        List<Ticket> ticketList=null;
-        EventDao eventDao= new EventDaoImpl();
+    public List<Ticket> findTicketsByEvent(Event event) throws ServiceLevelException {
+        List<Ticket> ticketList = null;
+        EventDao eventDao = new EventDaoImpl();
         EntityTransaction entityTransaction = new EntityTransaction();
         try {
             entityTransaction.begin(eventDao);
-            ticketList=eventDao.findTicketsByEvent(event);
+            ticketList = eventDao.findTicketsByEvent(event);
             entityTransaction.commit();
         } catch (DaoException e) {
-            e.printStackTrace();
-        }finally {
+            entityTransaction.rollback();
+            throw new ServiceLevelException(e);
+        } finally {
             entityTransaction.end();
         }
         return ticketList;
     }
 
     @Override
-    public Ticket findTicketById(long id) {
-        List<Ticket> ticketList=null;
-        EventDao eventDao= new EventDaoImpl();
+    public Ticket findTicketById(long id) throws ServiceLevelException {
+        List<Ticket> ticketList = null;
+        EventDao eventDao = new EventDaoImpl();
         EntityTransaction entityTransaction = new EntityTransaction();
         try {
             entityTransaction.begin(eventDao);
-            ticketList=eventDao.findTicketById(id);
+            ticketList = eventDao.findTicketById(id);
             entityTransaction.commit();
         } catch (DaoException e) {
-            e.printStackTrace();
-        }finally {
+            entityTransaction.rollback();
+            throw new ServiceLevelException(e);
+        } finally {
             entityTransaction.end();
         }
         return ticketList.get(0);
@@ -167,6 +174,7 @@ public class EventServiceImpl implements Service, EventService {
             events = eventDao.findRange(start, eventsPerPage);
             entityTransaction.commit();
         } catch (DaoException e) {
+            entityTransaction.rollback();
             throw new ServiceLevelException(e);
         } finally {
             entityTransaction.end();
@@ -183,6 +191,7 @@ public class EventServiceImpl implements Service, EventService {
             eventDao.update(event);
             entityTransaction.commit();
         } catch (DaoException e) {
+            entityTransaction.rollback();
             throw new ServiceLevelException(e);
         } finally {
             entityTransaction.end();
@@ -192,14 +201,15 @@ public class EventServiceImpl implements Service, EventService {
 
     @Override
     public Event findEventById(long id) throws ServiceLevelException {
-        Event event=null;
+        Event event = null;
         EventDao eventDao = new EventDaoImpl();
         EntityTransaction entityTransaction = new EntityTransaction();
         entityTransaction.begin(eventDao);
         try {
-            event=(Event)eventDao.findById(id).get(0);
+            event = (Event) eventDao.findById(id).get(0);
             entityTransaction.commit();
         } catch (DaoException e) {
+            entityTransaction.rollback();
             throw new ServiceLevelException(e);
         } finally {
             entityTransaction.end();
@@ -216,6 +226,7 @@ public class EventServiceImpl implements Service, EventService {
             eventDao.updateVenue(venue);
             entityTransaction.commit();
         } catch (DaoException e) {
+            entityTransaction.rollback();
             throw new ServiceLevelException(e);
         } finally {
             entityTransaction.end();
@@ -234,6 +245,7 @@ public class EventServiceImpl implements Service, EventService {
             number = eventDao.getNumberOfRecords();
             entityTransaction.commit();
         } catch (DaoException e) {
+            entityTransaction.rollback();
             throw new ServiceLevelException(e);
         } finally {
             entityTransaction.end();

@@ -29,6 +29,7 @@ public class UserServiceImpl implements UserService, Service {
             number = userDao.getNumberOfRecords();
             entityTransaction.commit();
         } catch (DaoException e) {
+            entityTransaction.rollback();
             throw new ServiceLevelException(e);
         } finally {
             entityTransaction.end();
@@ -49,6 +50,7 @@ public class UserServiceImpl implements UserService, Service {
             id=userDao.create(user);
             entityTransaction.commit();
         } catch (DaoException e) {
+            entityTransaction.rollback();
             throw new ServiceLevelException(e);
         } finally {
             entityTransaction.end();
@@ -67,6 +69,7 @@ public class UserServiceImpl implements UserService, Service {
             users = userDao.findRange(start, recordsPerPage);
             entityTransaction.commit();
         } catch (DaoException e) {
+            entityTransaction.rollback();
             throw new ServiceLevelException(e);
         } finally {
             entityTransaction.end();
@@ -84,6 +87,7 @@ public class UserServiceImpl implements UserService, Service {
             users = userDao.findAll();
             entityTransaction.commit();
         } catch (DaoException e) {
+            entityTransaction.rollback();
             throw new ServiceLevelException(e);
         } finally {
             entityTransaction.end();
@@ -113,6 +117,7 @@ public class UserServiceImpl implements UserService, Service {
             }
             entityTransaction.commit();
         } catch (DaoException e) {
+            entityTransaction.rollback();
             throw new ServiceLevelException(e);
         } finally {
             entityTransaction.end();
@@ -134,6 +139,7 @@ public class UserServiceImpl implements UserService, Service {
             user = userDao.findUserByLogin(login);
             entityTransaction.commit();
         } catch (DaoException e) {
+            entityTransaction.rollback();
             throw new ServiceLevelException(e);
         } finally {
             entityTransaction.end();
