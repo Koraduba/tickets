@@ -40,10 +40,16 @@
          <li class="nav-item">
             <a class="nav-link" href="${pageContext.request.contextPath}/mainservlet?command=cart">Cart</a>
         </li>
+          <li class="nav-item">
+                 <a class="nav-link" href="${pageContext.request.contextPath}/mainservlet?command=orders">Orders</a>
+             </li>
         <c:if test="${role=='ADMINISTRATOR'}">
         <li class="nav-item">
           <a class="nav-link" href="${pageContext.request.contextPath}/mainservlet?command=new_user">New users</a>
         </li>
+         <li class="nav-item">
+           <a class="nav-link" href="${pageContext.request.contextPath}/mainservlet?command=statistic">Statistic</a>
+         </li>
         </c:if>
           <c:if test="${role=='HOST'}">
           <li class="nav-item">

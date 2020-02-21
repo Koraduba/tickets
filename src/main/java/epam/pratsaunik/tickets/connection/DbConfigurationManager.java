@@ -20,7 +20,7 @@ import java.util.ResourceBundle;
 
     public static final String COMMAND_USERS="command.users";
 
-    public static DbConfigurationManager getInstance() {
+     static DbConfigurationManager getInstance() {
         if (instance == null) {
             instance = new DbConfigurationManager();
             instance.resourceBundle = ResourceBundle.getBundle(BUNDLE_NAME);
@@ -28,7 +28,7 @@ import java.util.ResourceBundle;
         return instance;
     }
 
-    public String getProperty(String key) {
+     String getProperty(String key) {
         return (String) resourceBundle.getObject(key);
     }
 }

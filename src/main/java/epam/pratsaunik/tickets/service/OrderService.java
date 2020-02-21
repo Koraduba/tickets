@@ -3,20 +3,23 @@ package epam.pratsaunik.tickets.service;
 import epam.pratsaunik.tickets.entity.*;
 import epam.pratsaunik.tickets.exception.ServiceLevelException;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 public interface OrderService {
 
-    public abstract List<Order> findOrdersByUser (User user);
-    public abstract long createOrderLine(OrderLine orderLine) throws ServiceLevelException;
-    public abstract OrderLine update (OrderLine orderLine);
-    public abstract boolean deleteOrderLine (OrderLine orderLine);
-    public abstract List<OrderLine> findOrderLinesByOrder (Order order);
+    List<Order> findOrdersByUser (User user) throws ServiceLevelException;
+    List<Order> findOrdersBelowAmount(BigDecimal amount) throws ServiceLevelException;
+    List<Order> findOrdersAboveAmount(BigDecimal amount) throws ServiceLevelException;
+    long createOrderLine(OrderLine orderLine) throws ServiceLevelException;
+    OrderLine update (OrderLine orderLine);
+    boolean deleteOrderLine (OrderLine orderLine);
+    List<OrderLine> findOrderLinesByOrder (Order order) throws ServiceLevelException;
 
-    public abstract long create(Order order) throws ServiceLevelException;
-    public abstract Order update(Order order);
-    public abstract boolean delete(Order order);
-    public abstract List<Order> findAll();
-    public abstract List<Order> findRange(int start, int perPage);
-    public abstract Order findById(long id) throws ServiceLevelException;
+    long create(Order order) throws ServiceLevelException;
+    Order update(Order order);
+    boolean delete(Order order);
+    List<Order> findAll();
+    List<Order> findRange(int start, int perPage);
+    Order findById(long id) throws ServiceLevelException;
 }

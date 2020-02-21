@@ -86,7 +86,7 @@ public class ConnectionPoll {
         if (connection.getClass() == ProxyConnection.class) {
             availableCon.offer((ProxyConnection) connection);
             consCount.decrementAndGet();
-            log.info("Connection returned " + connection.toString());
+            log.info("Connection returned " + connection);
         } else
             throw new ConnectionException();
     }

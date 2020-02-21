@@ -10,6 +10,7 @@ import epam.pratsaunik.tickets.exception.ServiceLevelException;
 import epam.pratsaunik.tickets.service.Service;
 import epam.pratsaunik.tickets.service.impl.EventServiceImpl;
 import epam.pratsaunik.tickets.util.ConfigurationManager2;
+import epam.pratsaunik.tickets.util.MessageManager;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -22,8 +23,6 @@ public class UploadCommand extends AbstractCommand {
     public CommandResult execute(RequestContent content) throws CommandException {
         CommandResult commandResult=new CommandResult();
         log.debug("UploadCommand launched");
-        log.debug("Current page",content.getSessionAttribute("current_page").toString());
-
         try {
             Long id=(Long)content.getSessionAttribute("id");
             if (id!=null){
@@ -36,6 +35,7 @@ public class UploadCommand extends AbstractCommand {
         } catch (ServiceLevelException e) {
             e.printStackTrace();
         }
+        content.setSessionAttribute("HomeMessage",MessageManager.INSTANCE.getProperty("message.eventcreated"));
         commandResult.setResponsePage(ConfigurationManager2.HOME_PAGE_PATH.getProperty());
         commandResult.setResponseType(CommandResult.ResponseType.FORWARD);
         return commandResult;

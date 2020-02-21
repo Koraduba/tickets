@@ -21,8 +21,6 @@ import java.util.List;
 
 public class OrderDaoImpl extends OrderDao {
     private final static Logger log = LogManager.getLogger();
-    private UserDaoImpl userDao = new UserDaoImpl();//fixme
-    private EventDaoImpl eventDao = new EventDaoImpl();
 
     private final static String SQL_FIND_ORDERS_BY_EVENT = "SELECT order_id, user, date FROM `order` " +
             "INNER JOIN order_line ON order.order_id=order_line.order " +
@@ -42,9 +40,9 @@ public class OrderDaoImpl extends OrderDao {
     private final static String SQL_UPDATE_ORDER_LINE = "UPDATE order_line SET ticket=?,quantity=?,`order`=? " +
             "WHERE order_line_id=?";
     private final static String SQL_DELETE_ORDER_LINE = "DELETE FROM order_line WHERE order_line_id=?";
-    private final static String SQL_FIND_ORDER_LINE_BY_ID = "SELECT order_line_id,ticket,quantity,`order` FROM order_line" +
+    private final static String SQL_FIND_ORDER_LINE_BY_ID = "SELECT order_line_id,ticket,quantity,`order` FROM order_line " +
             "WHERE order_line_id=?";
-    private final static String SQL_FIND_ORDER_LINES_BY_ORDER = "SELECT order_line_id,ticket,quantity,`order` FROM order_line" +
+    private final static String SQL_FIND_ORDER_LINES_BY_ORDER = "SELECT order_line_id,ticket,quantity,`order` FROM order_line " +
             "WHERE `order`=?";
 
     private final static String SQL_GET_NUMBER_OF_RECORDS = "SELECT count(order_id) FROM `order`";
@@ -68,9 +66,10 @@ public class OrderDaoImpl extends OrderDao {
             while (resultSet.next()) {
                 Order order = new Order();
                 order.setOrderId(resultSet.getLong(ColumnName.ORDER_ID));
-                User user = userDao.findById(resultSet.getLong(ColumnName.ORDER_USER)).get(0);//FIXME
+                User user = new User();
+                user.setUserId(resultSet.getLong(ColumnName.ORDER_USER));
                 order.setUser(user);
-                Date date = new Date(resultSet.getLong("date"));
+                Date date = new Date(resultSet.getLong(ColumnName.ORDER_DATE));
                 SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
                 order.setDate(simpleDateFormat.format(date));
                 orderList.add(order);
@@ -100,9 +99,11 @@ public class OrderDaoImpl extends OrderDao {
             while (resultSet.next()) {
                 Order order = new Order();
                 order.setOrderId(resultSet.getLong(ColumnName.ORDER_ID));
-                User user = userDao.findById(resultSet.getLong(ColumnName.ORDER_USER)).get(0);//fixme
+                User user = new User();
+                user.setUserId(resultSet.getLong(ColumnName.ORDER_USER));
                 order.setUser(user);
-                Date date = new Date(resultSet.getLong("date"));
+                order.setUser(user);
+                Date date = new Date(resultSet.getLong(ColumnName.ORDER_DATE));
                 SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
                 order.setDate(simpleDateFormat.format(date));
                 orderList.add(order);
@@ -133,9 +134,11 @@ public class OrderDaoImpl extends OrderDao {
             while (resultSet.next()) {
                 Order order = new Order();
                 order.setOrderId(resultSet.getLong(ColumnName.ORDER_ID));
-                User user = userDao.findById(resultSet.getLong(ColumnName.ORDER_USER)).get(0);//fixme
+                User user = new User();
+                user.setUserId(resultSet.getLong(ColumnName.ORDER_USER));
                 order.setUser(user);
-                Date date = new Date(resultSet.getLong("date"));
+                order.setUser(user);
+                Date date = new Date(resultSet.getLong(ColumnName.ORDER_DATE));
                 SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
                 order.setDate(simpleDateFormat.format(date));
                 orderList.add(order);
@@ -167,7 +170,7 @@ public class OrderDaoImpl extends OrderDao {
                 Order order = new Order();
                 order.setOrderId(resultSet.getLong(ColumnName.ORDER_ID));
                 order.setUser(user);
-                Date date = new Date(resultSet.getLong("date"));
+                Date date = new Date(resultSet.getLong(ColumnName.ORDER_DATE));
                 SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
                 order.setDate(simpleDateFormat.format(date));
                 orderList.add(order);
@@ -271,7 +274,9 @@ public class OrderDaoImpl extends OrderDao {
                 OrderLine orderLine = new OrderLine();
                 orderLine.setOrderLineId(resultSet.getLong(ColumnName.ORDER_LINE_ID));
                 orderLine.setTicketQuantity(resultSet.getInt(ColumnName.ORDER_LINE_QUANTITY));
-                Ticket ticket = eventDao.findTicketById(resultSet.getLong(ColumnName.ORDER_LINE_TICKET)).get(0);
+                Ticket ticket = new Ticket();
+                ticket.setTicketId(resultSet.getLong(ColumnName.ORDER_LINE_TICKET));
+                orderLine.setTicket(ticket);
                 Order order = findById(resultSet.getLong(ColumnName.ORDER_LINE_ORDER)).get(0);
                 orderLine.setTicket(ticket);
                 orderLine.setOrder(order);
@@ -298,12 +303,15 @@ public class OrderDaoImpl extends OrderDao {
         try {
             statement = connection.prepareStatement(SQL_FIND_ORDER_LINES_BY_ORDER);
             statement.setLong(1, order.getOrderId());
+            log.debug(statement);
             resultSet = statement.executeQuery();
+            log.debug("OrderDaoImpl::findOrderLinesByOrder resultset" + resultSet);
             while (resultSet.next()) {
                 OrderLine orderLine = new OrderLine();
                 orderLine.setOrderLineId(resultSet.getLong(ColumnName.ORDER_LINE_ID));
                 orderLine.setTicketQuantity(resultSet.getInt(ColumnName.ORDER_LINE_QUANTITY));
-                Ticket ticket = eventDao.findTicketById(resultSet.getLong(ColumnName.ORDER_LINE_TICKET)).get(0);
+                Ticket ticket = new Ticket();
+                ticket.setTicketId(resultSet.getLong(ColumnName.ORDER_LINE_TICKET));
                 orderLine.setTicket(ticket);
                 orderLine.setOrder(order);
                 orderLineList.add(orderLine);
@@ -312,7 +320,9 @@ public class OrderDaoImpl extends OrderDao {
             throw new DaoException(e);
         } finally {
             try {
-                resultSet.close();
+                if (resultSet != null) {
+                    resultSet.close();
+                }
                 statement.close();
             } catch (SQLException e) {
                 log.warn(e);
@@ -451,9 +461,11 @@ public class OrderDaoImpl extends OrderDao {
             while (resultSet.next()) {
                 Order order = new Order();
                 order.setOrderId(resultSet.getLong(ColumnName.ORDER_ID));
-                User user = userDao.findById(resultSet.getLong(ColumnName.ORDER_USER)).get(0);
+                User user = new User();
+                user.setUserId(resultSet.getLong(ColumnName.ORDER_USER));
                 order.setUser(user);
-                Date date = new Date(resultSet.getLong("date"));
+                order.setUser(user);
+                Date date = new Date(resultSet.getLong(ColumnName.ORDER_DATE));
                 SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
                 order.setDate(simpleDateFormat.format(date));
                 orderList.add(order);
@@ -482,9 +494,11 @@ public class OrderDaoImpl extends OrderDao {
             while (resultSet.next()) {
                 Order order = new Order();
                 order.setOrderId(resultSet.getLong(ColumnName.ORDER_ID));
-                User user = userDao.findById(resultSet.getLong(ColumnName.ORDER_USER)).get(0);
+                User user = new User();
+                user.setUserId(resultSet.getLong(ColumnName.ORDER_USER));
                 order.setUser(user);
-                Date date = new Date(resultSet.getLong("date"));
+                order.setUser(user);
+                Date date = new Date(resultSet.getLong(ColumnName.ORDER_DATE));
                 SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
                 order.setDate(simpleDateFormat.format(date));
                 orderList.add(order);
@@ -513,9 +527,11 @@ public class OrderDaoImpl extends OrderDao {
             while (resultSet.next()) {
                 Order order = new Order();
                 order.setOrderId(resultSet.getLong(ColumnName.ORDER_ID));
-                User user = userDao.findById(resultSet.getLong(ColumnName.ORDER_USER)).get(0);
+                User user = new User();
+                user.setUserId(resultSet.getLong(ColumnName.ORDER_USER));
                 order.setUser(user);
-                Date date = new Date(resultSet.getLong("date"));
+                order.setUser(user);
+                Date date = new Date(resultSet.getLong(ColumnName.ORDER_DATE));
                 SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
                 order.setDate(simpleDateFormat.format(date));
                 orderList.add(order);

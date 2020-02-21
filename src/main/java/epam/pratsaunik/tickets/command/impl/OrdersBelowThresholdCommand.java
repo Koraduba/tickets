@@ -10,7 +10,6 @@ import epam.pratsaunik.tickets.exception.CommandException;
 import epam.pratsaunik.tickets.exception.ServiceLevelException;
 import epam.pratsaunik.tickets.service.Service;
 import epam.pratsaunik.tickets.service.impl.OrderServiceImpl;
-import epam.pratsaunik.tickets.util.ConfigurationManager;
 import epam.pratsaunik.tickets.util.ConfigurationManager2;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -19,20 +18,21 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
-public class OrdersCommand extends AbstractCommand {
-    private final static Logger log = LogManager.getLogger();
-    public OrdersCommand(Service service) {
+public class OrdersBelowThresholdCommand extends AbstractCommand {
+    private final static Logger log= LogManager.getLogger();
+    public OrdersBelowThresholdCommand(Service service) {
+
         super(service);
     }
 
     @Override
     public CommandResult execute(RequestContent content) throws CommandException {
-        CommandResult commandResult = new CommandResult();
-        User user = (User) content.getSessionAttribute("user");
-        List<Order> orderList = null;
-        List<BigDecimal> orderSumList = null;
+        CommandResult commandResult=new CommandResult();
+        BigDecimal amount = BigDecimal.valueOf(Long.parseLong(content.getRequestParameter("amount")));
+        List<Order> orderList;
+        List<BigDecimal> orderSumList;
         try {
-            orderList = ((OrderServiceImpl) service).findOrdersByUser(user);
+            orderList = ((OrderServiceImpl)service).findOrdersBelowAmount(amount);
             orderSumList = new ArrayList<>();
             for (Order order : orderList) {
                 List<OrderLine> orderLinesByOrder = ((OrderServiceImpl) service).findOrderLinesByOrder(order);

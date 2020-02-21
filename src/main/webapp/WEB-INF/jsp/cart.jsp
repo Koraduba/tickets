@@ -18,7 +18,7 @@ CART
                 <td>${orderLine.ticket.category}</td>
                 <td>${orderLine.ticket.price}</td>
                 <td>${orderLine.ticketQuantity}</td>
-                <td>${orderLine.ticket.price}*${orderLine.ticketQuantity}</td>
+                <td>${orderLine.ticket.price*orderLine.ticketQuantity}</td>
             </tr>
         </c:forEach>
     </table>

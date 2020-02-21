@@ -8,7 +8,10 @@ public enum  MessageManager {
     private final String BUNDLE_NAME = "messages";
     private ResourceBundle resourceBundle;
     private MessageManager() {
-        resourceBundle = ResourceBundle.getBundle(BUNDLE_NAME);
+        resourceBundle = ResourceBundle.getBundle(BUNDLE_NAME, Locale.getDefault());
+    }
+    public void changeResource(Locale locale) {
+        resourceBundle = ResourceBundle.getBundle(BUNDLE_NAME, locale);
     }
     public String getProperty(String key) {
         return resourceBundle.getString(key);

@@ -25,7 +25,9 @@ public enum CommandType {
     HOME(new HomeCommand(new OrderServiceImpl())),
     ORDERS(new OrdersCommand(new OrderServiceImpl())),
     PROFILE(new ProfileCommand(new UserServiceImpl())),
-    STATISTIC(new StatisticCommand(new OrderServiceImpl()));
+    STATISTIC(new StatisticCommand(new OrderServiceImpl())),
+    ORDERS_BELOW_THRESHOLD(new OrdersBelowThresholdCommand(new OrderServiceImpl())),
+    ORDERS_ABOVE_THRESHOLD(new OrdersAboveThresholdCommand(new OrderServiceImpl()));
 
     private AbstractCommand command;
 

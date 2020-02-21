@@ -36,13 +36,12 @@ public class OrderLineCommand extends AbstractCommand {
         }
         OrderLine orderLine = new OrderLine();
         orderLine.setTicketQuantity(Integer.parseInt(content.getRequestParameter(ParameterName.ORDER_LINE_QUANTITY)));
-        Ticket ticket = new Ticket();
         Long ticketId = Long.parseLong(content.getRequestParameter(ParameterName.ORDER_LINE_TICKET));
-        ticket = ((EventServiceImpl) service).findTicketById(ticketId);
+        Ticket ticket = ((EventServiceImpl) service).findTicketById(ticketId);
         orderLine.setTicket(ticket);
         orderLineList.add(orderLine);
-        commandResult.setResponsePage(ConfigurationManager2.ERROR_PAGE_PATH.getProperty());
-        commandResult.setResponseType(CommandResult.ResponseType.FORWARD);
+        commandResult.setResponsePage(ConfigurationManager2.EVENT_PAGE_PATH.getProperty());
+        commandResult.setResponseType(CommandResult.ResponseType.REDIRECT);
 
         return commandResult;
     }

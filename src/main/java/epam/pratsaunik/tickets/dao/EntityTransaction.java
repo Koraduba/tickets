@@ -21,7 +21,7 @@ public class EntityTransaction {
             try {
                 connection=ConnectionPoll.getInstance().retrieveConnection();
             } catch (ConnectionException e) {
-               log.fatal("Connection error"+e);
+               log.fatal("Connection error",e);
                throw new RuntimeException();
             }
         }

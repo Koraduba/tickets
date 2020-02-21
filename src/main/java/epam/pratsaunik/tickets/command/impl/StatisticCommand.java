@@ -17,7 +17,7 @@ public class StatisticCommand extends AbstractCommand {
         CommandResult commandResult=new CommandResult();
 
         commandResult.setResponsePage(ConfigurationManager2.STATISTIC_PAGE_PATH.getProperty());
-        commandResult.setResponseType(CommandResult.ResponseType.FORWARD);
+        commandResult.setResponseType(CommandResult.ResponseType.REDIRECT);
         return commandResult;
     }
 }

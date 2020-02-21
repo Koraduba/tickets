@@ -46,6 +46,7 @@ public class LoginCommand extends AbstractCommand {
             if (hasAccount) {
                 content.setSessionAttribute(AttributeName.USER_ROLE,user.get(0).getRole().toString());
                 Locale rus = new Locale("ru", "RU");
+                MessageManager.INSTANCE.changeResource(rus);
                 content.setSessionAttribute(AttributeName.LOCALE, rus);
                 content.setSessionAttribute(AttributeName.USER, user.get(0));
                 commandResult.setResponsePage(ConfigurationManager2.HOME_PAGE_PATH.getProperty());

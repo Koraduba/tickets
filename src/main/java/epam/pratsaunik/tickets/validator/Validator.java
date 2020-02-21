@@ -63,4 +63,8 @@ public class Validator {
 
         return false;
     }
+
+    public static boolean vaidateImage(RequestContent content){
+        return false;
+    }
 }

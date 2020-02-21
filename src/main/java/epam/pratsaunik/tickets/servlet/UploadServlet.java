@@ -4,6 +4,8 @@ import epam.pratsaunik.tickets.command.*;
 import epam.pratsaunik.tickets.exception.CommandException;
 import epam.pratsaunik.tickets.util.ConfigurationManager;
 import epam.pratsaunik.tickets.util.ConfigurationManager2;
+import epam.pratsaunik.tickets.util.MessageManager;
+import epam.pratsaunik.tickets.util.MessageType;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -17,6 +19,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 
 @MultipartConfig
@@ -39,12 +42,20 @@ public class UploadServlet extends HttpServlet {
         if (!uploadDir.exists()) {
             uploadDir.mkdir();
         }
-        for (Part part : req.getParts()) {
-            log.debug(absPath);
-            if (part.getSubmittedFileName() != null) {
-                part.write(uploadDir + File.separator + part.getSubmittedFileName());
-                req.getSession().setAttribute("path", UPLOAD_PATH + File.separator + part.getSubmittedFileName());
+        try {
+            for (Part part : req.getParts()) {
+                log.debug("Upload Servlet. Part:" +part);
+                if (part.getSubmittedFileName()!=null) {
+                    log.debug(part.getSubmittedFileName());
+                    part.write(uploadDir + File.separator + part.getSubmittedFileName());
+                    req.getSession().setAttribute("path", UPLOAD_PATH + File.separator + part.getSubmittedFileName());
+                }
             }
+        } catch (IOException e) {
+            log.debug("Uploadservlet. IOException.");
+            req.setAttribute("errorUploadMessage", MessageManager.INSTANCE.getProperty(MessageType.NO_CHOSEN_FILE));
+
+            getServletContext().getRequestDispatcher(ConfigurationManager2.UPLOAD_PAGE_PATH.getProperty()).forward(req,resp);
         }
         String commandName = req.getParameter(ParameterName.COMMAND);
         AbstractCommand commandAction = CommandFactory.instance.getCommand(commandName);
@@ -63,8 +74,8 @@ public class UploadServlet extends HttpServlet {
                         getServletContext().getRequestDispatcher(commandResult.getResponsePage()).forward(req, resp);
                         break;
                     case REDIRECT:
-                        resp.sendRedirect(req.getContextPath() + "/uploadservlet");
                         req.getSession().setAttribute("page", commandResult.getResponsePage());
+                        resp.sendRedirect(req.getContextPath() + "/uploadservlet");
                         break;
                     default:
                         throw new ServletException("Command error!");
