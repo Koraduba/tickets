@@ -5,51 +5,65 @@
 <head><title>newEvent</title></head>
 <body>
 NEW EVENT
-
-<form action="${pageContext.request.contextPath}/mainservlet?command=add_event" id="form1" method="post">
-    <input type="hidden" name="command" value="upload" />
+${errorNewEventMessage}
+<form action="${pageContext.request.contextPath}/mainservlet" id="form1" method="post" name="form1">
+    <input type="hidden" name="command"/>
   <div class="form-group">
     <label for="name">Name</label>
     <div class="col-sm-10">
-      <input type="text" class="form-control" id="name" name="name">
+      <input type="text" class="form-control" id="name" name="name" value="${sessionScope.name}">
     </div>
   </div>
   <div class="form-group">
     <label for="date">Date</label>
     <div class="col-sm-10">
-      <input type="date" class="form-control" id="date" name="date">
+      <input type="date" class="form-control" id="date" name="date" value="${date}">
   </div>
   <div class="form-group">
     <label for="time">Time</label>
     <div class="col-sm-10">
-      <input type="time" class="form-control" id="time" name="time">
+      <input type="time" class="form-control" id="time" name="time" value="${time}">
     </div>
   </div>
     <div class="form-group">
       <label for="description">Description</label>
       <div class="col-sm-10">
-        <textarea class="form-control" id="description" name="description" rows="3"></textarea>
+        <textarea class="form-control" id="description" name="description" rows="3" >${description}</textarea>
       </div>
   </div>
+  ${price_standard}
     <div class="form-group">
       <label for="price-standard">Standard ticket price</label>
       <div class="col-sm-10">
-        <input type="number" class="form-control" id="price-standard" name="price-standard">
+        <input type="number" class="form-control" id="price-standard" name="price-standard" value="${price_standard}">
     </div>
       <div class="form-group">
         <label for="price-vip">VIP ticket price</label>
         <div class="col-sm-10">
-          <input type="number" class="form-control" id="price-vip" name="price-vip">
+          <input type="number" class="form-control" id="price-vip" name="price-vip" value="${price_vip}">
       </div>
     <div class="form-group">
       <label for="venue">Venue</label>
       <select id="venue" class="form-control" name="venue">
+        <option value="" selected disabled hidden>Choose here</option>
       <c:forEach items="${venues}" var="venue">
          <option>${venue.name}</option>
       </c:forEach>
       </select>
       <a class="nav-link" href="${pageContext.request.contextPath}/mainservlet?command=new_venue">Add venue</a>
     </div>
-              <button type="submit">SUBMIT</button>
+        <div class="form-group">
+          <img src="${path}" class="img-fluid" alt="Responsive image">
+          <br/>
+          <input type="submit" value="Add image" onclick="setCommand('upload')">
+          <br/>
+    </div>
+          <input type="submit" value="Add event" onclick="setCommand('add_event')">
   </form>
+
+  <script>
+  function setCommand (commandType){
+  document.forms['form1'].elements.command.value=commandType;
+  }
+  </script>
 <jsp:include page="footer.jsp"/>

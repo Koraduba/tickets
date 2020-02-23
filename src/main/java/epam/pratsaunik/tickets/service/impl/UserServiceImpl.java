@@ -4,6 +4,7 @@ package epam.pratsaunik.tickets.service.impl;
 import epam.pratsaunik.tickets.dao.EntityTransaction;
 import epam.pratsaunik.tickets.dao.UserDao;
 import epam.pratsaunik.tickets.dao.impl.UserDaoImpl;
+import epam.pratsaunik.tickets.entity.Entity;
 import epam.pratsaunik.tickets.entity.Role;
 import epam.pratsaunik.tickets.entity.User;
 import epam.pratsaunik.tickets.exception.DaoException;
@@ -41,7 +42,7 @@ public class UserServiceImpl implements UserService, Service {
     @Override
     public long create(User user) throws ServiceLevelException {
         long id=0;
-        UserDao userDao = new UserDaoImpl();
+        UserDaoImpl userDao = new UserDaoImpl();
         String passwordEncoded = PasswordHash.getHash(user.getPassword());
         user.setPassword(passwordEncoded);
         EntityTransaction entityTransaction = new EntityTransaction();
@@ -59,10 +60,29 @@ public class UserServiceImpl implements UserService, Service {
     }
 
     @Override
+    public boolean update(User user) throws ServiceLevelException {
+        EntityTransaction entityTransaction = new EntityTransaction();
+        UserDaoImpl userDao = new UserDaoImpl();
+        String passwordEncoded = PasswordHash.getHash(user.getPassword());
+        user.setPassword(passwordEncoded);
+        entityTransaction.begin(userDao);
+        try {
+            userDao.update(user);
+            entityTransaction.commit();
+        } catch (DaoException e) {
+            entityTransaction.rollback();
+            throw new ServiceLevelException(e);
+        }finally {
+            entityTransaction.end();
+        }
+        return true;
+    }
+
+    @Override
     public List<User> findRange(int currentPage, int recordsPerPage) throws ServiceLevelException {
         List<User> users;
         int start = currentPage * recordsPerPage - recordsPerPage;
-        UserDao userDao = new UserDaoImpl();
+        UserDaoImpl userDao = new UserDaoImpl();
         EntityTransaction entityTransaction = new EntityTransaction();
         entityTransaction.begin(userDao);
         try {
@@ -80,7 +100,7 @@ public class UserServiceImpl implements UserService, Service {
     @Override
     public List<User> findAllUsers() throws ServiceLevelException {
         List<User> users;
-        UserDao userDao = new UserDaoImpl();
+        UserDaoImpl userDao = new UserDaoImpl();
         EntityTransaction entityTransaction = new EntityTransaction();
         entityTransaction.begin(userDao);
         try {

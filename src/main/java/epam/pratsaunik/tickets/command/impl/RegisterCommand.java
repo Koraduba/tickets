@@ -57,7 +57,7 @@ public class RegisterCommand extends AbstractCommand {
             long result=((UserServiceImpl) service).create(user);
             if(result>0){
                 EmailSender emailSender = new EmailSender();
-                emailSender.sendConfirmation(user.getEmail());
+                emailSender.sendConfirmation(user.getEmail(),"confirmation","Your account is created\n");
             }
             log.debug("user created");
             commandResult.setResponsePage(ConfigurationManager2.HOME_PAGE_PATH.getProperty());

@@ -22,6 +22,8 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
+import static com.mysql.cj.conf.PropertyKey.logger;
+
 @MultipartConfig
 public class UploadServlet extends HttpServlet {
 
@@ -30,12 +32,13 @@ public class UploadServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        getServletContext().getRequestDispatcher(ConfigurationManager2.HOME_PAGE_PATH.getProperty()).forward(req, resp);
+        log.debug("Page"+req.getSession().getAttribute("current_page"));
+
+        getServletContext().getRequestDispatcher(ConfigurationManager2.NEW_EVENT_PAGE_PATH.getProperty()).forward(req, resp);
     }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        CommandResult commandResult=null;
         String path = req.getServletContext().getRealPath("/");
         String absPath = path + File.separator + UPLOAD_PATH;
         File uploadDir = new File(absPath);
@@ -44,8 +47,8 @@ public class UploadServlet extends HttpServlet {
         }
         try {
             for (Part part : req.getParts()) {
-                log.debug("Upload Servlet. Part:" +part);
-                if (part.getSubmittedFileName()!=null) {
+                log.debug("Upload Servlet. Part:" + part);
+                if (part.getSubmittedFileName() != null) {
                     log.debug(part.getSubmittedFileName());
                     part.write(uploadDir + File.separator + part.getSubmittedFileName());
                     req.getSession().setAttribute("path", UPLOAD_PATH + File.separator + part.getSubmittedFileName());
@@ -55,37 +58,10 @@ public class UploadServlet extends HttpServlet {
             log.debug("Uploadservlet. IOException.");
             req.setAttribute("errorUploadMessage", MessageManager.INSTANCE.getProperty(MessageType.NO_CHOSEN_FILE));
 
-            getServletContext().getRequestDispatcher(ConfigurationManager2.UPLOAD_PAGE_PATH.getProperty()).forward(req,resp);
+            getServletContext().getRequestDispatcher(ConfigurationManager2.UPLOAD_PAGE_PATH.getProperty()).forward(req, resp);
         }
-        String commandName = req.getParameter(ParameterName.COMMAND);
-        AbstractCommand commandAction = CommandFactory.instance.getCommand(commandName);
-        RequestContent requestContent = new RequestContent();
-        requestContent.extractValues(req);
-        if (commandAction != null) {
-            try {
-                commandResult = commandAction.execute(requestContent);
-            } catch (CommandException e) {
-                log.info(e);
-            }
-            try {
-                requestContent.insertAttributes(req);
-                switch (commandResult.getResponseType()) {
-                    case FORWARD:
-                        getServletContext().getRequestDispatcher(commandResult.getResponsePage()).forward(req, resp);
-                        break;
-                    case REDIRECT:
-                        req.getSession().setAttribute("page", commandResult.getResponsePage());
-                        resp.sendRedirect(req.getContextPath() + "/uploadservlet");
-                        break;
-                    default:
-                        throw new ServletException("Command error!");
-                }
-            } catch (Exception e) {
-                throw new ServletException(e);
-            }
-        } else {
-            log.info("Command does not exist!");
-            throw new ServletException();
-    }
+        resp.sendRedirect(req.getContextPath() + "/uploadservlet");
+
+
     }
 }

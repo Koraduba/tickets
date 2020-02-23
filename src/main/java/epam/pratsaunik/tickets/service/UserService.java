@@ -9,6 +9,8 @@ public interface UserService {
 
     long create(User user) throws ServiceLevelException;
 
+    boolean update (User user) throws ServiceLevelException;
+
     List<User> findAllUsers() throws ServiceLevelException;
 
     List<User> findRange(int currentPage, int recordsPerPage) throws ServiceLevelException;

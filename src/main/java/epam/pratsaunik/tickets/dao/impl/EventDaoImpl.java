@@ -18,8 +18,8 @@ public class EventDaoImpl extends EventDao {
     private final static Logger log = LogManager.getLogger();
     private final static long MILLISECONDS_PER_DAY = 86400000;
     private final static String SQL_GET_NUMBER_OF_RECORDS = "SELECT count(event_id) FROM event";
-    private final static String SQL_CREATE_EVENT = "INSERT INTO event(name,date,description,image,venue) " +
-            "VALUES(?,?,?,?,?)";
+    private final static String SQL_CREATE_EVENT = "INSERT INTO event(name,date,description,image,venue,owner) " +
+            "VALUES(?,?,?,?,?,?)";
     private final static String SQL_UPDATE_EVENT = "UPDATE event SET name=?,date=?,description=?,image=?,venue=? WHERE event_id=?";
     private final static String SQL_DELETE_EVENT_BY_ID = "DELETE FROM event WHERE event_id=?";
     private final static String SQL_FIND_EVENT_BY_ID = "SELECT event_id,name,date,description,image,venue FROM event WHERE event_id=?";
@@ -104,6 +104,7 @@ public class EventDaoImpl extends EventDao {
             } else {
                 statement.setLong(5, 0);
             }
+            statement.setLong(6,event.getOwner().getUserId());
             statement.execute();
             resultSet = statement.getGeneratedKeys();
             resultSet.next();

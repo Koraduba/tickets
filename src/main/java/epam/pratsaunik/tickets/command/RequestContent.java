@@ -5,7 +5,9 @@ import epam.pratsaunik.tickets.servlet.AttributeName;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import javax.mail.Session;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
@@ -32,8 +34,15 @@ public class RequestContent {
         for (Map.Entry<String, Object> entry : requestAttributes.entrySet()) {
             request.setAttribute(entry.getKey(), entry.getValue());
         }
+        HttpSession session = request.getSession(true);
         for (Map.Entry<String, Object> entry : sessionAttributes.entrySet()) {
-            request.getSession(true).setAttribute(entry.getKey(), entry.getValue());
+            if (entry.getValue() != null) {
+                session.setAttribute(entry.getKey(), entry.getValue());
+            } else {
+                if (entry.getKey() != null) {
+                    session.removeAttribute(entry.getKey());
+                }
+            }
         }
     }
 

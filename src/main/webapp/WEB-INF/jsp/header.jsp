@@ -28,7 +28,7 @@
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav mr-auto">
         <li class="nav-item">
-          <a class="nav-link" href="${pageContext.request.contextPath}">User profile</a>
+          <a class="nav-link" href="${pageContext.request.contextPath}/mainservlet?command=logout">Logout</a>
         </li>
 
         <li class="nav-item">
@@ -40,9 +40,14 @@
          <li class="nav-item">
             <a class="nav-link" href="${pageContext.request.contextPath}/mainservlet?command=cart">Cart</a>
         </li>
-          <li class="nav-item">
+        <li class="nav-item">
                  <a class="nav-link" href="${pageContext.request.contextPath}/mainservlet?command=orders">Orders</a>
-             </li>
+        </li>
+        <c:if test="${role=='USER'||role=='HOST'}">
+        <li class="nav-item">
+          <a class="nav-link" href="${pageContext.request.contextPath}/mainservlet?command=profile">Profile</a>
+        </li>
+        </c:if>
         <c:if test="${role=='ADMINISTRATOR'}">
         <li class="nav-item">
           <a class="nav-link" href="${pageContext.request.contextPath}/mainservlet?command=new_user">New users</a>

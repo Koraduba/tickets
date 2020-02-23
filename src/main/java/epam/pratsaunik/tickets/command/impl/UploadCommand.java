@@ -10,6 +10,7 @@ import epam.pratsaunik.tickets.exception.ServiceLevelException;
 import epam.pratsaunik.tickets.service.Service;
 import epam.pratsaunik.tickets.service.impl.EventServiceImpl;
 import epam.pratsaunik.tickets.util.ConfigurationManager2;
+import epam.pratsaunik.tickets.util.InputKeeper;
 import epam.pratsaunik.tickets.util.MessageManager;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -23,20 +24,10 @@ public class UploadCommand extends AbstractCommand {
     public CommandResult execute(RequestContent content) throws CommandException {
         CommandResult commandResult=new CommandResult();
         log.debug("UploadCommand launched");
-        try {
-            Long id=(Long)content.getSessionAttribute("id");
-            if (id!=null){
-                Event event = ((EventServiceImpl) service).findEventById(id);
-                event.setImage((String)content.getSessionAttribute("path"));
-                ((EventServiceImpl) service).update(event);
-            }else{
-                throw new CommandException("No eventId in session");
-            }
-        } catch (ServiceLevelException e) {
-            e.printStackTrace();
-        }
-        content.setSessionAttribute("HomeMessage",MessageManager.INSTANCE.getProperty("message.eventcreated"));
-        commandResult.setResponsePage(ConfigurationManager2.HOME_PAGE_PATH.getProperty());
+        InputKeeper keeper = new InputKeeper();
+        keeper.keepEvent(content);
+        log.debug("Event name"+content.getSessionAttribute("name"));
+        commandResult.setResponsePage(ConfigurationManager2.UPLOAD_PAGE_PATH.getProperty());
         commandResult.setResponseType(CommandResult.ResponseType.FORWARD);
         return commandResult;
     }

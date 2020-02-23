@@ -29,5 +29,11 @@
              <fmt:message key="label.signin" bundle="${rb}" var="localizedSignIn"/><br/>
              <input type="submit" value="${localizedSignIn}"/>
         </form>
+        <form name="register" method="POST" action="mainservlet">
+             <input type="hidden" name="command" value="guest" />
+             <fmt:message key="label.guest" bundle="${rb}" var="localizedGuest"/><br/>
+             <input type="submit" value="${localizedGuest}"/>
+        </form>
+
     </div>
 <jsp:include page="footer.jsp"/>

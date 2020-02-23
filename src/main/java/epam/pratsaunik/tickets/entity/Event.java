@@ -16,6 +16,7 @@ public class Event extends Entity {
     private String description;
     private String image;
     private Venue venue;
+    private User owner;
 
     public Long getEventId() {
         return eventId;
@@ -71,6 +72,14 @@ public class Event extends Entity {
 
     public void setVenue(Venue venue) {
         this.venue = venue;
+    }
+
+    public User getOwner() {
+        return owner;
+    }
+
+    public void setOwner(User owner) {
+        this.owner = owner;
     }
 
     @Override

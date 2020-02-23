@@ -37,6 +37,17 @@ EVENT
             </form>
             </tr>
 			</c:forEach>
+	            <tr>
+	                        <form name="edit" method="POST" action="mainservlet">
+                				<td>${ticket.category}</td>
+                				<td>${ticket.price}</td>
+                				<td><input type="submit" value="to Cart"/></td>
+                                <input type="hidden" name="command" value="edit_event" />
+                                <input type="hidden" name="event" value="${event.eventId}" />
+                                <input type="hidden" name="ticket" value="${ticket.ticketId}" />
+                            </form>
+                </tr>
+
 	</table>
  </div>
 <jsp:include page="footer.jsp"/>

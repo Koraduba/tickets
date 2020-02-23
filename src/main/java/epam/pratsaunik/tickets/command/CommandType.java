@@ -27,7 +27,13 @@ public enum CommandType {
     PROFILE(new ProfileCommand(new UserServiceImpl())),
     STATISTIC(new StatisticCommand(new OrderServiceImpl())),
     ORDERS_BELOW_THRESHOLD(new OrdersBelowThresholdCommand(new OrderServiceImpl())),
-    ORDERS_ABOVE_THRESHOLD(new OrdersAboveThresholdCommand(new OrderServiceImpl()));
+    ORDERS_ABOVE_THRESHOLD(new OrdersAboveThresholdCommand(new OrderServiceImpl())),
+    GUEST(new GuestCommand(new UserServiceImpl())),
+    LOGOUT(new LogoutCommand(new UserServiceImpl())),
+    EDIT_USER(new EditUserCommand(new UserServiceImpl())),
+    CHANGE_PASSWORD(new ChangePasswordCommand(new UserServiceImpl())),
+    NEW_PASSWORD(new PasswordChangedCommand(new UserServiceImpl())),
+    EDIT_EVENT(new EditEventCommand(new EventServiceImpl()));
 
     private AbstractCommand command;
 
