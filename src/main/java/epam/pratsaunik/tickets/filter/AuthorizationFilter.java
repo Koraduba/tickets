@@ -45,7 +45,8 @@ public class AuthorizationFilter implements Filter {
         USER_AVAILABLE.add(CommandType.ORDERS);
         USER_AVAILABLE.add(CommandType.PROFILE);
 
-        HOST_AVAILABLE.add(CommandType.ADD_EVENT);
+        HOST_AVAILABLE.add(CommandType.NEW_EVENT);
+        HOST_AVAILABLE.add(CommandType.NEW_EVENT_PAGE);
         HOST_AVAILABLE.add(CommandType.ADD_VENUE);
         HOST_AVAILABLE.add(CommandType.CATALOG);
         HOST_AVAILABLE.add(CommandType.CHANGE_PASSWORD);
@@ -53,7 +54,7 @@ public class AuthorizationFilter implements Filter {
         HOST_AVAILABLE.add(CommandType.EVENT);
         HOST_AVAILABLE.add(CommandType.HOME);
         HOST_AVAILABLE.add(CommandType.LOGIN);
-        HOST_AVAILABLE.add(CommandType.NEW_EVENT);
+        HOST_AVAILABLE.add(CommandType.MY_EVENTS);
         HOST_AVAILABLE.add(CommandType.NEW_VENUE);
         HOST_AVAILABLE.add(CommandType.NEW_PASSWORD);
         HOST_AVAILABLE.add(CommandType.LOGOUT);
@@ -66,9 +67,12 @@ public class AuthorizationFilter implements Filter {
         ADMIN_AVAILABLE.add(CommandType.HOME);
         ADMIN_AVAILABLE.add(CommandType.LOGIN);
         ADMIN_AVAILABLE.add(CommandType.LOGOUT);
+        ADMIN_AVAILABLE.add(CommandType.NEW_USER);
         ADMIN_AVAILABLE.add(CommandType.ORDERS_ABOVE_THRESHOLD);
         ADMIN_AVAILABLE.add(CommandType.ORDERS_BELOW_THRESHOLD);
         ADMIN_AVAILABLE.add(CommandType.PROFILE);
+        ADMIN_AVAILABLE.add(CommandType.REGISTER);
+        ADMIN_AVAILABLE.add(CommandType.STATISTIC);
         ADMIN_AVAILABLE.add(CommandType.USERS);
 
 

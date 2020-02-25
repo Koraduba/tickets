@@ -14,10 +14,6 @@
             <Patternlayout pattern="${pattern_console}"/>
         </Console>
 
-        <File name="File1" filename="${LOG_DIR}/text.log" buferredIO="true">
-            <Patternlayout pattern="${pattern_file}"/>
-        </File>
-
         <RollingFile name="File" filename="${LOG_DIR}/text_arc.log" append="true"
         filePattern="${ARCHIVE_LOG_DIR}/${date:yyyy-MM-dd}/%d{yyyy-MM-dd_HH-mm}_%i.log">
             <Patternlayout pattern="${pattern_file}"/>
@@ -32,8 +28,7 @@
         <Root level="debug">
 
             <AppenderRef ref="Console" level="info"/>
-            <AppenderRef ref="File"/>
-            <AppenderRef ref="File1" level="trace"/>
+            <AppenderRef ref="File" level="trace"/>
         </Root>
     </Loggers>
 

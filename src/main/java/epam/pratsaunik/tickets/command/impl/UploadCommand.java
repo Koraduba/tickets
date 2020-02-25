@@ -26,7 +26,6 @@ public class UploadCommand extends AbstractCommand {
         log.debug("UploadCommand launched");
         InputKeeper keeper = new InputKeeper();
         keeper.keepEvent(content);
-        log.debug("Event name"+content.getSessionAttribute("name"));
         commandResult.setResponsePage(ConfigurationManager2.UPLOAD_PAGE_PATH.getProperty());
         commandResult.setResponseType(CommandResult.ResponseType.FORWARD);
         return commandResult;

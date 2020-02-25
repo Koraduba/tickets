@@ -11,7 +11,7 @@ ${errorNewEventMessage}
   <div class="form-group">
     <label for="name">Name</label>
     <div class="col-sm-10">
-      <input type="text" class="form-control" id="name" name="name" value="${sessionScope.name}">
+      <input type="text" class="form-control" id="name" name="name" value="${name}">
     </div>
   </div>
   <div class="form-group">
@@ -31,7 +31,6 @@ ${errorNewEventMessage}
         <textarea class="form-control" id="description" name="description" rows="3" >${description}</textarea>
       </div>
   </div>
-  ${price_standard}
     <div class="form-group">
       <label for="price-standard">Standard ticket price</label>
       <div class="col-sm-10">
@@ -44,8 +43,8 @@ ${errorNewEventMessage}
       </div>
     <div class="form-group">
       <label for="venue">Venue</label>
-      <select id="venue" class="form-control" name="venue">
-        <option value="" selected disabled hidden>Choose here</option>
+      <select id="venue" class="form-control" name="event_venue">
+
       <c:forEach items="${venues}" var="venue">
          <option>${venue.name}</option>
       </c:forEach>
@@ -53,12 +52,16 @@ ${errorNewEventMessage}
       <a class="nav-link" href="${pageContext.request.contextPath}/mainservlet?command=new_venue">Add venue</a>
     </div>
         <div class="form-group">
+        <c:if test="${path!=null}">
           <img src="${path}" class="img-fluid" alt="Responsive image">
           <br/>
+        </c:if>
+        <c:if test="${path==null}">
           <input type="submit" value="Add image" onclick="setCommand('upload')">
           <br/>
+        </c:if>
     </div>
-          <input type="submit" value="Add event" onclick="setCommand('add_event')">
+          <input type="submit" value="Add event" onclick="setCommand('new_event')">
   </form>
 
   <script>

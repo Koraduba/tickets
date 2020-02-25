@@ -16,6 +16,7 @@ public class ColumnName {
     public final static String EVENT_VENUE="venue";
     public final static String EVENT_IMAGE="image";
     public final static String EVENT_DATE="date";
+    public final static String EVENT_HOST="owner";
     public final static String VENUE_ID="venue_id";
     public final static String VENUE_NAME="name";
     public final static String VENUE_CAPACITY="capacity";

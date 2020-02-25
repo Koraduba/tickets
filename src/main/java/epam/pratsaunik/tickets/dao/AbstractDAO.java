@@ -8,7 +8,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.List;
 
-public abstract class AbstractDAO<K, T extends Entity> {
+public abstract class AbstractDAO<T extends Entity> {
     protected Connection connection;
 
     public abstract int getNumberOfRecords() throws DaoException;

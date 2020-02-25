@@ -30,19 +30,17 @@
         <li class="nav-item">
           <a class="nav-link" href="${pageContext.request.contextPath}/mainservlet?command=logout">Logout</a>
         </li>
-
-        <li class="nav-item">
-          <a class="nav-link" href="${pageContext.request.contextPath}/mainservlet?command=users&currentPage=1">Users</a>
-        </li>
          <li class="nav-item">
            <a class="nav-link" href="${pageContext.request.contextPath}/mainservlet?command=catalog&currentPage=1">Events</a>
          </li>
+         <c:if test="${role=='USER'}">
          <li class="nav-item">
             <a class="nav-link" href="${pageContext.request.contextPath}/mainservlet?command=cart">Cart</a>
         </li>
         <li class="nav-item">
                  <a class="nav-link" href="${pageContext.request.contextPath}/mainservlet?command=orders">Orders</a>
         </li>
+        </c:if>
         <c:if test="${role=='USER'||role=='HOST'}">
         <li class="nav-item">
           <a class="nav-link" href="${pageContext.request.contextPath}/mainservlet?command=profile">Profile</a>
@@ -50,7 +48,10 @@
         </c:if>
         <c:if test="${role=='ADMINISTRATOR'}">
         <li class="nav-item">
-          <a class="nav-link" href="${pageContext.request.contextPath}/mainservlet?command=new_user">New users</a>
+            <a class="nav-link" href="${pageContext.request.contextPath}/mainservlet?command=users&currentPage=1">Users</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="${pageContext.request.contextPath}/mainservlet?command=new_user">New user</a>
         </li>
          <li class="nav-item">
            <a class="nav-link" href="${pageContext.request.contextPath}/mainservlet?command=statistic">Statistic</a>
@@ -58,13 +59,12 @@
         </c:if>
           <c:if test="${role=='HOST'}">
           <li class="nav-item">
-            <a class="nav-link" href="${pageContext.request.contextPath}/mainservlet?command=new_event">New event</a>
+            <a class="nav-link" href="${pageContext.request.contextPath}/mainservlet?command=new_event_page">New event</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="${pageContext.request.contextPath}/mainservlet?command=my_events&currentPage=1">My events</a>
           </li>
         </c:if>
       </ul>
-      <form class="form-inline my-2 my-lg-0" action="${pageContext.request.contextPath}/search">
-        <input name="searchStr" class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-        <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-      </form>
     </div>
   </nav>

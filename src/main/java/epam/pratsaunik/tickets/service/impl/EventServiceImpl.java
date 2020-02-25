@@ -22,7 +22,7 @@ public class EventServiceImpl implements Service, EventService {
     @Override
     public long create(Event event) throws ServiceLevelException {
         long id = 0;
-        EventDao eventDao = new EventDaoImpl();
+        EventDaoImpl eventDao = new EventDaoImpl();
         EntityTransaction entityTransaction = new EntityTransaction();
         entityTransaction.begin(eventDao);
         try {
@@ -70,6 +70,7 @@ public class EventServiceImpl implements Service, EventService {
         } finally {
             entityTransaction.end();
         }
+        log.debug("venue"+venue.getName());
         return venue;
     }
 
@@ -167,11 +168,35 @@ public class EventServiceImpl implements Service, EventService {
     public List<Event> findEventsByRange(int currentPage, int eventsPerPage) throws ServiceLevelException {
         List<Event> events;
         int start = currentPage * eventsPerPage - eventsPerPage;
+        EventDaoImpl eventDao = new EventDaoImpl();
+        UserDaoImpl userDao = new UserDaoImpl();
+        EntityTransaction entityTransaction = new EntityTransaction();
+        entityTransaction.begin(eventDao, userDao);
+        try {
+            events = eventDao.findRange(start, eventsPerPage);
+            for (Event event:events) {
+                User owner = userDao.findById(event.getOwner().getUserId()).get(0);
+                event.setOwner(owner);
+            }
+            entityTransaction.commit();
+        } catch (DaoException e) {
+            entityTransaction.rollback();
+            throw new ServiceLevelException(e);
+        } finally {
+            entityTransaction.end();
+        }
+        return events;
+    }
+
+    @Override
+    public List<Event> findEventsByHost(User owner,int currentPage, int eventsPerPage) throws ServiceLevelException {
+        List<Event> events;
+        int start = currentPage * eventsPerPage - eventsPerPage;
         EventDao eventDao = new EventDaoImpl();
         EntityTransaction entityTransaction = new EntityTransaction();
         entityTransaction.begin(eventDao);
         try {
-            events = eventDao.findRange(start, eventsPerPage);
+            events = eventDao.findEventByHost(owner,start,eventsPerPage);
             entityTransaction.commit();
         } catch (DaoException e) {
             entityTransaction.rollback();
@@ -203,10 +228,13 @@ public class EventServiceImpl implements Service, EventService {
     public Event findEventById(long id) throws ServiceLevelException {
         Event event = null;
         EventDao eventDao = new EventDaoImpl();
+        UserDaoImpl userDao = new UserDaoImpl();
         EntityTransaction entityTransaction = new EntityTransaction();
         entityTransaction.begin(eventDao);
         try {
             event = (Event) eventDao.findById(id).get(0);
+            User owner= userDao.findById(event.getOwner().getUserId()).get(0);
+            event.setOwner(owner);
             entityTransaction.commit();
         } catch (DaoException e) {
             entityTransaction.rollback();

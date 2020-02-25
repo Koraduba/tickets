@@ -17,7 +17,7 @@ public class ParameterName {
     public final static String EVENT_TIME="time";
     public final static String EVENT_DESCRIPTION="description";
     public final static String EVENT_IMAGE="path";
-    public final static String EVENT_VENUE="venue";
+    public final static String EVENT_VENUE="event_venue";
     public final static String TICKET_PRICE_VIP="price-vip";
     public final static String TICKET_PRICE_STANDARD="price-standard";
     public final static String VENUE_NAME="name";

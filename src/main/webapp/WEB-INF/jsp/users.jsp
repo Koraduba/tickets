@@ -5,16 +5,16 @@
     <table class="table table-striped table-bordered table-sm">
         <tr>
             <th>ID</th>
+            <th>Login</th>
             <th>Name</th>
             <th>Surname</th>
             <th>Email</th>
             <th>Role</th>
         </tr>
-        ${currentPage}
-        ${nOfPages}
         <c:forEach items="${users}" var="eachUser">
             <tr>
                 <td>${eachUser.userId}</td>
+                <td>${eachUser.login}</td>
                 <td>${eachUser.name}</td>
                 <td>${eachUser.surname}</td>
                 <td>${eachUser.email}</td>

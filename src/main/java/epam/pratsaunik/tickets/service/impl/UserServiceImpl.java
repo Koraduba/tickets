@@ -1,6 +1,7 @@
 package epam.pratsaunik.tickets.service.impl;
 
 
+import epam.pratsaunik.tickets.dao.AbstractDAO;
 import epam.pratsaunik.tickets.dao.EntityTransaction;
 import epam.pratsaunik.tickets.dao.UserDao;
 import epam.pratsaunik.tickets.dao.impl.UserDaoImpl;

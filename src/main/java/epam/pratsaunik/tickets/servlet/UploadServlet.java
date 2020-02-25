@@ -45,6 +45,9 @@ public class UploadServlet extends HttpServlet {
         if (!uploadDir.exists()) {
             uploadDir.mkdir();
         }
+
+        String url = req.getHeader("referer");
+        System.out.println(url);
         try {
             for (Part part : req.getParts()) {
                 log.debug("Upload Servlet. Part:" + part);
@@ -60,6 +63,7 @@ public class UploadServlet extends HttpServlet {
 
             getServletContext().getRequestDispatcher(ConfigurationManager2.UPLOAD_PAGE_PATH.getProperty()).forward(req, resp);
         }
+        req.removeAttribute("errorUploadMessage");
         resp.sendRedirect(req.getContextPath() + "/uploadservlet");
 
 

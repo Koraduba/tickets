@@ -21,23 +21,23 @@
                 <div class="form-group">
                     <label for="exampleInputEmail1">Email address</label>
                     <input type="email" name="email" class="form-control" id="exampleInputEmail1"
-                           aria-describedby="emailHelp" placeholder=${email} value=${email}>
+                           aria-describedby="emailHelp"  value="${email}">
                     <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.
                     </small>
                 </div>
                 <div class="form-group">
                     <label for="firstName">First name</label>
                     <input type="firstName" name="name" class="form-control" id="firstName"
-                           value=${name}>
+                           value="${name}">
                 </div>
                 <div class="form-group">
                     <label for="lastName">Last name</label>
                     <input type="lastName" name="surname" class="form-control" id="lastName"
-                           placeholder=${surname} value=${surname}>
+                           placeholder=${surname} value="${surname}">
                 </div>
                 <div class="form-group">
                     <label for="login">Login</label>
-                    <input type="login" name="login" class="form-control" id="login" value=${login}>
+                    <input type="login" name="login" class="form-control" id="login" value="${login}">
                 </div>
                 <div class="form-group">
                     <label for="password">Password</label>

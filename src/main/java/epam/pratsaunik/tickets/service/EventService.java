@@ -2,6 +2,7 @@ package epam.pratsaunik.tickets.service;
 
 import epam.pratsaunik.tickets.entity.Event;
 import epam.pratsaunik.tickets.entity.Ticket;
+import epam.pratsaunik.tickets.entity.User;
 import epam.pratsaunik.tickets.entity.Venue;
 import epam.pratsaunik.tickets.exception.ServiceLevelException;
 
@@ -25,6 +26,8 @@ public interface EventService {
     Ticket findTicketById(long id) throws ServiceLevelException;
 
     List<Event> findEventsByRange(int start, int eventsPerPage) throws ServiceLevelException;
+
+    List<Event> findEventsByHost (User owner,int currentPage, int eventsPerPage) throws ServiceLevelException;
 
     Event update(Event event) throws ServiceLevelException;
 

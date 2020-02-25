@@ -2,6 +2,7 @@ package epam.pratsaunik.tickets.dao;
 
 import epam.pratsaunik.tickets.entity.Event;
 import epam.pratsaunik.tickets.entity.Ticket;
+import epam.pratsaunik.tickets.entity.User;
 import epam.pratsaunik.tickets.entity.Venue;
 import epam.pratsaunik.tickets.exception.DaoException;
 
@@ -12,6 +13,7 @@ public abstract class EventDao extends AbstractDAO {
 
     public abstract List<Event> findEventsByDate(Date date  ) throws DaoException;
     public abstract List<Event> findEventByName(String name) throws DaoException;
+    public abstract List<Event> findEventByHost(User owner,int start, int recordsPerPage) throws DaoException;
     public abstract long createVenue(Venue venue) throws DaoException;
     public abstract Venue updateVenue (Venue venue) throws DaoException;
     public abstract boolean deleteVenue (Venue venue) throws DaoException;
