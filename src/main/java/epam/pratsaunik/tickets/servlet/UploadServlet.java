@@ -32,7 +32,6 @@ public class UploadServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        log.debug("Page"+req.getSession().getAttribute("current_page"));
 
         getServletContext().getRequestDispatcher(ConfigurationManager2.NEW_EVENT_PAGE_PATH.getProperty()).forward(req, resp);
     }
@@ -54,7 +53,13 @@ public class UploadServlet extends HttpServlet {
                 if (part.getSubmittedFileName() != null) {
                     log.debug(part.getSubmittedFileName());
                     part.write(uploadDir + File.separator + part.getSubmittedFileName());
-                    req.getSession().setAttribute("path", UPLOAD_PATH + File.separator + part.getSubmittedFileName());
+                    switch ((String)req.getSession().getAttribute("entity")) {
+                        case "event" :req.getSession().setAttribute("event_path", UPLOAD_PATH + File.separator + part.getSubmittedFileName());
+                        break;
+                        case "venue" :req.getSession().setAttribute("venue_path", UPLOAD_PATH + File.separator + part.getSubmittedFileName());
+                        break;
+                    }
+                    req.getSession().setAttribute("venue_path", UPLOAD_PATH + File.separator + part.getSubmittedFileName());
                 }
             }
         } catch (IOException e) {

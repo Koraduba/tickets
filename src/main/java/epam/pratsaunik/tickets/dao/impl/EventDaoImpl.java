@@ -210,8 +210,10 @@ public class EventDaoImpl extends EventDao {
                 event.setDate(simpleDateFormat.format(date));
                 simpleDateFormat = new SimpleDateFormat("HH:mm");
                 event.setTime(simpleDateFormat.format(date));
-                Venue venue = findVenueById(resultSet.getLong(ColumnName.EVENT_VENUE)).get(0);
-                event.setVenue(venue);
+                List<Venue> venues=findVenueById(resultSet.getLong(ColumnName.EVENT_VENUE));
+                if (!venues.isEmpty()){
+                    event.setVenue(venues.get(0));//todo
+                }
                 User owner = new User();
                 owner.setUserId(resultSet.getLong(ColumnName.EVENT_HOST));
                 event.setOwner(owner);

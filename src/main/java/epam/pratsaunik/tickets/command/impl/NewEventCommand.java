@@ -45,7 +45,7 @@ public class NewEventCommand extends AbstractCommand {
         event.setDate(content.getRequestParameter(ParameterName.EVENT_DATE));
         event.setTime(content.getRequestParameter(ParameterName.EVENT_TIME));
         event.setDescription(content.getRequestParameter(ParameterName.EVENT_DESCRIPTION));
-        String path=(String)content.getSessionAttribute("path");
+        String path=(String)content.getSessionAttribute("event_path");
         event.setImage(path);
         ticketStd.setCategory(TicketCat.STANDARD);
         ticketVip.setCategory(TicketCat.VIP);

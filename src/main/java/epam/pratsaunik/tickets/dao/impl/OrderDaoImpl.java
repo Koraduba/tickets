@@ -176,6 +176,8 @@ public class OrderDaoImpl extends OrderDao {
         ResultSet resultSet = null;
         try {
             statement = connection.prepareStatement(SQL_FIND_ORDERS_BY_USER);
+            log.debug("user: "+user);
+            log.debug("statement: "+statement);
             statement.setLong(1, user.getUserId());
             resultSet = statement.executeQuery();
             while (resultSet.next()) {

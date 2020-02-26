@@ -1,7 +1,9 @@
 package epam.pratsaunik.tickets.filter;
 
+import epam.pratsaunik.tickets.command.CommandResult;
 import epam.pratsaunik.tickets.command.CommandType;
 import epam.pratsaunik.tickets.entity.Role;
+import epam.pratsaunik.tickets.util.ConfigurationManager;
 import epam.pratsaunik.tickets.util.ConfigurationManager2;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -32,6 +34,7 @@ public class AuthorizationFilter implements Filter {
         GUEST_AVAILABLE.add(CommandType.EVENT);
         GUEST_AVAILABLE.add(CommandType.GUEST);
         GUEST_AVAILABLE.add(CommandType.HOME);
+        GUEST_AVAILABLE.add(CommandType.CHANGE_LOCALE);
 
         USER_AVAILABLE.add(CommandType.CART);
         USER_AVAILABLE.add(CommandType.CATALOG);
@@ -44,13 +47,14 @@ public class AuthorizationFilter implements Filter {
         USER_AVAILABLE.add(CommandType.ORDER_LINE);
         USER_AVAILABLE.add(CommandType.ORDERS);
         USER_AVAILABLE.add(CommandType.PROFILE);
+        USER_AVAILABLE.add(CommandType.CHANGE_LOCALE);
 
         HOST_AVAILABLE.add(CommandType.NEW_EVENT);
         HOST_AVAILABLE.add(CommandType.NEW_EVENT_PAGE);
         HOST_AVAILABLE.add(CommandType.ADD_VENUE);
         HOST_AVAILABLE.add(CommandType.CATALOG);
         HOST_AVAILABLE.add(CommandType.CHANGE_PASSWORD);
-        HOST_AVAILABLE.add(CommandType.EDIT_EVENT);
+        HOST_AVAILABLE.add(CommandType.EDIT_EVENT_PAGE);
         HOST_AVAILABLE.add(CommandType.EVENT);
         HOST_AVAILABLE.add(CommandType.HOME);
         HOST_AVAILABLE.add(CommandType.LOGIN);
@@ -61,6 +65,7 @@ public class AuthorizationFilter implements Filter {
         HOST_AVAILABLE.add(CommandType.PROFILE);
         HOST_AVAILABLE.add(CommandType.UPLOAD);
         HOST_AVAILABLE.add(CommandType.UPLOAD_LAYOUT);
+        HOST_AVAILABLE.add(CommandType.CHANGE_LOCALE);
 
         ADMIN_AVAILABLE.add(CommandType.CATALOG);
         ADMIN_AVAILABLE.add(CommandType.EDIT_USER);
@@ -74,7 +79,7 @@ public class AuthorizationFilter implements Filter {
         ADMIN_AVAILABLE.add(CommandType.REGISTER);
         ADMIN_AVAILABLE.add(CommandType.STATISTIC);
         ADMIN_AVAILABLE.add(CommandType.USERS);
-
+        ADMIN_AVAILABLE.add(CommandType.CHANGE_LOCALE);
 
 
 
@@ -88,9 +93,10 @@ public class AuthorizationFilter implements Filter {
         HttpSession session = req.getSession(false);
         String command = req.getParameter("command");
         log.debug("command: "+command);
-        if (command==null||command.equalsIgnoreCase(CommandType.LOGIN.toString())){
+        if (command==null||command.equalsIgnoreCase(CommandType.LOGIN.toString())||command.equalsIgnoreCase(CommandType.GUEST.toString())){
             log.info("login case");
             chain.doFilter(request,response);
+            return;
         }
 
         if (session == null) {
@@ -104,6 +110,7 @@ public class AuthorizationFilter implements Filter {
                 log.info(e);
             }
             log.info("role: "+role);
+            log.debug("command:"+command);
             if (role == null) {
                 defaultRequest(request, response, chain, req, res, command);
             } else {
@@ -115,7 +122,12 @@ public class AuthorizationFilter implements Filter {
                         } else {
                             log.info("Command is not available for USER!");
                             session.removeAttribute("user");
-                            res.sendRedirect(req.getContextPath() + LOGIN_PATH);
+                            try {
+                                log.debug("path"+req.getContextPath());
+                                res.sendRedirect(req.getContextPath() + ConfigurationManager2.LOGIN_PAGE_PATH.getProperty());
+                            } catch (Exception e) {
+                                log.debug(e);
+                            }
                         }
                         break;
                     case ADMINISTRATOR:

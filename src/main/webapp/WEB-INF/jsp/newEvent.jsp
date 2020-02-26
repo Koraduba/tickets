@@ -8,6 +8,7 @@ NEW EVENT
 ${errorNewEventMessage}
 <form action="${pageContext.request.contextPath}/mainservlet" id="form1" method="post" name="form1">
     <input type="hidden" name="command"/>
+    <input type="hidden" name="entity" value="event">
   <div class="form-group">
     <label for="name">Name</label>
     <div class="col-sm-10">
@@ -52,11 +53,11 @@ ${errorNewEventMessage}
       <a class="nav-link" href="${pageContext.request.contextPath}/mainservlet?command=new_venue">Add venue</a>
     </div>
         <div class="form-group">
-        <c:if test="${path!=null}">
-          <img src="${path}" class="img-fluid" alt="Responsive image">
+        <c:if test="${event_path!=null}">
+          <img src="${event_path}" class="img-fluid" alt="Responsive image">
           <br/>
         </c:if>
-        <c:if test="${path==null}">
+        <c:if test="${event_path==null}">
           <input type="submit" value="Add image" onclick="setCommand('upload')">
           <br/>
         </c:if>

@@ -20,7 +20,8 @@ public enum ConfigurationManager2 {
     UPLOAD_LAYOUT_PATH("uploadlayout.page.path"),
     STATISTIC_PAGE_PATH("statistic.page.path"),
     CHANGE_PASSWORD_PAGE_PATH("changepassword.page.path"),
-    EDIT_EVENT_PAGE_PATH("editevent.page.path");
+    EDIT_EVENT_PAGE_PATH("editevent.page.path"),
+    MY_EVENTS_PAGE_PATH("myevents.page.path");
 
     private String key;
     private ResourceBundle resourceBundle;

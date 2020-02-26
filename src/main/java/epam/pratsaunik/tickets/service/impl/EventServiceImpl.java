@@ -230,7 +230,7 @@ public class EventServiceImpl implements Service, EventService {
         EventDao eventDao = new EventDaoImpl();
         UserDaoImpl userDao = new UserDaoImpl();
         EntityTransaction entityTransaction = new EntityTransaction();
-        entityTransaction.begin(eventDao);
+        entityTransaction.begin(eventDao, userDao);
         try {
             event = (Event) eventDao.findById(id).get(0);
             User owner= userDao.findById(event.getOwner().getUserId()).get(0);

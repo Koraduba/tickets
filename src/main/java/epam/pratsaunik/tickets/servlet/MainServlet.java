@@ -52,6 +52,7 @@ public class MainServlet extends HttpServlet {
                 throw new ServletException(e);
             }
             content.insertAttributes(request);
+            log.debug("Main servlet. user: "+request.getSession().getAttribute("user"));
             switch (commandResult.getResponseType()) {
                 case FORWARD:
                     getServletContext().getRequestDispatcher(commandResult.getResponsePage()).forward(request, response);

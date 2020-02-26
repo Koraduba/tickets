@@ -9,10 +9,7 @@ import epam.pratsaunik.tickets.exception.ServiceLevelException;
 import epam.pratsaunik.tickets.service.Service;
 import epam.pratsaunik.tickets.service.impl.UserServiceImpl;
 import epam.pratsaunik.tickets.servlet.AttributeName;
-import epam.pratsaunik.tickets.util.ConfigurationManager;
-import epam.pratsaunik.tickets.util.ConfigurationManager2;
-import epam.pratsaunik.tickets.util.MessageType;
-import epam.pratsaunik.tickets.util.MessageManager;
+import epam.pratsaunik.tickets.util.*;
 import jdk.jfr.Event;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -45,21 +42,23 @@ public class LoginCommand extends AbstractCommand {
             }
             if (hasAccount) {
                 content.setSessionAttribute(AttributeName.USER_ROLE,user.get(0).getRole().toString());
-                Locale rus = new Locale("ru", "RU");
-                MessageManager.INSTANCE.changeResource(rus);
-                content.setSessionAttribute(AttributeName.LOCALE, rus);
+                MessageManager.INSTANCE.changeResource(LocaleName.LOCALE_EN);
+                content.setSessionAttribute(AttributeName.LOCALE, LocaleName.LOCALE_EN);
                 content.setSessionAttribute(AttributeName.USER, user.get(0));
                 commandResult.setResponsePage(ConfigurationManager2.HOME_PAGE_PATH.getProperty());
                 commandResult.setResponseType(CommandResult.ResponseType.FORWARD);
+                log.debug("LoginCommand. user:"+user.get(0));
             } else {
                 content.setRequestAttribute("errorLoginPassMessage", MessageManager.INSTANCE.getProperty(MessageType.NO_SUCH_USER));
                 commandResult.setResponsePage(ConfigurationManager2.LOGIN_PAGE_PATH.getProperty());
                 commandResult.setResponseType(CommandResult.ResponseType.FORWARD);
+                log.debug("LoginCommand. user:"+user.get(0));
             }
         } catch (ServiceLevelException e) {
             throw new CommandException(e);
         }
-        return commandResult;
 
+
+        return commandResult;
     }
 }

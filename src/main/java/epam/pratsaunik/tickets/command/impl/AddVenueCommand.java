@@ -30,6 +30,8 @@ public class AddVenueCommand extends AbstractCommand {
         List<Venue> venueList = null;
         venue.setName(content.getRequestParameter(ParameterName.VENUE_NAME));
         venue.setCapacity(Integer.parseInt(content.getRequestParameter(ParameterName.VENUE_CAPACITY)));
+        String path = (String)content.getSessionAttribute("venue_path");
+        venue.setLayout(path);
         try {
             long eventId=((EventServiceImpl)service).createVenue(venue);
             venueList=((EventServiceImpl)service).findAllVenues();

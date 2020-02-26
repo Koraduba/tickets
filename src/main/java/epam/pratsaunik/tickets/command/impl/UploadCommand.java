@@ -23,6 +23,7 @@ public class UploadCommand extends AbstractCommand {
     @Override
     public CommandResult execute(RequestContent content) throws CommandException {
         CommandResult commandResult=new CommandResult();
+        content.setSessionAttribute("entity",content.getRequestParameter("entity"));
         log.debug("UploadCommand launched");
         InputKeeper keeper = new InputKeeper();
         keeper.keepEvent(content);

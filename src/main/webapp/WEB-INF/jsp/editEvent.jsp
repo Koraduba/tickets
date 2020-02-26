@@ -6,8 +6,9 @@
 <body>
 EDIT EVENT
 
-<form action="${pageContext.request.contextPath}/mainservlet?command=event_edited" id="form1" method="post">
-    <input type="hidden" name="command" value="upload" />
+<form action="${pageContext.request.contextPath}/mainservlet" id="form1" method="post" name="form1">
+    <input type="hidden" name="command" />
+    <input type="hidden" name="entity" value="event">
   <div class="form-group">
     <label for="name">Name</label>
     <div class="col-sm-10">
@@ -37,20 +38,31 @@ EDIT EVENT
       <div class="col-sm-10">
         <input type="number" class="form-control" id="${ticket.ticketId}" name="price-${ticket.category}" value="${ticket.price}">
     </div>
-  </c:forEach>
-    <div class="form-group">
-      <label for="venue">Venue</label>
-      <select id="venue" class="form-control" name="venue">
-      <c:forEach items="${venues}" var="venue">
-         <option>${venue.name}</option>
-      </c:forEach>
-      </select>
-      <a class="nav-link" href="${pageContext.request.contextPath}/mainservlet?command=new_venue">Add venue</a>
+    </c:forEach>
+      <div class="form-group">
+          <label for="venue">Venue</label>
+          <select id="venue" class="form-control" name="event_venue">
+          <c:forEach items="${venues}" var="venue">
+             <option selected="${venue.name==event.venue.name}">${venue.name}</option>
+          </c:forEach>
+          </select>
+          <a class="nav-link" href="${pageContext.request.contextPath}/mainservlet?command=new_venue">Add venue</a>
     </div>
+
         <div class="form-group">
-        <img src="${event.image}" class="img-fluid" alt="Responsive image">
-      <a class="nav-link" href="${pageContext.request.contextPath}/mainservlet?command=upload">Change picture</a>
-        </div>
-              <button type="submit">SUBMIT</button>
+        <c:if test="${event.image!=null}">
+          <img src="${event.image}" class="img-fluid" alt="Responsive image">
+          <br/>
+        </c:if>
+          <input type="submit" value="Change image" onclick="setCommand('upload')">
+          <br/>
+    </div>
+          <input type="submit" value="Submit" onclick="setCommand('edit_event')">
   </form>
+
+  <script>
+  function setCommand (commandType){
+  document.forms['form1'].elements.command.value=commandType;
+  }
+  </script>
 <jsp:include page="footer.jsp"/>

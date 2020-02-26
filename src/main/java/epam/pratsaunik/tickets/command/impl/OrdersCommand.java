@@ -29,6 +29,7 @@ public class OrdersCommand extends AbstractCommand {
     public CommandResult execute(RequestContent content) throws CommandException {
         CommandResult commandResult = new CommandResult();
         User user = (User) content.getSessionAttribute("user");
+        log.debug("CommandResult. user: " +user);
         List<Order> orderList = null;
         List<BigDecimal> orderSumList = null;
         try {

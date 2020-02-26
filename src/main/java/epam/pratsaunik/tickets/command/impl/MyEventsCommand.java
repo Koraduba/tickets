@@ -45,7 +45,7 @@ public class MyEventsCommand extends AbstractCommand {
         } catch (ServiceLevelException e) {
             e.printStackTrace();
         }
-        commandResult.setResponsePage(ConfigurationManager2.CATALOG_PAGE_PATH.getProperty());
+        commandResult.setResponsePage(ConfigurationManager2.MY_EVENTS_PAGE_PATH.getProperty());
         commandResult.setResponseType(CommandResult.ResponseType.FORWARD);
         return commandResult;
     }

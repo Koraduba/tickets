@@ -33,8 +33,9 @@ public enum CommandType {
     EDIT_USER(new EditUserCommand(new UserServiceImpl())),
     CHANGE_PASSWORD(new ChangePasswordCommand(new UserServiceImpl())),
     NEW_PASSWORD(new PasswordChangedCommand(new UserServiceImpl())),
-    EDIT_EVENT(new EditEventCommand(new EventServiceImpl())),
-    MY_EVENTS(new MyEventsCommand(new EventServiceImpl()));
+    EDIT_EVENT_PAGE(new EditEventPageCommand(new EventServiceImpl())),
+    MY_EVENTS(new MyEventsCommand(new EventServiceImpl())),
+    CHANGE_LOCALE(new ChangeLocaleCommand(new UserServiceImpl()));
 
     private AbstractCommand command;
 

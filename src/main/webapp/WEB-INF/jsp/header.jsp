@@ -1,6 +1,9 @@
 <!doctype html>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="ctg" uri="/WEB-INF/tld/custom.tld" %>
+<fmt:setLocale value="${locale}" scope="session" />
+<fmt:setBundle basename="property.pagecontent" var="rb" />
 <html lang="en">
   <head>
     <!-- Required meta tags -->
@@ -15,10 +18,14 @@
     src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
 <script type="text/javascript"
     src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.18/jquery-ui.min.js"></script>
-
-  </head>
   <body>
-      <ctg:info-time/>
+
+  <ctg:info-time/>
+  <form action="mainservlet">
+  <input type="hidden" name="command" value="change_locale">
+  <input type="submit" value="EN/RU"/>
+  </form>
+
   <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <a class="navbar-brand" href="${pageContext.request.contextPath}/">TICKETS</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -28,33 +35,33 @@
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav mr-auto">
         <li class="nav-item">
-          <a class="nav-link" href="${pageContext.request.contextPath}/mainservlet?command=logout">Logout</a>
+          <a class="nav-link" href="${pageContext.request.contextPath}/mainservlet?command=logout"><fmt:message key="label.logout" bundle="${rb}"/></a>
         </li>
          <li class="nav-item">
-           <a class="nav-link" href="${pageContext.request.contextPath}/mainservlet?command=catalog&currentPage=1">Events</a>
+           <a class="nav-link" href="${pageContext.request.contextPath}/mainservlet?command=catalog&currentPage=1"><fmt:message key="label.events" bundle="${rb}"/></a>
          </li>
          <c:if test="${role=='USER'}">
          <li class="nav-item">
-            <a class="nav-link" href="${pageContext.request.contextPath}/mainservlet?command=cart">Cart</a>
+            <a class="nav-link" href="${pageContext.request.contextPath}/mainservlet?command=cart"><fmt:message key="label.cart" bundle="${rb}"/></a>
         </li>
         <li class="nav-item">
-                 <a class="nav-link" href="${pageContext.request.contextPath}/mainservlet?command=orders">Orders</a>
+                 <a class="nav-link" href="${pageContext.request.contextPath}/mainservlet?command=orders"><fmt:message key="label.orders" bundle="${rb}"/></a>
         </li>
         </c:if>
         <c:if test="${role=='USER'||role=='HOST'}">
         <li class="nav-item">
-          <a class="nav-link" href="${pageContext.request.contextPath}/mainservlet?command=profile">Profile</a>
+          <a class="nav-link" href="${pageContext.request.contextPath}/mainservlet?command=profile"><fmt:message key="label.profile" bundle="${rb}"/></a>
         </li>
         </c:if>
         <c:if test="${role=='ADMINISTRATOR'}">
         <li class="nav-item">
-            <a class="nav-link" href="${pageContext.request.contextPath}/mainservlet?command=users&currentPage=1">Users</a>
+            <a class="nav-link" href="${pageContext.request.contextPath}/mainservlet?command=users&currentPage=1"><fmt:message key="label.users" bundle="${rb}"/></a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="${pageContext.request.contextPath}/mainservlet?command=new_user">New user</a>
+          <a class="nav-link" href="${pageContext.request.contextPath}/mainservlet?command=new_user"><fmt:message key="label.newuser" bundle="${rb}"/></a>
         </li>
          <li class="nav-item">
-           <a class="nav-link" href="${pageContext.request.contextPath}/mainservlet?command=statistic">Statistic</a>
+           <a class="nav-link" href="${pageContext.request.contextPath}/mainservlet?command=statistic"><fmt:message key="label.statistic" bundle="${rb}"/></a>
          </li>
         </c:if>
           <c:if test="${role=='HOST'}">
