@@ -11,6 +11,7 @@ import java.util.List;
 
 public abstract class EventDao extends AbstractDAO {
 
+    public abstract Integer getNumberOfEventsByHost (User owner) throws DaoException;
     public abstract List<Event> findEventsByDate(Date date  ) throws DaoException;
     public abstract List<Event> findEventByName(String name) throws DaoException;
     public abstract List<Event> findEventByHost(User owner,int start, int recordsPerPage) throws DaoException;
@@ -24,4 +25,5 @@ public abstract class EventDao extends AbstractDAO {
     public abstract boolean deleteTicket(Ticket ticket) throws DaoException;
     public abstract List<Ticket> findTicketById(long id) throws DaoException;
     public abstract List<Ticket> findTicketsByEvent(Event event) throws DaoException;
+    public abstract Ticket updateTicket(Ticket ticket) throws DaoException;
 }

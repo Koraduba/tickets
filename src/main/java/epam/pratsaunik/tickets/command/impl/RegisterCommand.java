@@ -9,14 +9,13 @@ import epam.pratsaunik.tickets.email.EmailSender;
 import epam.pratsaunik.tickets.exception.CommandException;
 import epam.pratsaunik.tickets.hash.PasswordHash;
 import epam.pratsaunik.tickets.servlet.ParameterName;
-import epam.pratsaunik.tickets.util.ConfigurationManager;
+import epam.pratsaunik.tickets.util.*;
 import epam.pratsaunik.tickets.entity.Role;
 import epam.pratsaunik.tickets.entity.User;
 import epam.pratsaunik.tickets.exception.ServiceLevelException;
 import epam.pratsaunik.tickets.service.Service;
 import epam.pratsaunik.tickets.service.impl.UserServiceImpl;
 import epam.pratsaunik.tickets.servlet.AttributeName;
-import epam.pratsaunik.tickets.util.ConfigurationManager2;
 import epam.pratsaunik.tickets.validator.Validator;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -33,35 +32,56 @@ import java.util.Properties;
 
 public class RegisterCommand extends AbstractCommand {
     private final static Logger log = LogManager.getLogger();
+
     public RegisterCommand(Service service) {
         super(service);
     }
 
     @Override
     public CommandResult execute(RequestContent content) throws CommandException {
-        CommandResult commandResult=new CommandResult();
-        if (!Validator.validateUser(content)){
+        CommandResult commandResult = new CommandResult();
+        InputKeeper.getInstance().keepUser(content);
+        if (!Validator.validateUser(content)) {
             commandResult.setResponsePage(ConfigurationManager2.REGISTRATION_PAGE_PATH.getProperty());
             commandResult.setResponseType(CommandResult.ResponseType.FORWARD);
+            return commandResult;
+        }
+        String login = content.getRequestParameter(ParameterName.USER_LOGIN);
+        List<User> users;
+        try {
+            users = ((UserServiceImpl) service).findUserByLogin(login);
+        } catch (ServiceLevelException e) {
+            throw new CommandException(e);
+        }
+        if (!users.isEmpty()){
+            commandResult.setResponsePage(ConfigurationManager2.REGISTRATION_PAGE_PATH.getProperty());
+            commandResult.setResponseType(CommandResult.ResponseType.FORWARD);
+            content.setRequestAttribute(AttributeName.ERROR_USER_LOGIN_MESSAGE, MessageManager.INSTANCE.getProperty(MessageType.USER_EXISTS));
             return commandResult;
         }
         User user = new User();
         user.setEmail(content.getRequestParameter(ParameterName.USER_EMAIL));
         user.setName(content.getRequestParameter(ParameterName.USER_NAME));
         user.setSurname(content.getRequestParameter(ParameterName.USER_SURNAME));
-        String password=content.getRequestParameter(ParameterName.USER_PASSWORD);
-        user.setPassword(password);//FIXME
-        user.setLogin(content.getRequestParameter(ParameterName.USER_LOGIN));
+        String password = content.getRequestParameter(ParameterName.USER_PASSWORD);
+        user.setPassword(password);
+        user.setLogin(login);
         user.setRole(Role.valueOf(content.getRequestParameter(ParameterName.USER_ROLE)));
         try {
-            long result=((UserServiceImpl) service).create(user);
-            if(result>0){
+            long result = ((UserServiceImpl) service).create(user);
+            if (result > 0) {
                 EmailSender emailSender = new EmailSender();
-                emailSender.sendConfirmation(user.getEmail(),"confirmation","Your account is created\n");
+                emailSender.sendConfirmation(user.getEmail(), "confirmation", "Your account is created\n");
             }
-            log.debug("user created");
+            String role = (String) content.getSessionAttribute(AttributeName.USER_ROLE);
+            if (role == null) {
+                content.setSessionAttribute(AttributeName.USER, user);
+                content.setSessionAttribute(AttributeName.USER_ROLE, user.getRole().toString());
+                content.setSessionAttribute(AttributeName.LOCALE, Locale.getDefault());
+            }
+            content.setSessionAttribute(AttributeName.HOME_MESSAGE, MessageManager.INSTANCE.getProperty(MessageManager.INSTANCE.ACCOUNT_CREATED_MESSAGE));
             commandResult.setResponsePage(ConfigurationManager2.HOME_PAGE_PATH.getProperty());
-            commandResult.setResponseType(CommandResult.ResponseType.FORWARD);
+            commandResult.setResponseType(CommandResult.ResponseType.REDIRECT);
         } catch (ServiceLevelException e) {
             throw new CommandException(e);
         }

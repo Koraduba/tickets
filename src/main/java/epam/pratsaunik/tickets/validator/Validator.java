@@ -1,6 +1,7 @@
 package epam.pratsaunik.tickets.validator;
 
 import epam.pratsaunik.tickets.command.RequestContent;
+import epam.pratsaunik.tickets.service.Service;
 import epam.pratsaunik.tickets.servlet.AttributeName;
 import epam.pratsaunik.tickets.servlet.ParameterName;
 import epam.pratsaunik.tickets.util.MessageType;
@@ -14,15 +15,21 @@ import java.util.regex.Pattern;
 
 public class Validator {
     private final static Logger log = LogManager.getLogger();
-    private final static String LOGIN_REGEX = "[A-Z][a-z]+";
-    private final static String EMAIL_REGEX = "[a-z]+@[a-z]+.[a-z]+";
-    private final static String NAME_REGEX = "[A-Z][a-z]+";
-    private final static String SURNAME_REGEX = "[A-Z][a-z]+";
-    private final static String EVENT_NAME_REGEX = "\\w{1,120}";
+    private final static String LOGIN_REGEX = "^[a-zA-Z][a-zA-Z0-9-_\\.]{1,20}$";
+    private final static String EMAIL_REGEX = "^[-\\w.]+@([A-z0-9][-A-z0-9]+\\.)+[A-z]{2,4}$";
+    private final static String NAME_REGEX = "^[a-zA-Z][a-z]{1,20}";
+    private final static String SURNAME_REGEX = "^[a-zA-Z][a-z]+";
+    private final static String PASSWORD_REGEX = "^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?!.*\\s).*$";
+    private final static String EVENT_NAME_REGEX = "^[a-zA-Z][a-z]{1,20}";
     private final static String EVENT_DESCRIPTION_REGEX = "\\w{1,120}";
-    private final static String EVENT_DATE_REGEX = ".{1,10}";
-    private final static String EVENT_TIME_REGEX = ".{1,10}";
-    private final static String TICKET_PRICE_REGEX = "\\d{1,5}";
+    private final static String EVENT_DATE_REGEX = "(19|20)\\d\\d-((0[1-9]|1[012])-(0[1-9]|[12]\\d)|(0[13-9]|1[012])-30|(0[13578]|1[02])-31)";
+    private final static String EVENT_TIME_REGEX = "^([0-1]\\d|2[0-3])(:[0-5]\\d)$";
+    private final static String TICKET_PRICE_REGEX = "\\d{1,4}";
+    private final static String ORDER_LINE_QUANTITY_REGEX = "\\d{1,3}";
+    private final static String VENUE_NAME_REGEX = "^[a-zA-Z][a-z]{1,20}";
+    private final static String VENUE_CAPACITY_REGEX = "^\\d{1,4}$";
+
+
 
 
     public static boolean validateLogin(String login) {
@@ -37,81 +44,118 @@ public class Validator {
         content.setRequestAttribute(AttributeName.USER_EMAIL, content.getRequestParameter(ParameterName.USER_EMAIL));
         content.setRequestAttribute(AttributeName.USER_SURNAME, content.getRequestParameter(ParameterName.USER_SURNAME));
         content.setRequestAttribute(AttributeName.USER_NAME, content.getRequestParameter(ParameterName.USER_NAME));
+        content.setRequestAttribute(AttributeName.USER_LOGIN, content.getRequestParameter(ParameterName.USER_LOGIN));
         Pattern pattern = Pattern.compile(NAME_REGEX);
         Matcher matcher = pattern.matcher(content.getRequestParameter(ParameterName.USER_NAME));
         if (!matcher.matches()) {
-            content.setRequestAttribute(AttributeName.USER_NAME, "NOT_VALID");
+            content.setRequestAttribute(AttributeName.ERROR_USER_NAME_MESSAGE, MessageManager.INSTANCE.getProperty(MessageType.INPUT_ERROR));
             result = false;
         }
         pattern = Pattern.compile(SURNAME_REGEX);
-        log.info(pattern.pattern());
         matcher = pattern.matcher(content.getRequestParameter(ParameterName.USER_SURNAME));
         if (!matcher.matches()) {
-            content.setRequestAttribute(AttributeName.USER_SURNAME, "NOT_VALID");
+            content.setRequestAttribute(AttributeName.ERROR_USER_SURNAME_MESSAGE, MessageManager.INSTANCE.getProperty(MessageType.INPUT_ERROR));
             result = false;
         }
         pattern = Pattern.compile(EMAIL_REGEX);
         matcher = pattern.matcher(content.getRequestParameter(ParameterName.USER_EMAIL));
         if (!matcher.matches()) {
-            content.setRequestAttribute(AttributeName.USER_EMAIL, "NOT_VALID");
+            content.setRequestAttribute(AttributeName.ERROR_USER_EMAIL_MESSAGE, MessageManager.INSTANCE.getProperty(MessageType.INPUT_ERROR));
             result = false;
         }
-        if (!result) {
-            content.setRequestAttribute(AttributeName.ERROR_LOGIN_PASS_MESSAGE, MessageManager.INSTANCE.getProperty(MessageType.INPUT_ERROR));
+
+        pattern = Pattern.compile(LOGIN_REGEX);
+        matcher = pattern.matcher(content.getRequestParameter(ParameterName.USER_LOGIN));
+        if (!matcher.matches()) {
+            content.setRequestAttribute(AttributeName.ERROR_USER_LOGIN_MESSAGE, MessageManager.INSTANCE.getProperty(MessageType.INPUT_ERROR));
+            result = false;
         }
+
+        pattern = Pattern.compile(PASSWORD_REGEX);
+        matcher = pattern.matcher(content.getRequestParameter(ParameterName.USER_PASSWORD));
+        if (!matcher.matches()) {
+            content.setRequestAttribute(AttributeName.ERROR_USER_PASSWORD_MESSAGE, MessageManager.INSTANCE.getProperty(MessageType.INPUT_ERROR));
+            result = false;
+        }
+
         return result;
     }
 
     public static boolean validateEvent(RequestContent content) {
         boolean result = true;
-        content.setRequestAttribute(AttributeName.EVENT_NAME, content.getRequestParameter(ParameterName.EVENT_NAME));
-        content.setRequestAttribute(AttributeName.EVENT_DATE, content.getRequestParameter(ParameterName.EVENT_DATE));
-        content.setRequestAttribute(AttributeName.EVENT_TIME, content.getRequestParameter(ParameterName.EVENT_TIME));
-        content.setRequestAttribute(AttributeName.EVENT_DESCRIPTION, content.getRequestParameter(ParameterName.EVENT_DESCRIPTION));
-        content.setRequestAttribute(AttributeName.TICKET_PRICE_STANDARD, content.getRequestParameter(ParameterName.TICKET_PRICE_STANDARD));
-        content.setRequestAttribute(AttributeName.TICKET_PRICE_VIP, content.getRequestParameter(ParameterName.TICKET_PRICE_VIP));
         Pattern pattern = Pattern.compile(EVENT_NAME_REGEX);
         Matcher matcher = pattern.matcher(content.getRequestParameter(ParameterName.EVENT_NAME));
         if (!matcher.matches()) {
-            content.setRequestAttribute(AttributeName.EVENT_NAME, "NOT VALID");
+            content.setRequestAttribute(AttributeName.ERROR_EVENT_NAME_MESSSAGE, MessageManager.INSTANCE.getProperty(MessageType.INPUT_ERROR));
             result = false;
         }
         pattern = Pattern.compile(EVENT_DATE_REGEX);
         matcher = pattern.matcher(content.getRequestParameter(ParameterName.EVENT_DATE));
         if (!matcher.matches()) {
-            content.setRequestAttribute(AttributeName.EVENT_DATE, "NOT VALID");
+            content.setRequestAttribute(AttributeName.ERROR_EVENT_DATE_MESSAGE, MessageManager.INSTANCE.getProperty(MessageType.INPUT_ERROR));
             result = false;
         }
         pattern = Pattern.compile(EVENT_TIME_REGEX);
         matcher = pattern.matcher(content.getRequestParameter(ParameterName.EVENT_TIME));
         if (!matcher.matches()) {
-            content.setRequestAttribute(AttributeName.EVENT_TIME, "NOT VALID");
+            content.setRequestAttribute(AttributeName.ERROR_EVENT_TIME_MESSAGE, MessageManager.INSTANCE.getProperty(MessageType.INPUT_ERROR));
             result = false;
         }
         pattern = Pattern.compile(EVENT_DESCRIPTION_REGEX);
         matcher = pattern.matcher(content.getRequestParameter(ParameterName.EVENT_DESCRIPTION));
         if (!matcher.matches()) {
-            content.setRequestAttribute(AttributeName.EVENT_DESCRIPTION, "NOT VALID");
+            content.setRequestAttribute(AttributeName.ERROR_EVENT_DESCRIPTION_MESSAGE, MessageManager.INSTANCE.getProperty(MessageType.INPUT_ERROR));
+
             result = false;
         }
         pattern = Pattern.compile(TICKET_PRICE_REGEX);
         matcher = pattern.matcher(content.getRequestParameter(ParameterName.TICKET_PRICE_STANDARD));
         if (!matcher.matches()) {
-            content.setRequestAttribute(AttributeName.TICKET_PRICE_STANDARD, "NOT VALID");
+            content.setRequestAttribute(AttributeName.ERROR_STANDARD_TICKET_PRICE_MESSAGE, MessageManager.INSTANCE.getProperty(MessageType.INPUT_ERROR));
+
             result = false;
         }
         pattern = Pattern.compile(TICKET_PRICE_REGEX);
         matcher = pattern.matcher(content.getRequestParameter(ParameterName.TICKET_PRICE_VIP));
         if (!matcher.matches()) {
-            content.setRequestAttribute(AttributeName.TICKET_PRICE_VIP, "NOT VALID");
+            content.setRequestAttribute(AttributeName.ERROR_VIP_TICKET_PRICE_MESSAGE, MessageManager.INSTANCE.getProperty(MessageType.INPUT_ERROR));
+
             result = false;
         }
+        return result;
+    }
 
-        if (!result) {
-            content.setRequestAttribute(AttributeName.ERROR_NEW_EVENT_MESSAGE, MessageManager.INSTANCE.getProperty(MessageType.INPUT_ERROR));
+    public static boolean validateOrderLine(RequestContent content) {
+        boolean result = true;
+        Pattern pattern = Pattern.compile(ORDER_LINE_QUANTITY_REGEX);
+        Matcher matcher = pattern.matcher(content.getRequestParameter(ParameterName.ORDER_LINE_QUANTITY));
+        if (!matcher.matches()) {
+            content.setRequestAttribute(AttributeName.ERROR_ORDER_LINE_QUANTITY_MESSAGE, MessageManager.INSTANCE.getProperty(MessageType.INPUT_ERROR));
+            result = false;
         }
 
         return result;
     }
+
+    public static boolean validateVenue(RequestContent content) {
+        boolean result = true;
+        Pattern pattern = Pattern.compile(VENUE_NAME_REGEX);
+        Matcher matcher = pattern.matcher(content.getRequestParameter(ParameterName.VENUE_NAME));
+        if (!matcher.matches()) {
+            content.setRequestAttribute(AttributeName.ERROR_VENUE_NAME_MESSAGE, MessageManager.INSTANCE.getProperty(MessageType.INPUT_ERROR));
+            result = false;
+        }
+        pattern = Pattern.compile(VENUE_CAPACITY_REGEX);
+        matcher = pattern.matcher(content.getRequestParameter(ParameterName.VENUE_CAPACITY));
+        if (!matcher.matches()) {
+            content.setRequestAttribute(AttributeName.ERROR_VENUE_CAPACITY_MESSAGE, MessageManager.INSTANCE.getProperty(MessageType.INPUT_ERROR));
+            result = false;
+        }
+
+        return result;
+    }
+
+
+
 
 }

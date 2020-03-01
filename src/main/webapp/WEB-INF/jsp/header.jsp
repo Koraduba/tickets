@@ -58,7 +58,7 @@
             <a class="nav-link" href="${pageContext.request.contextPath}/mainservlet?command=users&currentPage=1"><fmt:message key="label.users" bundle="${rb}"/></a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="${pageContext.request.contextPath}/mainservlet?command=new_user"><fmt:message key="label.newuser" bundle="${rb}"/></a>
+          <a class="nav-link" href="${pageContext.request.contextPath}/mainservlet?command=new_user_page"><fmt:message key="label.newuser" bundle="${rb}"/></a>
         </li>
          <li class="nav-item">
            <a class="nav-link" href="${pageContext.request.contextPath}/mainservlet?command=statistic"><fmt:message key="label.statistic" bundle="${rb}"/></a>

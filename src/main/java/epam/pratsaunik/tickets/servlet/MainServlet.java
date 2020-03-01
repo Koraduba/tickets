@@ -31,7 +31,7 @@ public class MainServlet extends HttpServlet {
         if (commandName != null) {
             doPost(request, response);
         } else {
-            String page = (String) request.getSession().getAttribute("page");
+            String page = (String) request.getSession().getAttribute(AttributeName.REDIRECT_PAGE);
             getServletContext().getRequestDispatcher(page).forward(request, response);
         }
     }
@@ -58,8 +58,8 @@ public class MainServlet extends HttpServlet {
                     getServletContext().getRequestDispatcher(commandResult.getResponsePage()).forward(request, response);
                     break;
                 case REDIRECT:
+                    request.getSession().setAttribute(AttributeName.REDIRECT_PAGE, commandResult.getResponsePage());
                     response.sendRedirect(request.getContextPath() + "/mainservlet");
-                    request.getSession().setAttribute("page", commandResult.getResponsePage());
                     break;
                 default:
                     throw new ServletException("Command error!");

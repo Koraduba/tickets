@@ -9,6 +9,7 @@ import epam.pratsaunik.tickets.exception.ServiceLevelException;
 import epam.pratsaunik.tickets.service.Service;
 import epam.pratsaunik.tickets.service.impl.UserServiceImpl;
 import epam.pratsaunik.tickets.servlet.AttributeName;
+import epam.pratsaunik.tickets.servlet.ParameterName;
 import epam.pratsaunik.tickets.util.*;
 import jdk.jfr.Event;
 import org.apache.logging.log4j.LogManager;
@@ -28,14 +29,13 @@ public class LoginCommand extends AbstractCommand {
     @Override
     public CommandResult execute(RequestContent content) throws CommandException {
         CommandResult commandResult=new CommandResult();
-        log.info("LoginCommand");
-        String login = content.getRequestParameter("login");
-        String password = content.getRequestParameter("password");
+        log.info("LoginCommand works");
+        String login = content.getRequestParameter(ParameterName.USER_LOGIN);
+        String password = content.getRequestParameter(ParameterName.USER_PASSWORD);
         boolean hasAccount;
         try {
             List<User> user = ((UserServiceImpl) service).findUserByLogin(login);
             if (user.isEmpty()) {
-                log.info("No user with such login");
                 hasAccount = false;
             } else {
                 hasAccount = ((UserServiceImpl) service).checkUser(login, password, user.get(0));
@@ -49,10 +49,9 @@ public class LoginCommand extends AbstractCommand {
                 commandResult.setResponseType(CommandResult.ResponseType.FORWARD);
                 log.debug("LoginCommand. user:"+user.get(0));
             } else {
-                content.setRequestAttribute("errorLoginPassMessage", MessageManager.INSTANCE.getProperty(MessageType.NO_SUCH_USER));
+                content.setRequestAttribute(AttributeName.ERROR_LOGIN_PASS_MESSAGE, MessageManager.INSTANCE.getProperty(MessageType.NO_SUCH_USER));
                 commandResult.setResponsePage(ConfigurationManager2.LOGIN_PAGE_PATH.getProperty());
                 commandResult.setResponseType(CommandResult.ResponseType.FORWARD);
-                log.debug("LoginCommand. user:"+user.get(0));
             }
         } catch (ServiceLevelException e) {
             throw new CommandException(e);

@@ -34,4 +34,8 @@ public interface EventService {
     Event findEventById(long id) throws ServiceLevelException;
 
     Venue updateVenue(Venue venue) throws ServiceLevelException;
+
+    Ticket updateTicket(Ticket ticket) throws ServiceLevelException;
+
+    Integer getNumberOfEventsByHost(User owner) throws ServiceLevelException;
 }

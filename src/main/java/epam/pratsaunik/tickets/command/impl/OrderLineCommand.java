@@ -10,9 +10,11 @@ import epam.pratsaunik.tickets.exception.ServiceLevelException;
 import epam.pratsaunik.tickets.service.Service;
 import epam.pratsaunik.tickets.service.impl.EventServiceImpl;
 import epam.pratsaunik.tickets.service.impl.OrderServiceImpl;
+import epam.pratsaunik.tickets.servlet.AttributeName;
 import epam.pratsaunik.tickets.servlet.ParameterName;
 import epam.pratsaunik.tickets.util.ConfigurationManager;
 import epam.pratsaunik.tickets.util.ConfigurationManager2;
+import epam.pratsaunik.tickets.validator.Validator;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -30,11 +32,17 @@ public class OrderLineCommand extends AbstractCommand {
 
     @Override
     public CommandResult execute(RequestContent content) throws CommandException {
-        CommandResult commandResult=new CommandResult();
-        List<OrderLine> orderLineList = (List<OrderLine>) content.getSessionAttribute("cart");
-        if (orderLineList==null){
-            orderLineList=new ArrayList<>();
-            content.setSessionAttribute("cart",orderLineList);
+        log.debug("OrderLineCommand");
+        CommandResult commandResult = new CommandResult();
+        if (!Validator.validateOrderLine(content)) {
+            commandResult.setResponsePage(ConfigurationManager2.EVENT_PAGE_PATH.getProperty());
+            commandResult.setResponseType(CommandResult.ResponseType.FORWARD);
+            return commandResult;
+        }
+        List<OrderLine> orderLineList = (List<OrderLine>) content.getSessionAttribute(AttributeName.SHOPPING_CART);
+        if (orderLineList == null) {
+            orderLineList = new ArrayList<>();
+            content.setSessionAttribute(AttributeName.SHOPPING_CART, orderLineList);
         }
         OrderLine orderLine = new OrderLine();
         orderLine.setTicketQuantity(Integer.parseInt(content.getRequestParameter(ParameterName.ORDER_LINE_QUANTITY)));

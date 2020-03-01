@@ -9,11 +9,11 @@ import epam.pratsaunik.tickets.util.ConfigurationManager2;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-public class NewUserCommand extends AbstractCommand {
+public class NewUserPageCommand extends AbstractCommand {
 
     private final static Logger log = LogManager.getLogger();
 
-    public NewUserCommand(Service service) {
+    public NewUserPageCommand(Service service) {
         super(service);
     }
 

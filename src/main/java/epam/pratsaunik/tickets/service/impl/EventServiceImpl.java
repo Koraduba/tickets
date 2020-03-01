@@ -262,6 +262,40 @@ public class EventServiceImpl implements Service, EventService {
         return venue;
     }
 
+    @Override
+    public Ticket updateTicket(Ticket ticket) throws ServiceLevelException {
+        EventDao eventDao = new EventDaoImpl();
+        EntityTransaction entityTransaction = new EntityTransaction();
+        entityTransaction.begin(eventDao);
+        try {
+            eventDao.updateTicket(ticket);
+            entityTransaction.commit();
+        } catch (DaoException e) {
+            entityTransaction.rollback();
+            throw new ServiceLevelException(e);
+        } finally {
+            entityTransaction.end();
+        }
+        return ticket;
+    }
+
+    @Override
+    public Integer getNumberOfEventsByHost(User owner) throws ServiceLevelException {
+        Integer number = null;
+        EventDao eventDao = new EventDaoImpl();
+        EntityTransaction entityTransaction = new EntityTransaction();
+        entityTransaction.begin(eventDao);
+        try {
+            number = eventDao.getNumberOfEventsByHost(owner);
+            entityTransaction.commit();
+        } catch (DaoException e) {
+            entityTransaction.rollback();
+            throw new ServiceLevelException(e);
+        } finally {
+            entityTransaction.end();
+        }
+        return number;    }
+
 
     @Override
     public Integer getNumberOfRecords() throws ServiceLevelException {
@@ -279,5 +313,25 @@ public class EventServiceImpl implements Service, EventService {
             entityTransaction.end();
         }
         return number;
+    }
+
+    public Event findEventByName(String name) throws ServiceLevelException {
+        Event event = null;
+        EventDao eventDao = new EventDaoImpl();
+        UserDaoImpl userDao = new UserDaoImpl();
+        EntityTransaction entityTransaction = new EntityTransaction();
+        entityTransaction.begin(eventDao,userDao);
+        try {
+            event = (Event) eventDao.findEventByName(name).get(0);
+            User owner= userDao.findById(event.getOwner().getUserId()).get(0);
+            event.setOwner(owner);
+            entityTransaction.commit();
+        } catch (DaoException e) {
+            entityTransaction.rollback();
+            throw new ServiceLevelException(e);
+        } finally {
+            entityTransaction.end();
+        }
+        return event;
     }
 }

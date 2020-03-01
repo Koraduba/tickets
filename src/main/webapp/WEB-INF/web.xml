@@ -79,10 +79,6 @@
     <servlet-name>MainServlet</servlet-name>
   </filter-mapping>
 
-  <error-page>
-    <exception-type>epam.pratsaunik.tickets.exception.CommandException</exception-type>
-    <location>/errors/error.jsp</location>
-  </error-page>
 
   <context-param>
     <param-name>administrator password</param-name>

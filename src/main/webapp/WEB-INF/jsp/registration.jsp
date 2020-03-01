@@ -22,29 +22,31 @@
                     <label for="exampleInputEmail1">Email address</label>
                     <input type="email" name="email" class="form-control" id="exampleInputEmail1"
                            aria-describedby="emailHelp"  value="${email}">
-                    <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.
-                    </small>
+                    <font color="red">${errorUserEmailMessage}</font>
                 </div>
                 <div class="form-group">
                     <label for="firstName">First name</label>
                     <input type="firstName" name="name" class="form-control" id="firstName"
                            value="${name}">
+                    <font color="red">${errorUserNameMessage}</font>
                 </div>
                 <div class="form-group">
                     <label for="lastName">Last name</label>
                     <input type="lastName" name="surname" class="form-control" id="lastName"
-                           placeholder=${surname} value="${surname}">
+                           value="${surname}">
+                    <font color="red">${errorUserSurnameMessage}</font>
                 </div>
                 <div class="form-group">
                     <label for="login">Login</label>
                     <input type="login" name="login" class="form-control" id="login" value="${login}">
+                    <font color="red">${errorUserLoginMessage}</font>
                 </div>
                 <div class="form-group">
                     <label for="password">Password</label>
                     <input type="password" name="password" class="form-control" id="password">
+                    <font color="red">${errorUserPasswordMessage}</font>
                 </div>
-                <br/>
-                ${errorLoginPassMessage}
+
 
                 <c:if test="${role=='ADMINISTRATOR'}">
                 <div>
@@ -53,10 +55,6 @@
                         <div>
                             <input type="radio" id="user" name="role" checked value="USER" />
                             <label for="user">USER</label>
-                        </div>
-                        <div>
-                            <input type="radio" id="vip_user" name="role" value="VIP_USER" />
-                            <label for="vip_user">VIP USER</label>
                         </div>
                         <div>
                             <input type="radio" id="host" name="role" value="HOST" />
@@ -72,13 +70,15 @@
                 <c:if test="${role!='ADMINISTRATOR'}">
                     <input type="hidden" name="role" value="USER" />
                 </c:if>
-
-
                 <button type="submit" class="btn btn-primary">Register</button>
             </form>
         </div>
         <div class="col-md-3"></div>
     </div>
 </div>
+<form action="mainservlet">
+    <input type="hidden" name="command" value="login">
+    <button type="submit">Back to Login</button>
+</form>
 
 <jsp:include page="footer.jsp"/>

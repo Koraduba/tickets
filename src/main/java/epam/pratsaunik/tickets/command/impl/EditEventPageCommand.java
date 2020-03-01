@@ -10,6 +10,7 @@ import epam.pratsaunik.tickets.exception.CommandException;
 import epam.pratsaunik.tickets.exception.ServiceLevelException;
 import epam.pratsaunik.tickets.service.Service;
 import epam.pratsaunik.tickets.service.impl.EventServiceImpl;
+import epam.pratsaunik.tickets.servlet.AttributeName;
 import epam.pratsaunik.tickets.util.ConfigurationManager2;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -27,25 +28,32 @@ public class EditEventPageCommand extends AbstractCommand {
 
     @Override
     public CommandResult execute(RequestContent content) throws CommandException {
-        CommandResult commandResult=new CommandResult();
+        CommandResult commandResult = new CommandResult();
         List<Venue> venueList;
-        List<Ticket> ticketList=null;
-        Event event=null;
+        List<Ticket> ticketList = null;
+        Event event = null;
         try {
-            venueList=((EventServiceImpl)service).findAllVenues();
+            venueList = ((EventServiceImpl) service).findAllVenues();
+            content.setSessionAttribute(AttributeName.VENUE_LIST, venueList);
+            if (content.getSessionAttribute(AttributeName.EVENT) == null) {
+                event = ((EventServiceImpl) service).findEventById(Long.parseLong(content.getRequestParameter("eventId")));
+                ticketList=((EventServiceImpl) service).findTicketsByEvent(event);
+                content.setSessionAttribute(AttributeName.EVENT, event);
+                content.setSessionAttribute(AttributeName.TICKET_LIST,ticketList);
+                content.setSessionAttribute(AttributeName.EVENT_NAME,event.getName());
+                content.setSessionAttribute(AttributeName.EVENT_DATE,event.getDate());
+                content.setSessionAttribute(AttributeName.EVENT_TIME,event.getTime());
+                content.setSessionAttribute(AttributeName.EVENT_DESCRIPTION,event.getDescription());
+                content.setSessionAttribute(AttributeName.EVENT_NAME,event.getName());
+                content.setSessionAttribute(AttributeName.EVENT_VENUE,event.getVenue());
+            }
+            if (content.getSessionAttribute(AttributeName.EVENT_IMAGE) == null) {
+                content.setSessionAttribute(AttributeName.EVENT_IMAGE, event.getImage());
+            }
         } catch (ServiceLevelException e) {
-            log.error("Error in EditEventPageCommand:"+e);
+            log.error("Error in EditEventPageCommand:" + e);
             throw new CommandException(e);
         }
-        try {
-            event = ((EventServiceImpl)service).findEventById(Long.parseLong(content.getRequestParameter("eventId")));
-            ticketList=((EventServiceImpl)service).findTicketsByEvent(event);
-        } catch (ServiceLevelException e) {
-            e.printStackTrace();
-        }
-        content.setRequestAttribute("tickets",ticketList );
-        content.setRequestAttribute("event",event);
-        content.setSessionAttribute("venues",venueList);
         commandResult.setResponsePage(ConfigurationManager2.EDIT_EVENT_PAGE_PATH.getProperty());
         commandResult.setResponseType(CommandResult.ResponseType.FORWARD);
         return commandResult;

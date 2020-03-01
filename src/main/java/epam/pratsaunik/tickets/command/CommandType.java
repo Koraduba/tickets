@@ -9,7 +9,7 @@ public enum CommandType {
     LOGIN(new LoginCommand(new UserServiceImpl())),
     USERS(new UsersCommand(new UserServiceImpl())),
     REGISTER(new RegisterCommand(new UserServiceImpl())),
-    NEW_USER(new NewUserCommand(new UserServiceImpl())),
+    NEW_USER_PAGE(new NewUserPageCommand(new UserServiceImpl())),
     INIT(new InitCommand(new UserServiceImpl())),
     NEW_EVENT_PAGE(new NewEventPageCommand(new EventServiceImpl())),
     NEW_VENUE(new NewVenueCommand(new EventServiceImpl())),
@@ -17,8 +17,7 @@ public enum CommandType {
     ADD_VENUE(new AddVenueCommand(new EventServiceImpl())),
     CATALOG(new CatalogCommand(new EventServiceImpl())),
     EVENT(new EventCommand(new EventServiceImpl())),
-    UPLOAD(new UploadCommand(new EventServiceImpl())),
-    UPLOAD_LAYOUT(new UploadLayoutCommand(new EventServiceImpl())),
+    UPLOAD_PAGE(new UploadPageCommand(new EventServiceImpl())),
     ORDER_LINE(new OrderLineCommand(new EventServiceImpl())),
     CART(new CartCommand(new OrderServiceImpl())),
     ORDER(new OrderCommand(new OrderServiceImpl())),
@@ -35,7 +34,8 @@ public enum CommandType {
     NEW_PASSWORD(new PasswordChangedCommand(new UserServiceImpl())),
     EDIT_EVENT_PAGE(new EditEventPageCommand(new EventServiceImpl())),
     MY_EVENTS(new MyEventsCommand(new EventServiceImpl())),
-    CHANGE_LOCALE(new ChangeLocaleCommand(new UserServiceImpl()));
+    CHANGE_LOCALE(new ChangeLocaleCommand(new UserServiceImpl())),
+    EDIT_EVENT(new EditEventCommand(new EventServiceImpl()));
 
     private AbstractCommand command;
 

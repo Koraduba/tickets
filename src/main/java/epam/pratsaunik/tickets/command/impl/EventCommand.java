@@ -24,6 +24,7 @@ public class EventCommand extends AbstractCommand {
 
     @Override
     public CommandResult execute(RequestContent content) throws CommandException {
+        log.debug("EventCommand");
         CommandResult commandResult=new CommandResult();
         Event event = null;
         List<Ticket> ticketList= null;

@@ -25,7 +25,7 @@
             <input type="submit" value="${localizedEnter}"/>
         </form>
         <form name="register" method="POST" action="mainservlet">
-             <input type="hidden" name="command" value="new_user" />
+             <input type="hidden" name="command" value="new_user_page" />
              <fmt:message key="label.signin" bundle="${rb}" var="localizedSignIn"/><br/>
              <input type="submit" value="${localizedSignIn}"/>
         </form>

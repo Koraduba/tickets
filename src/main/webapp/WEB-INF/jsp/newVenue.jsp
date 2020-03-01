@@ -5,33 +5,21 @@
 <head><title>newVenue</title></head>
 <body>
     <form action="${pageContext.request.contextPath}/mainservlet" id="form1" method="post" name="form1">
-        <input type="hidden" name="command"/>
+        <input type="hidden" name="command" value="add_venue"/>
         <input type="hidden" name="entity" value="venue">
-          <div class="form-group row">
+          <div class="form-group">
             <label for="name" class="col-sm-2 col-form-label">Name</label>
             <div class="col-sm-10">
-              <input type="text" class="form-control" id="name" name="name">
+              <input type="text" class="form-control" id="name" name="name" value="${name}">
+              <font color="red">${errorVenueNameMessage}</font>
             </div>
           </div>
-          <div class="form-group row">
+          <div class="form-group">
             <label for="capacity" class="col-sm-2 col-form-label">Capacity</label>
             <div class="col-sm-10">
-              <input type="number" class="form-control" id="capacity" name="capacity">
+              <input type="number" class="form-control" id="capacity" name="capacity" value="${capacity}">
+                <font color="red">${errorVenueCapacityMessage}</font>
             </div>
-        <div class="form-group">
-        <c:if test="${venue_path!=null}">
-          <img src="${venue_path}" class="img-fluid" alt="Responsive image">
-          <br/>
-        </c:if>
-          <input type="submit" value="Add image" onclick="setCommand('upload')">
-          <br/>
-        </div>
-          <input type="submit" value="Add venue" onclick="setCommand('add_venue')">
+                      <input type="submit" value="Add venue"">
     </form>
-
-      <script>
-      function setCommand (commandType){
-      document.forms['form1'].elements.command.value=commandType;
-      }
-      </script>
 <jsp:include page="footer.jsp"/>

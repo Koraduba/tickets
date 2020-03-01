@@ -21,15 +21,14 @@ import epam.pratsaunik.tickets.validator.Validator;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import javax.management.Attribute;
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 
-public class NewEventCommand extends AbstractCommand {
-    private final static Logger log = LogManager.getLogger();
+public class EditEventCommand extends AbstractCommand {
+    private final Logger log =LogManager.getLogger();
 
-
-    public NewEventCommand(Service service) {
+    public EditEventCommand(Service service) {
         super(service);
     }
 
@@ -38,57 +37,48 @@ public class NewEventCommand extends AbstractCommand {
         CommandResult commandResult = new CommandResult();
         InputKeeper.getInstance().keepEvent(content);
         if (!Validator.validateEvent(content)) {
-            InputKeeper.getInstance().keepEvent(content);
-            commandResult.setResponsePage(ConfigurationManager2.NEW_EVENT_PAGE_PATH.getProperty());
+            commandResult.setResponsePage(ConfigurationManager2.EDIT_EVENT_PAGE_PATH.getProperty());
             commandResult.setResponseType(CommandResult.ResponseType.FORWARD);
             return commandResult;
         }
-        Event event;
-        String name = content.getRequestParameter(ParameterName.EVENT_NAME);
+        Event event = (Event)content.getSessionAttribute(AttributeName.EVENT);
+        List<Ticket> ticketList=null;
         try {
-            event = ((EventServiceImpl) service).findEventByName(name);
-            if (event != null) {
-                commandResult.setResponsePage(ConfigurationManager2.NEW_EVENT_PAGE_PATH.getProperty());
-                commandResult.setResponseType(CommandResult.ResponseType.FORWARD);
-                content.setRequestAttribute(AttributeName.ERROR_EVENT_NAME_MESSSAGE, MessageManager.INSTANCE.getProperty(MessageType.EVENT_EXISTS));
-                return commandResult;
-            }
+            ticketList = ((EventServiceImpl)service).findTicketsByEvent(event);
         } catch (ServiceLevelException e) {
-            throw new CommandException(e);
+            e.printStackTrace();
         }
-
-
-        event = new Event();
-        Ticket ticketStd = new Ticket();
-        Ticket ticketVip = new Ticket();
-        event.setName(name);
+        event.setName(content.getRequestParameter(ParameterName.EVENT_NAME));
         event.setDate(content.getRequestParameter(ParameterName.EVENT_DATE));
         event.setTime(content.getRequestParameter(ParameterName.EVENT_TIME));
         event.setDescription(content.getRequestParameter(ParameterName.EVENT_DESCRIPTION));
-        String path = (String) content.getSessionAttribute(AttributeName.EVENT_IMAGE);
+        String path=(String)content.getSessionAttribute(AttributeName.EVENT_IMAGE);
         event.setImage(path);
-        ticketStd.setCategory(TicketCat.STANDARD);
-        ticketVip.setCategory(TicketCat.VIP);
-        ticketStd.setPrice(new BigDecimal(content.getRequestParameter(ParameterName.TICKET_PRICE_STANDARD)));
-        ticketVip.setPrice(new BigDecimal(content.getRequestParameter(ParameterName.TICKET_PRICE_VIP)));
         String venue = content.getRequestParameter(ParameterName.EVENT_VENUE);
-        event.setOwner((User) content.getSessionAttribute(AttributeName.USER));
         try {
-            if (venue != null) {
+            if (venue!=null && !venue.isEmpty()) {
                 event.setVenue(((EventServiceImpl) service).findVenueByName(venue));
             }
-            long eventId = ((EventServiceImpl) service).create(event);
-            event.setEventId(eventId);
-            ticketStd.setEvent(event);
-            ticketVip.setEvent(event);
-            ((EventServiceImpl) service).createTicket(ticketStd);
-            ((EventServiceImpl) service).createTicket(ticketVip);
-            content.setSessionAttribute(AttributeName.HOME_MESSAGE, MessageManager.INSTANCE.getProperty(MessageManager.INSTANCE.EVENT_CREATED_MESSAGE));
+            ((EventServiceImpl) service).update(event);
+            if (ticketList != null) {
+                for (Ticket ticket : ticketList) {
+                    if(ticket.getCategory()==TicketCat.STANDARD){
+                        ticket.setPrice(new BigDecimal(content.getRequestParameter(ParameterName.TICKET_PRICE_STANDARD)));
+                    }
+                    if(ticket.getCategory()==TicketCat.VIP){
+                        ticket.setPrice(new BigDecimal(content.getRequestParameter(ParameterName.TICKET_PRICE_VIP)));
+                    }
+                    ((EventServiceImpl)service).updateTicket(ticket);
+                }
+            }
+
+            InputKeeper.getInstance().clearEvent(content);
+            content.setSessionAttribute(AttributeName.HOME_MESSAGE,MessageManager.INSTANCE.getProperty(MessageType.EVENT_EDITED));
             commandResult.setResponsePage(ConfigurationManager2.HOME_PAGE_PATH.getProperty());
             commandResult.setResponseType(CommandResult.ResponseType.REDIRECT);
             InputKeeper.getInstance().clearEvent(content);
         } catch (ServiceLevelException e) {
-            throw new CommandException("NewEventCommand", e);
+            throw new CommandException("EditEventCommand",e);
         }
         return commandResult;
     }

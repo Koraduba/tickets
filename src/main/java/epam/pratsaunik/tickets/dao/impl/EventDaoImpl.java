@@ -18,6 +18,7 @@ public class EventDaoImpl extends EventDao {
     private final static Logger log = LogManager.getLogger();
     private final static long MILLISECONDS_PER_DAY = 86400000;
     private final static String SQL_GET_NUMBER_OF_RECORDS = "SELECT count(event_id) FROM event";
+    private final static String SQL_GET_NUMBER_OF_EVENTS_BY_HOST = "SELECT count(event_id) FROM event WHERE owner=?";
     private final static String SQL_CREATE_EVENT = "INSERT INTO event(name,date,description,image,venue,owner) " +
             "VALUES(?,?,?,?,?,?)";
     private final static String SQL_UPDATE_EVENT = "UPDATE event SET name=?,date=?,description=?,image=?,venue=?,owner=? WHERE event_id=?";
@@ -31,9 +32,9 @@ public class EventDaoImpl extends EventDao {
     private final static String SQL_FIND_EVENTS_BY_DATE = "SELECT event_id,name,date,description,image,venue,owner FROM event WHERE date<? AND date>=?";
     private final static String SQL_FIND_EVENTS_BY_NAME = "SELECT event_id,name,date,description,image,venue,owner FROM event WHERE name=?";
     private final static String SQL_FIND_EVENTS_BY_HOST = "SELECT event_id,name,date,description,image,venue,owner FROM event WHERE owner=? LIMIT ?,?";
-    private final static String SQL_CREATE_VENUE = "INSERT INTO venue(name,capacity,layout) " +
-            "VALUES(?,?,?)";
-    private final static String SQL_UPDATE_VENUE = "UPDATE venue SET name=?,capacity=?,layout=? WHERE venue_id=?";
+    private final static String SQL_CREATE_VENUE = "INSERT INTO venue(name,capacity) " +
+            "VALUES(?,?)";
+    private final static String SQL_UPDATE_VENUE = "UPDATE venue SET name=?,capacity=? WHERE venue_id=?";
     private final static String SQL_DELETE_VENUE = "DELETE FROM venue WHERE venue_id=?";
     private final static String SQL_FIND_ALL_VENUES = "SELECT venue_id,name,capacity,layout FROM venue";
     private final static String SQL_FIND_VENUE_BY_ID = "SELECT venue_id,name,capacity,layout FROM venue WHERE venue_id=?";
@@ -45,6 +46,7 @@ public class EventDaoImpl extends EventDao {
             "AND ticket_id=?";
     private final static String SQL_FIND_TICKETS_BY_EVENT = "SELECT ticket_id,event,category.name,price FROM ticket,category " +
             "WHERE category_id=ticket.category AND event=?";
+    private final static String SQL_UPDATE_TICKET = "UPDATE ticket SET event=?,category=?,price=? WHERE ticket_id=?";
 
     @Override
     public int getNumberOfRecords() throws DaoException {
@@ -77,8 +79,8 @@ public class EventDaoImpl extends EventDao {
     @Override
     public long create(Entity entity) throws DaoException {
         Event event = (Event) entity;
-        PreparedStatement statement=null;
-        ResultSet resultSet=null;
+        PreparedStatement statement = null;
+        ResultSet resultSet = null;
         long id = -1;
         try {
             statement = connection.prepareStatement(SQL_CREATE_EVENT, PreparedStatement.RETURN_GENERATED_KEYS);
@@ -93,9 +95,8 @@ public class EventDaoImpl extends EventDao {
             }
             if (date != null) {
                 statement.setLong(2, (date.getTime()));
-            }
-            else{
-                statement.setNull(2,Types.BIGINT);
+            } else {
+                statement.setNull(2, Types.BIGINT);
             }
             statement.setString(3, event.getDescription());
             statement.setString(4, event.getImage());
@@ -105,7 +106,7 @@ public class EventDaoImpl extends EventDao {
             } else {
                 statement.setNull(5, Types.INTEGER);
             }
-            statement.setLong(6,event.getOwner().getUserId());
+            statement.setLong(6, event.getOwner().getUserId());
             statement.execute();
             resultSet = statement.getGeneratedKeys();
             resultSet.next();
@@ -151,7 +152,7 @@ public class EventDaoImpl extends EventDao {
             } else {
                 statement.setNull(5, Types.INTEGER);
             }
-            statement.setLong(6,event.getOwner().getUserId());
+            statement.setLong(6, event.getOwner().getUserId());
             statement.setLong(7, event.getEventId());
             statement.execute();
         } catch (SQLException e) {
@@ -194,7 +195,7 @@ public class EventDaoImpl extends EventDao {
     public List<Event> findById(long id) throws DaoException {
         List<Event> eventList = new ArrayList<>();
         PreparedStatement statement = null;
-        ResultSet resultSet=null;
+        ResultSet resultSet = null;
         try {
             statement = connection.prepareStatement(SQL_FIND_EVENT_BY_ID);
             statement.setLong(1, id);
@@ -210,8 +211,8 @@ public class EventDaoImpl extends EventDao {
                 event.setDate(simpleDateFormat.format(date));
                 simpleDateFormat = new SimpleDateFormat("HH:mm");
                 event.setTime(simpleDateFormat.format(date));
-                List<Venue> venues=findVenueById(resultSet.getLong(ColumnName.EVENT_VENUE));
-                if (!venues.isEmpty()){
+                List<Venue> venues = findVenueById(resultSet.getLong(ColumnName.EVENT_VENUE));
+                if (!venues.isEmpty()) {
                     event.setVenue(venues.get(0));//todo
                 }
                 User owner = new User();
@@ -240,7 +241,7 @@ public class EventDaoImpl extends EventDao {
     @Override
     public List findAll() throws DaoException {
         Statement statement = null;
-        ResultSet resultSet=null;
+        ResultSet resultSet = null;
         List<Event> eventList = new ArrayList<>();
         try {
             statement = connection.createStatement();
@@ -283,7 +284,7 @@ public class EventDaoImpl extends EventDao {
     public List<Event> findRange(int start, int recordsPerPage) throws DaoException {
         List<Event> events = new ArrayList<>();
         PreparedStatement statement = null;
-        ResultSet resultSet=null;
+        ResultSet resultSet = null;
         try {
             statement = connection.prepareStatement(SQL_FIND_RANGE_OF_EVENTS);
             statement.setInt(1, start);
@@ -300,8 +301,8 @@ public class EventDaoImpl extends EventDao {
                 event.setDate(simpleDateFormat.format(date));
                 simpleDateFormat = new SimpleDateFormat("HH:mm");
                 event.setTime(simpleDateFormat.format(date));
-                List<Venue> venues=findVenueById(resultSet.getLong(ColumnName.EVENT_VENUE));
-                if (!venues.isEmpty()){
+                List<Venue> venues = findVenueById(resultSet.getLong(ColumnName.EVENT_VENUE));
+                if (!venues.isEmpty()) {
                     event.setVenue(venues.get(0));//todo
                 }
                 User owner = new User();
@@ -328,10 +329,39 @@ public class EventDaoImpl extends EventDao {
 
 
     @Override
+    public Integer getNumberOfEventsByHost(User owner) throws DaoException {
+        Integer number =null;
+        PreparedStatement statement=null;
+        ResultSet resultSet=null;
+        try {
+            statement=connection.prepareStatement(SQL_GET_NUMBER_OF_EVENTS_BY_HOST);
+            statement.setLong(1,owner.getUserId());
+            resultSet=statement.executeQuery();
+            while (resultSet.next()){
+                number=resultSet.getInt(1);
+            }
+        } catch (SQLException e) {
+            throw  new DaoException(e);
+        }finally {
+            try {
+                if (resultSet != null) {
+                    resultSet.close();
+                }
+                if (statement != null) {
+                    statement.close();
+                }
+            } catch (SQLException e) {
+                log.warn(e);
+            }
+        }
+        return number;
+    }
+
+    @Override
     public List<Event> findEventsByDate(Date dateOfEvent) throws DaoException {
         List<Event> eventList = new ArrayList<>();
         PreparedStatement statement = null;
-        ResultSet resultSet=null;
+        ResultSet resultSet = null;
         long time = dateOfEvent.getTime();
         try {
             statement = connection.prepareStatement(SQL_FIND_EVENTS_BY_DATE);
@@ -349,8 +379,8 @@ public class EventDaoImpl extends EventDao {
                 event.setDate(simpleDateFormat.format(date));
                 simpleDateFormat = new SimpleDateFormat("HH:mm");
                 event.setTime(simpleDateFormat.format(date));
-                List<Venue> venues=findVenueById(resultSet.getLong(ColumnName.EVENT_VENUE));
-                if (!venues.isEmpty()){
+                List<Venue> venues = findVenueById(resultSet.getLong(ColumnName.EVENT_VENUE));
+                if (!venues.isEmpty()) {
                     event.setVenue(venues.get(0));//todo
                 }
                 User owner = new User();
@@ -379,7 +409,7 @@ public class EventDaoImpl extends EventDao {
     public List<Event> findEventByName(String name) throws DaoException {
         List<Event> eventList = new ArrayList<>();
         PreparedStatement statement = null;
-        ResultSet resultSet=null;
+        ResultSet resultSet = null;
         try {
             statement = connection.prepareStatement(SQL_FIND_EVENTS_BY_NAME);
             statement.setString(1, name);
@@ -395,8 +425,8 @@ public class EventDaoImpl extends EventDao {
                 event.setDate(simpleDateFormat.format(date));
                 simpleDateFormat = new SimpleDateFormat("HH:mm");
                 event.setTime(simpleDateFormat.format(date));
-                List<Venue> venues=findVenueById(resultSet.getLong(ColumnName.EVENT_VENUE));
-                if (!venues.isEmpty()){
+                List<Venue> venues = findVenueById(resultSet.getLong(ColumnName.EVENT_VENUE));
+                if (!venues.isEmpty()) {
                     event.setVenue(venues.get(0));//todo
                 }
                 User owner = new User();
@@ -422,10 +452,10 @@ public class EventDaoImpl extends EventDao {
     }
 
     @Override
-    public List<Event> findEventByHost(User owner,int start, int recordsPerPage) throws DaoException {
+    public List<Event> findEventByHost(User owner, int start, int recordsPerPage) throws DaoException {
         List<Event> eventList = new ArrayList<>();
         PreparedStatement statement = null;
-        ResultSet resultSet=null;
+        ResultSet resultSet = null;
         try {
             statement = connection.prepareStatement(SQL_FIND_EVENTS_BY_HOST);
             statement.setLong(1, owner.getUserId());
@@ -443,8 +473,8 @@ public class EventDaoImpl extends EventDao {
                 event.setDate(simpleDateFormat.format(date));
                 simpleDateFormat = new SimpleDateFormat("HH:mm");
                 event.setTime(simpleDateFormat.format(date));
-                List<Venue> venues=findVenueById(resultSet.getLong(ColumnName.EVENT_VENUE));
-                if (!venues.isEmpty()){
+                List<Venue> venues = findVenueById(resultSet.getLong(ColumnName.EVENT_VENUE));
+                if (!venues.isEmpty()) {
                     event.setVenue(venues.get(0));//todo
                 }
                 event.setOwner(owner);
@@ -473,16 +503,11 @@ public class EventDaoImpl extends EventDao {
         log.debug("EventDaOImpl::createVenue");
         log.debug(venue.toString());
         PreparedStatement statement = null;
-        ResultSet resultSet=null;
+        ResultSet resultSet = null;
         try {
             statement = connection.prepareStatement(SQL_CREATE_VENUE, PreparedStatement.RETURN_GENERATED_KEYS);
             statement.setString(1, venue.getName());
             statement.setInt(2, venue.getCapacity());
-            if (venue.getLayout() != null) {
-                statement.setString(3, venue.getLayout());
-            } else {
-                statement.setNull(3, Types.VARCHAR);
-            }
             statement.execute();
             resultSet = statement.getGeneratedKeys();
             resultSet.next();
@@ -513,12 +538,7 @@ public class EventDaoImpl extends EventDao {
             statement = connection.prepareStatement(SQL_UPDATE_VENUE);
             statement.setString(1, venue.getName());
             statement.setInt(2, venue.getCapacity());
-            if (venue.getLayout() != null) {
-                statement.setString(3, venue.getLayout());
-            } else {
-                statement.setNull(3, Types.VARCHAR);
-            }
-            statement.setLong(4, venue.getVenueId());
+            statement.setLong(3, venue.getVenueId());
             statement.execute();
         } catch (SQLException e) {
             throw new DaoException(e);
@@ -560,7 +580,7 @@ public class EventDaoImpl extends EventDao {
     @Override
     public List<Venue> findAllVenues() throws DaoException {
         Statement statement = null;
-        ResultSet resultSet=null;
+        ResultSet resultSet = null;
         List<Venue> venueList = new ArrayList<>();
         try {
             statement = connection.createStatement();
@@ -570,7 +590,6 @@ public class EventDaoImpl extends EventDao {
                 venue.setVenueId(resultSet.getLong(ColumnName.VENUE_ID));
                 venue.setName(resultSet.getString(ColumnName.VENUE_NAME));
                 venue.setCapacity(resultSet.getInt(ColumnName.VENUE_CAPACITY));
-                venue.setLayout(resultSet.getString(ColumnName.VENUE_NAME));
                 venueList.add(venue);
             }
         } catch (SQLException e) {
@@ -593,7 +612,7 @@ public class EventDaoImpl extends EventDao {
     @Override
     public List<Venue> findVenueById(Long id) throws DaoException {
         PreparedStatement statement = null;
-        ResultSet resultSet=null;
+        ResultSet resultSet = null;
         List<Venue> venueList = new ArrayList<>();
         try {
             statement = connection.prepareStatement(SQL_FIND_VENUE_BY_ID);
@@ -604,7 +623,6 @@ public class EventDaoImpl extends EventDao {
                 venue.setVenueId(resultSet.getLong(ColumnName.VENUE_ID));
                 venue.setName(resultSet.getString(ColumnName.VENUE_NAME));
                 venue.setCapacity(resultSet.getInt(ColumnName.VENUE_CAPACITY));
-                venue.setLayout(resultSet.getString(ColumnName.VENUE_LAYOUT));//todo
                 venueList.add(venue);
             }
         } catch (SQLException e) {
@@ -627,7 +645,7 @@ public class EventDaoImpl extends EventDao {
     @Override
     public List<Venue> findVenueByName(String name) throws DaoException {
         PreparedStatement statement = null;
-        ResultSet resultSet=null;
+        ResultSet resultSet = null;
         List<Venue> venueList = new ArrayList<>();
         try {
             statement = connection.prepareStatement(SQL_FIND_VENUE_BY_NAME);
@@ -638,7 +656,6 @@ public class EventDaoImpl extends EventDao {
                 venue.setVenueId(resultSet.getLong(ColumnName.VENUE_ID));
                 venue.setName(resultSet.getString(ColumnName.VENUE_NAME));
                 venue.setCapacity(resultSet.getInt(ColumnName.VENUE_CAPACITY));
-                venue.setLayout(resultSet.getString(ColumnName.VENUE_LAYOUT));
                 venueList.add(venue);
             }
         } catch (SQLException e) {
@@ -661,7 +678,7 @@ public class EventDaoImpl extends EventDao {
     @Override
     public long createTicket(Ticket ticket) throws DaoException {
         PreparedStatement statement = null;
-        ResultSet resultSet=null;
+        ResultSet resultSet = null;
         long id = 0;
         try {
             statement = connection.prepareStatement(SQL_CREATE_TICKET, PreparedStatement.RETURN_GENERATED_KEYS);
@@ -716,12 +733,12 @@ public class EventDaoImpl extends EventDao {
     @Override
     public List<Ticket> findTicketById(long id) throws DaoException {
         PreparedStatement statement = null;
-        ResultSet resultSet=null;
+        ResultSet resultSet = null;
         List<Ticket> ticketList = new ArrayList<>();
         try {
             statement = connection.prepareStatement(SQL_FIND_TICKET_BY_ID);
             statement.setLong(1, id);
-            log.debug("Statement:" +statement);
+            log.debug("Statement:" + statement);
             resultSet = statement.executeQuery();
             while (resultSet.next()) {
                 Ticket ticket = new Ticket();
@@ -751,8 +768,9 @@ public class EventDaoImpl extends EventDao {
 
     @Override
     public List<Ticket> findTicketsByEvent(Event event) throws DaoException {
+        log.debug(event);
         PreparedStatement statement = null;
-        ResultSet resultSet=null;
+        ResultSet resultSet = null;
         List<Ticket> ticketList = new ArrayList<>();
         try {
             statement = connection.prepareStatement(SQL_FIND_TICKETS_BY_EVENT);
@@ -781,6 +799,31 @@ public class EventDaoImpl extends EventDao {
             }
         }
         return ticketList;
+    }
+
+    @Override
+    public Ticket updateTicket(Ticket ticket) throws DaoException {
+        PreparedStatement statement = null;
+        try {
+            statement = connection.prepareStatement(SQL_UPDATE_TICKET);
+            statement.setLong(1, ticket.getEvent().getEventId());
+            statement.setInt(2, ticket.getCategory().ordinal() + 1);
+            statement.setBigDecimal(3, ticket.getPrice());
+            statement.setLong(4, ticket.getTicketId());
+            statement.execute();
+        } catch (SQLException e) {
+            throw new DaoException(e);
+        } finally {
+            try {
+                if (statement != null) {
+                    statement.close();
+                }
+            } catch (SQLException e) {
+                log.warn(e);
+            }
+        }
+
+        return ticket;
     }
 
 

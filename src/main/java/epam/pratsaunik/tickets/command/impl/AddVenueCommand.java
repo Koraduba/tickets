@@ -8,9 +8,10 @@ import epam.pratsaunik.tickets.exception.CommandException;
 import epam.pratsaunik.tickets.exception.ServiceLevelException;
 import epam.pratsaunik.tickets.service.Service;
 import epam.pratsaunik.tickets.service.impl.EventServiceImpl;
+import epam.pratsaunik.tickets.servlet.AttributeName;
 import epam.pratsaunik.tickets.servlet.ParameterName;
-import epam.pratsaunik.tickets.util.ConfigurationManager;
-import epam.pratsaunik.tickets.util.ConfigurationManager2;
+import epam.pratsaunik.tickets.util.*;
+import epam.pratsaunik.tickets.validator.Validator;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -18,27 +19,55 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class AddVenueCommand extends AbstractCommand {
+    private static final String NEW_EVENT = "new";
+    private static final String EDIT_EVENT = "edit";
     private final static Logger log = LogManager.getLogger();
+
     public AddVenueCommand(Service service) {
         super(service);
     }
 
     @Override
     public CommandResult execute(RequestContent content) throws CommandException {
-        CommandResult commandResult=new CommandResult();
-        Venue venue = new Venue();
-        List<Venue> venueList = null;
-        venue.setName(content.getRequestParameter(ParameterName.VENUE_NAME));
-        venue.setCapacity(Integer.parseInt(content.getRequestParameter(ParameterName.VENUE_CAPACITY)));
-        String path = (String)content.getSessionAttribute("venue_path");
-        venue.setLayout(path);
-        try {
-            long eventId=((EventServiceImpl)service).createVenue(venue);
-            venueList=((EventServiceImpl)service).findAllVenues();
-            content.setSessionAttribute("id", eventId);
-            content.setSessionAttribute("venues",venueList);
-            commandResult.setResponsePage(ConfigurationManager2.UPLOAD_PAGE_PATH.getProperty());
+        CommandResult commandResult = new CommandResult();
+        if (!Validator.validateVenue(content)) {
+            InputKeeper.getInstance().keepVenue(content);
+            commandResult.setResponsePage(ConfigurationManager2.NEW_VENUE_PAGE_PATH.getProperty());
             commandResult.setResponseType(CommandResult.ResponseType.FORWARD);
+            return commandResult;
+        }
+        Venue venue;
+        String name = content.getRequestParameter(ParameterName.VENUE_NAME);
+        try {
+            venue = ((EventServiceImpl) service).findVenueByName(name);
+            if (venue != null) {
+                commandResult.setResponsePage(ConfigurationManager2.NEW_VENUE_PAGE_PATH.getProperty());
+                commandResult.setResponseType(CommandResult.ResponseType.FORWARD);
+                content.setRequestAttribute(AttributeName.ERROR_VENUE_NAME_MESSAGE, MessageManager.INSTANCE.getProperty(MessageType.VENUE_EXISTS));
+                return commandResult;
+            }
+        } catch (ServiceLevelException e) {
+            throw new CommandException(e);
+        }
+        List<Venue> venueList = null;
+        venue=new Venue();
+        venue.setName(name);
+        venue.setCapacity(Integer.parseInt(content.getRequestParameter(ParameterName.VENUE_CAPACITY)));
+        try {
+            ((EventServiceImpl) service).createVenue(venue);
+            venueList = ((EventServiceImpl) service).findAllVenues();
+            content.setSessionAttribute("venues", venueList);
+            switch ((String) content.getSessionAttribute(AttributeName.MODE)) {
+                case NEW_EVENT:
+                    commandResult.setResponsePage(ConfigurationManager2.NEW_EVENT_PAGE_PATH.getProperty());
+                    break;
+                case EDIT_EVENT:
+                    commandResult.setResponsePage(ConfigurationManager2.EDIT_EVENT_PAGE_PATH.getProperty());
+                    break;
+                default:
+                    throw new CommandException();
+            }
+            commandResult.setResponseType(CommandResult.ResponseType.REDIRECT);
         } catch (ServiceLevelException e) {
             throw new CommandException(e);
         }

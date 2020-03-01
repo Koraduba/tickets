@@ -18,10 +18,12 @@ public class ParameterName {
     public final static String EVENT_DESCRIPTION="description";
     public final static String EVENT_IMAGE="path";
     public final static String EVENT_VENUE="event_venue";
-    public final static String TICKET_PRICE_VIP="price-vip";
-    public final static String TICKET_PRICE_STANDARD="price-standard";
+    public final static String TICKET_PRICE_VIP="price_VIP";
+    public final static String TICKET_PRICE_STANDARD="price_STANDARD";
     public final static String VENUE_NAME="name";
     public final static String VENUE_CAPACITY="capacity";
+    public final static String IMAGE_ENTITY="entity";
+    public final static String MODE="mode";
 
 
 

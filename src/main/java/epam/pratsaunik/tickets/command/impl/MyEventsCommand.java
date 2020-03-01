@@ -28,14 +28,14 @@ public class MyEventsCommand extends AbstractCommand {
     public CommandResult execute(RequestContent content) {
         CommandResult commandResult=new CommandResult();
         List<Event> list;
+        User owner = (User)content.getSessionAttribute("user");
         try {
-            int nOfRecords =  service.getNumberOfRecords();
+            int nOfRecords =  ((EventServiceImpl)service).getNumberOfEventsByHost(owner);
             int nOfPages = nOfRecords / EVENTS_PER_PAGE;
             if (nOfRecords % EVENTS_PER_PAGE > 0) {
                 nOfPages++;
             }
             int currentPage = Integer.parseInt(content.getRequestParameter("currentPage"));
-            User owner = (User)content.getSessionAttribute("user");
             list = ((EventServiceImpl) service).findEventsByHost(owner, currentPage, EVENTS_PER_PAGE);
             log.debug(list);
             log.debug("nOfRecords" + nOfRecords + " nOfPages:" + nOfPages + " Size of list" + list.size());

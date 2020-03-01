@@ -8,8 +8,10 @@ import epam.pratsaunik.tickets.exception.CommandException;
 import epam.pratsaunik.tickets.exception.ServiceLevelException;
 import epam.pratsaunik.tickets.service.Service;
 import epam.pratsaunik.tickets.service.impl.EventServiceImpl;
+import epam.pratsaunik.tickets.servlet.AttributeName;
 import epam.pratsaunik.tickets.util.ConfigurationManager;
 import epam.pratsaunik.tickets.util.ConfigurationManager2;
+import epam.pratsaunik.tickets.util.InputKeeper;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -25,14 +27,17 @@ public class NewEventPageCommand extends AbstractCommand {
     @Override
     public CommandResult execute(RequestContent content) throws CommandException {
         CommandResult commandResult=new CommandResult();
-        List<Venue> venueList = new ArrayList<>();
+        if(content.getSessionAttribute("event")!=null){
+            InputKeeper.getInstance().clearEvent(content);
+        }
+        List<Venue> venueList;
         try {
             venueList=((EventServiceImpl)service).findAllVenues();
         } catch (ServiceLevelException e) {
-            log.error("Error in NewEventCommand:"+e);
-            throw new CommandException(e);
+            log.error("Error in NewEventPageCommand:"+e);
+            throw new CommandException("NewEventPageCommand",e);
         }
-        content.setSessionAttribute("venues",venueList);
+        content.setSessionAttribute(AttributeName.VENUE_LIST,venueList);
         commandResult.setResponsePage(ConfigurationManager2.NEW_EVENT_PAGE_PATH.getProperty());
         commandResult.setResponseType(CommandResult.ResponseType.FORWARD);
         return commandResult;

@@ -9,6 +9,7 @@ import epam.pratsaunik.tickets.service.Service;
 import epam.pratsaunik.tickets.servlet.AttributeName;
 import epam.pratsaunik.tickets.util.ConfigurationManager2;
 import epam.pratsaunik.tickets.util.MessageManager;
+import epam.pratsaunik.tickets.util.MessageType;
 
 import java.util.Locale;
 
@@ -20,7 +21,9 @@ public class LogoutCommand extends AbstractCommand {
     @Override
     public CommandResult execute(RequestContent content) throws CommandException {
         CommandResult commandResult = new CommandResult();
+        content.setSessionAttribute(AttributeName.HOME_MESSAGE,null);
         content.setSessionAttribute(AttributeName.USER_ROLE,null);
+        content.setSessionAttribute(AttributeName.USER,null);
         MessageManager.INSTANCE.changeResource(Locale.getDefault());
         content.setSessionAttribute(AttributeName.LOCALE, Locale.getDefault());
         commandResult.setResponsePage(ConfigurationManager2.LOGIN_PAGE_PATH.getProperty());
