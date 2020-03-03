@@ -316,7 +316,7 @@ public class EventServiceImpl implements Service, EventService {
     }
 
     public Event findEventByName(String name) throws ServiceLevelException {
-        Event event = null;
+        Event event;
         EventDao eventDao = new EventDaoImpl();
         UserDaoImpl userDao = new UserDaoImpl();
         EntityTransaction entityTransaction = new EntityTransaction();

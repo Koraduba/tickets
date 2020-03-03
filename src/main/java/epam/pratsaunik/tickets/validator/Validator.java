@@ -9,29 +9,36 @@ import epam.pratsaunik.tickets.util.MessageManager;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import javax.smartcardio.ATR;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * Validator of input information based on given regular expressions
+ * @author Dzmitry Mikulich
+ * @version 1.0
+ */
 public class Validator {
     private final static Logger log = LogManager.getLogger();
     private final static String LOGIN_REGEX = "^[a-zA-Z][a-zA-Z0-9-_\\.]{1,20}$";
     private final static String EMAIL_REGEX = "^[-\\w.]+@([A-z0-9][-A-z0-9]+\\.)+[A-z]{2,4}$";
-    private final static String NAME_REGEX = "^[a-zA-Z][a-z]{1,20}";
-    private final static String SURNAME_REGEX = "^[a-zA-Z][a-z]+";
+    private final static String NAME_REGEX = "^[a-zA-Z][a-z]{1,20}$";
+    private final static String SURNAME_REGEX = "^[a-zA-Z][a-z]{1,20}$";
     private final static String PASSWORD_REGEX = "^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?!.*\\s).*$";
-    private final static String EVENT_NAME_REGEX = "^[a-zA-Z][a-z]{1,20}";
-    private final static String EVENT_DESCRIPTION_REGEX = "\\w{1,120}";
-    private final static String EVENT_DATE_REGEX = "(19|20)\\d\\d-((0[1-9]|1[012])-(0[1-9]|[12]\\d)|(0[13-9]|1[012])-30|(0[13578]|1[02])-31)";
+    private final static String EVENT_NAME_REGEX = "^[a-zA-Z][a-z]{1,20}$";
+    private final static String EVENT_DESCRIPTION_REGEX = "^\\w{1,120}$";
+    private final static String EVENT_DATE_REGEX = "^(19|20)\\d\\d-((0[1-9]|1[012])-(0[1-9]|[12]\\d)|(0[13-9]|1[012])-30|(0[13578]|1[02])-31)$";
     private final static String EVENT_TIME_REGEX = "^([0-1]\\d|2[0-3])(:[0-5]\\d)$";
-    private final static String TICKET_PRICE_REGEX = "\\d{1,4}";
-    private final static String ORDER_LINE_QUANTITY_REGEX = "\\d{1,3}";
-    private final static String VENUE_NAME_REGEX = "^[a-zA-Z][a-z]{1,20}";
+    private final static String TICKET_PRICE_REGEX = "^\\d{1,4}$";
+    private final static String ORDER_LINE_QUANTITY_REGEX = "^\\d{1,3}$";
+    private final static String VENUE_NAME_REGEX = "^[a-zA-Z][a-z]{1,20}$";
     private final static String VENUE_CAPACITY_REGEX = "^\\d{1,4}$";
 
 
-
-
+    /**
+     *
+     * @param login login input
+     * @return {@codetrue} if login corresponds to given regular expression
+     */
     public static boolean validateLogin(String login) {
 
         Pattern pattern = Pattern.compile(LOGIN_REGEX);
@@ -39,6 +46,12 @@ public class Validator {
         return matcher.matches();
     }
 
+    /**
+     *
+     * @param content {@code RequestContent} instance to provide request parameters ans session attributes
+     * @return {@code true} if all user data fields correspond to given regular expressions
+     * @see RequestContent
+     */
     public static boolean validateUser(RequestContent content) {
         boolean result = true;
         content.setRequestAttribute(AttributeName.USER_EMAIL, content.getRequestParameter(ParameterName.USER_EMAIL));
@@ -80,7 +93,12 @@ public class Validator {
 
         return result;
     }
-
+    /**
+     *
+     * @param content {@code RequestContent} instance to provide request parameters ans session attributes
+     * @return {@code true} if all event data fields correspond to given regular expressions
+     * @see RequestContent
+     */
     public static boolean validateEvent(RequestContent content) {
         boolean result = true;
         Pattern pattern = Pattern.compile(EVENT_NAME_REGEX);
@@ -125,6 +143,12 @@ public class Validator {
         return result;
     }
 
+    /**
+     *
+     * @param content {@code RequestContent} instance to provide request parameters ans session attributes
+     * @return {@code true} if quantity input correspond to given regular expression
+     * @see RequestContent
+     */
     public static boolean validateOrderLine(RequestContent content) {
         boolean result = true;
         Pattern pattern = Pattern.compile(ORDER_LINE_QUANTITY_REGEX);
@@ -137,6 +161,12 @@ public class Validator {
         return result;
     }
 
+    /**
+     *
+     * @param content {@code RequestContent} instance to provide request parameters ans session attributes
+     * @return {@code true} if all venue data fields correspond to given regular expressions
+     * @see RequestContent
+     */
     public static boolean validateVenue(RequestContent content) {
         boolean result = true;
         Pattern pattern = Pattern.compile(VENUE_NAME_REGEX);

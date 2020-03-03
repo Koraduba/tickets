@@ -89,6 +89,15 @@
     <listener-class>epam.pratsaunik.tickets.listener.ContextListenerImpl</listener-class>
   </listener>
 
+  <error-page>
+    <error-code>404</error-code>
+    <location>/errors/error.jsp</location>
+  </error-page>
+
+  <error-page>
+    <exception-type>java.lang.RuntimeException</exception-type>
+    <location>/errors/error.jsp</location>
+  </error-page>
 
 </web-app>
 

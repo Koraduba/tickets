@@ -14,17 +14,25 @@ import epam.pratsaunik.tickets.util.ConfigurationManager2;
 import epam.pratsaunik.tickets.util.MessageManager;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
-import static jdk.nashorn.internal.runtime.regexp.joni.Config.log;
-
-
+/**
+ * Class{@code AddVenueCommand} is used to create and save new venue in data base
+ * @version 1.0
+ * @see AbstractCommand
+ */
 public class PasswordChangedCommand extends AbstractCommand {
     private static final Logger log = LogManager.getLogger();
 
     public PasswordChangedCommand(Service service) {
         super(service);
     }
-
+    /**
+     *
+     * @param content{@code RequestContent} instance to provide request parameters ans session attributes access
+     * @return {@code CommandResult} instance with information about response type and further destination page
+     * @throws CommandException custom exception to be thrown in case of exception on service level
+     * @see RequestContent
+     * @see CommandResult
+     */
     @Override
     public CommandResult execute(RequestContent content) throws CommandException {
         UserServiceImpl userService = (UserServiceImpl) service;

@@ -12,6 +12,5 @@ Exception: ${pageContext.exception}
 <br/>
 Message from exception: ${pageContext.exception.message}
 <br/>
-<br/>
 <a class="nav-link" href="${pageContext.request.contextPath}/mainservlet?command=home">Home</a>
 </body></html>

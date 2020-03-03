@@ -1,14 +1,17 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<fmt:setLocale value="${locale}" scope="session" />
+<fmt:setBundle basename="property.pagecontent" var="rb" />
 <jsp:include page="header.jsp"/>
-CATALOG
+<fmt:message key="label.events" bundle="${rb}" />
 <div class="row col-md-6">
     <table class="table table-striped table-bordered table-sm">
         <tr>
-            <th>Name</th>
-            <th>Date</th>
-            <th>Time</th>
-            <th>Venue</th>
+            <th><fmt:message key="label.name" bundle="${rb}" /></th>
+            <th><fmt:message key="label.date" bundle="${rb}" /></th>
+            <th><fmt:message key="label.time" bundle="${rb}" /></th>
+            <th><fmt:message key="label.venue" bundle="${rb}" /></th>
             <th></th>
         </tr>
         <c:forEach items="${events}" var="eachEvent">

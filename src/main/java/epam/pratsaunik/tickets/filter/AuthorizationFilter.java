@@ -7,8 +7,6 @@ import epam.pratsaunik.tickets.util.ConfigurationManager;
 import epam.pratsaunik.tickets.util.ConfigurationManager2;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import sun.jvm.hotspot.debugger.win32.coff.COFFException;
-
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;

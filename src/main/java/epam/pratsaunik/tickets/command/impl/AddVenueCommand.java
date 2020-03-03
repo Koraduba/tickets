@@ -17,7 +17,11 @@ import org.apache.logging.log4j.Logger;
 
 import java.util.ArrayList;
 import java.util.List;
-
+/**
+ * Class{@code AddVenueCommand} is used to create and save new venue in data base
+ * @version 1.0
+ * @see AbstractCommand
+ */
 public class AddVenueCommand extends AbstractCommand {
     private static final String NEW_EVENT = "new";
     private static final String EDIT_EVENT = "edit";
@@ -27,6 +31,14 @@ public class AddVenueCommand extends AbstractCommand {
         super(service);
     }
 
+    /**
+     *
+     * @param content{@code RequestContent} instance to provide request parameters ans session attributes access
+     * @return {@code CommandResult} instance with information about response type  and further destination page
+     * @throws CommandException custom exception to be thrown in case of exception on service level
+     * @see RequestContent
+     * @see CommandResult
+     */
     @Override
     public CommandResult execute(RequestContent content) throws CommandException {
         CommandResult commandResult = new CommandResult();

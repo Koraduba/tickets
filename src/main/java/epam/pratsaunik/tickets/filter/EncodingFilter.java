@@ -16,7 +16,6 @@ public class EncodingFilter implements Filter{
                          FilterChain chain) throws IOException, ServletException {
         logger.info("Encoding Filter works!");
         String codeRequest = request.getCharacterEncoding();
-// установка кодировки из параметров фильтра, если не установлена
         if (code != null && !code.equalsIgnoreCase(codeRequest)) {
             request.setCharacterEncoding(code);
             response.setCharacterEncoding(code);
