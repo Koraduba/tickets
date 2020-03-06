@@ -20,6 +20,6 @@ PROFILE
 </div>
             <form name="changePassword" method="POST" action="mainservlet">
 				<td><input type="submit" value="Change password"/></td>
-                <input type="hidden" name="command" value="change_password" />
+                <input type="hidden" name="command" value="new_password_page" />
             </form>
 <jsp:include page="footer.jsp"/>

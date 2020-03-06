@@ -9,10 +9,8 @@ import epam.pratsaunik.tickets.exception.CommandException;
 import epam.pratsaunik.tickets.exception.ServiceLevelException;
 import epam.pratsaunik.tickets.service.Service;
 import epam.pratsaunik.tickets.service.impl.EventServiceImpl;
-import epam.pratsaunik.tickets.service.impl.OrderServiceImpl;
 import epam.pratsaunik.tickets.servlet.AttributeName;
 import epam.pratsaunik.tickets.servlet.ParameterName;
-import epam.pratsaunik.tickets.util.ConfigurationManager;
 import epam.pratsaunik.tickets.util.ConfigurationManager2;
 import epam.pratsaunik.tickets.validator.Validator;
 import org.apache.logging.log4j.LogManager;
@@ -21,7 +19,8 @@ import org.apache.logging.log4j.Logger;
 import java.util.ArrayList;
 import java.util.List;
 /**
- * Class{@code AddVenueCommand} is used to create and save new venue in data base
+ * Class{@code OrderLineCommand} is used to create new order line for shopping cart
+ * and save it in session
  * @version 1.0
  * @see AbstractCommand
  */

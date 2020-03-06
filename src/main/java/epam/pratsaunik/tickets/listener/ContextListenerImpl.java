@@ -18,7 +18,7 @@ public class ContextListenerImpl implements ServletContextListener {
             ConnectionPoll.getInstance().destroyPoll();
             log.debug("CP destroyed");
         } catch (ConnectionException e) {
-            log.debug("CP destruction failed"+e);
+            log.debug("CP destruction failed",e);
     }
     }
 }

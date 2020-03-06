@@ -4,33 +4,29 @@ package epam.pratsaunik.tickets.command.impl;
 import epam.pratsaunik.tickets.command.AbstractCommand;
 import epam.pratsaunik.tickets.command.CommandResult;
 import epam.pratsaunik.tickets.command.RequestContent;
-import epam.pratsaunik.tickets.dao.ColumnName;
 import epam.pratsaunik.tickets.email.EmailSender;
-import epam.pratsaunik.tickets.exception.CommandException;
-import epam.pratsaunik.tickets.hash.PasswordHash;
-import epam.pratsaunik.tickets.servlet.ParameterName;
-import epam.pratsaunik.tickets.util.*;
 import epam.pratsaunik.tickets.entity.Role;
 import epam.pratsaunik.tickets.entity.User;
+import epam.pratsaunik.tickets.exception.CommandException;
 import epam.pratsaunik.tickets.exception.ServiceLevelException;
 import epam.pratsaunik.tickets.service.Service;
 import epam.pratsaunik.tickets.service.impl.UserServiceImpl;
 import epam.pratsaunik.tickets.servlet.AttributeName;
+import epam.pratsaunik.tickets.servlet.ParameterName;
+import epam.pratsaunik.tickets.util.ConfigurationManager2;
+import epam.pratsaunik.tickets.util.InputKeeper;
+import epam.pratsaunik.tickets.util.MessageManager;
+import epam.pratsaunik.tickets.util.MessageType;
 import epam.pratsaunik.tickets.validator.Validator;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import javax.mail.*;
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeMessage;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.util.Date;
 import java.util.List;
 import java.util.Locale;
-import java.util.Properties;
+
 /**
- * Class{@code AddVenueCommand} is used to create and save new venue in data base
+ * Class{@code RegisterCommand} is used to create and save new user in data base
+ *
  * @version 1.0
  * @see AbstractCommand
  */
@@ -40,8 +36,8 @@ public class RegisterCommand extends AbstractCommand {
     public RegisterCommand(Service service) {
         super(service);
     }
+
     /**
-     *
      * @param content{@code RequestContent} instance to provide request parameters ans session attributes access
      * @return {@code CommandResult} instance with information about response type and further destination page
      * @throws CommandException custom exception to be thrown in case of exception on service level
@@ -64,7 +60,7 @@ public class RegisterCommand extends AbstractCommand {
         } catch (ServiceLevelException e) {
             throw new CommandException(e);
         }
-        if (!users.isEmpty()){
+        if (!users.isEmpty()) {
             commandResult.setResponsePage(ConfigurationManager2.REGISTRATION_PAGE_PATH.getProperty());
             commandResult.setResponseType(CommandResult.ResponseType.FORWARD);
             content.setRequestAttribute(AttributeName.ERROR_USER_LOGIN_MESSAGE, MessageManager.INSTANCE.getProperty(MessageType.USER_EXISTS));

@@ -9,8 +9,6 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 </head>
     <body>
-<jsp:useBean id="ob" class="java.lang.String"/>
-${ob.tostring}
     <img src="${pageContext.request.contextPath}/img/login.jpg" class="rounded mx-auto d-block" alt="...">
     <hr>
     <div class="mx-auto" style="width: 200px;">

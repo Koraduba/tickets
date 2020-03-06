@@ -17,7 +17,8 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 /**
- * Class{@code AddVenueCommand} is used to create and save new venue in data base
+ * Class{@code OrdersAboveThreshold} is used to provide data of orders
+ *  above given threshold
  * @version 1.0
  * @see AbstractCommand
  */

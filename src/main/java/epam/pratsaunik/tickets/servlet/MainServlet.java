@@ -42,6 +42,8 @@ public class MainServlet extends HttpServlet {
         content.extractValues(request);
         String commandName = request.getParameter(ParameterName.COMMAND);
         log.debug("Command came to mainservlet: " + commandName);
+        log.debug(request.getCharacterEncoding());
+        log.debug(request.getParameter("name"));
         AbstractCommand commandAction = CommandFactory.instance.getCommand(commandName);
         if (commandAction != null) {
             CommandResult commandResult = null;

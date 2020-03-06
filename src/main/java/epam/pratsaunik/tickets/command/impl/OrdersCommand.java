@@ -10,6 +10,7 @@ import epam.pratsaunik.tickets.exception.CommandException;
 import epam.pratsaunik.tickets.exception.ServiceLevelException;
 import epam.pratsaunik.tickets.service.Service;
 import epam.pratsaunik.tickets.service.impl.OrderServiceImpl;
+import epam.pratsaunik.tickets.servlet.AttributeName;
 import epam.pratsaunik.tickets.util.ConfigurationManager;
 import epam.pratsaunik.tickets.util.ConfigurationManager2;
 import org.apache.logging.log4j.LogManager;
@@ -19,7 +20,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 /**
- * Class{@code AddVenueCommand} is used to create and save new venue in data base
+ * Class{@code OrdersCommand} is used to provide paginated data of orders present in data base
  * @version 1.0
  * @see AbstractCommand
  */
@@ -39,7 +40,7 @@ public class OrdersCommand extends AbstractCommand {
     @Override
     public CommandResult execute(RequestContent content) throws CommandException {
         CommandResult commandResult = new CommandResult();
-        User user = (User) content.getSessionAttribute("user");
+        User user = (User) content.getSessionAttribute(AttributeName.USER);
         log.debug("CommandResult. user: " +user);
         List<Order> orderList = null;
         List<BigDecimal> orderSumList = null;
@@ -57,8 +58,8 @@ public class OrdersCommand extends AbstractCommand {
         } catch (ServiceLevelException e) {
             throw new CommandException(e);
         }
-        content.setRequestAttribute("orders", orderList);
-        content.setRequestAttribute("sums", orderSumList);
+        content.setRequestAttribute(AttributeName.ORDER_LIST, orderList);
+        content.setRequestAttribute(AttributeName.ORDER_SUMS, orderSumList);
         commandResult.setResponsePage(ConfigurationManager2.ORDERS_PAGE_PATH.getProperty());
         commandResult.setResponseType(CommandResult.ResponseType.FORWARD);
         return commandResult;

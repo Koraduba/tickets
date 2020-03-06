@@ -26,6 +26,8 @@ public class AttributeName {
     public final static String VENUE_IMAGE = "venue_path";
     public final static String VENUE_NAME = "name";
     public final static String VENUE_CAPACITY = "capacity";
+    public final static String ORDER_LIST="orders";
+    public final static String ORDER_SUMS="sums";
 
 
 
@@ -56,4 +58,6 @@ public class AttributeName {
     public final static String REDIRECT_PAGE = "page";
     public final static String EVENT = "event";
     public static final String SHOPPING_CART = "cart" ;
+    public static final String NUMBER_OF_PAGES="nOfPages";
+    public static final String CURRENT_PAGE="currentPage";
 }

@@ -8,19 +8,18 @@ import epam.pratsaunik.tickets.service.Service;
 import epam.pratsaunik.tickets.util.ConfigurationManager2;
 import epam.pratsaunik.tickets.util.MessageManager;
 /**
- * Class{@code AddVenueCommand} is used to create and save new venue in data base
+ * Class{@code NewPasswordPageCommand} is used to forward to change password page
  * @version 1.0
  * @see AbstractCommand
  */
-public class ChangePasswordCommand extends AbstractCommand {
-    public ChangePasswordCommand(Service service) {
+public class NewPasswordPageCommand extends AbstractCommand {
+    public NewPasswordPageCommand(Service service) {
         super(service);
     }
     /**
      *
      * @param content{@code RequestContent} instance to provide request parameters ans session attributes access
      * @return {@code CommandResult} instance with information about response type and further destination page
-     * @throws CommandException custom exception to be thrown in case of exception on service level
      * @see RequestContent
      * @see CommandResult
      */

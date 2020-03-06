@@ -36,7 +36,7 @@ public class AuthorizationFilter implements Filter {
 
         USER_AVAILABLE.add(CommandType.CART);
         USER_AVAILABLE.add(CommandType.CATALOG);
-        USER_AVAILABLE.add(CommandType.CHANGE_PASSWORD);
+        USER_AVAILABLE.add(CommandType.NEW_PASSWORD_PAGE);
         USER_AVAILABLE.add(CommandType.EVENT);
         USER_AVAILABLE.add(CommandType.HOME);
         USER_AVAILABLE.add(CommandType.LOGOUT);
@@ -51,7 +51,7 @@ public class AuthorizationFilter implements Filter {
         HOST_AVAILABLE.add(CommandType.NEW_EVENT_PAGE);
         HOST_AVAILABLE.add(CommandType.ADD_VENUE);
         HOST_AVAILABLE.add(CommandType.CATALOG);
-        HOST_AVAILABLE.add(CommandType.CHANGE_PASSWORD);
+        HOST_AVAILABLE.add(CommandType.NEW_PASSWORD_PAGE);
         HOST_AVAILABLE.add(CommandType.EDIT_EVENT_PAGE);
         HOST_AVAILABLE.add(CommandType.EDIT_EVENT);
         HOST_AVAILABLE.add(CommandType.EVENT);

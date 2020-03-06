@@ -21,7 +21,9 @@ public enum ConfigurationManager2 {
     STATISTIC_PAGE_PATH("statistic.page.path"),
     CHANGE_PASSWORD_PAGE_PATH("changepassword.page.path"),
     EDIT_EVENT_PAGE_PATH("editevent.page.path"),
-    MY_EVENTS_PAGE_PATH("myevents.page.path");
+    MY_EVENTS_PAGE_PATH("myevents.page.path"),
+    DATABASE_URL ("database.url"),
+    DATABASE_DRIVER_NAME ("database.driver.name");
 
     private String key;
     private ResourceBundle resourceBundle;

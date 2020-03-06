@@ -1,12 +1,18 @@
 package epam.pratsaunik.tickets.connection;
 
 import epam.pratsaunik.tickets.exception.ConnectionException;
+import epam.pratsaunik.tickets.util.ConfigurationManager;
+import epam.pratsaunik.tickets.util.ConfigurationManager2;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.Properties;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingDeque;
 import java.util.concurrent.TimeUnit;
@@ -29,7 +35,7 @@ public class ConnectionPoll {
 
     private ConnectionPoll() {
         try {
-            Class.forName(DbConfigurationManager.getInstance().getProperty(DATABASE_DRIVER_NAME));
+            Class.forName(ConfigurationManager2.DATABASE_DRIVER_NAME.getProperty());
         } catch (ClassNotFoundException e) {
             throw new RuntimeException("Database driver cannot be found",e);
         }
@@ -51,14 +57,25 @@ public class ConnectionPoll {
     }
 
     private ProxyConnection getConnection() throws ConnectionException {
+
+        InputStream inputStream = getClass().getClassLoader().getResourceAsStream("database.properties");
+        Properties properties = new Properties();
+        try {
+            properties.load(inputStream);
+        } catch (IOException e) {
+            log.error(e);
+        }
         Connection connection;
         try {
-            connection = DriverManager.getConnection(DbConfigurationManager.getInstance().getProperty(DATABASE_URL),
-                    DbConfigurationManager.getInstance().getProperty(DATABASE_USERNAME),
-                    DbConfigurationManager.getInstance().getProperty(DATABASE_PWD));
+            connection = DriverManager.getConnection(ConfigurationManager2.DATABASE_URL.getProperty(),properties);
+            Statement statement = connection.createStatement();
+            statement.executeQuery("SET NAMES UTF8");
+            statement.close();
         } catch (SQLException e) {
             throw new ConnectionException(e);
         }
+
+
         log.debug("CONNECTION POLL:"+connection);
         return new ProxyConnection(connection);
     }

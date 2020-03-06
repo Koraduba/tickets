@@ -15,14 +15,14 @@ import epam.pratsaunik.tickets.util.MessageManager;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 /**
- * Class{@code AddVenueCommand} is used to create and save new venue in data base
+ * Class{@code NewPasswordCommand} is used to change user password
  * @version 1.0
  * @see AbstractCommand
  */
-public class PasswordChangedCommand extends AbstractCommand {
+public class NewPasswordCommand extends AbstractCommand {
     private static final Logger log = LogManager.getLogger();
 
-    public PasswordChangedCommand(Service service) {
+    public NewPasswordCommand(Service service) {
         super(service);
     }
     /**
@@ -60,7 +60,6 @@ public class PasswordChangedCommand extends AbstractCommand {
             commandResult.setResponseType(CommandResult.ResponseType.FORWARD);
             return commandResult;
         }
-
 
         content.setSessionAttribute("HomeMessage", MessageManager.INSTANCE.getProperty("message.passwordchanged"));
         commandResult.setResponsePage(ConfigurationManager2.HOME_PAGE_PATH.getProperty());

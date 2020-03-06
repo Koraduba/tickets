@@ -21,16 +21,16 @@ public class Validator {
     private final static Logger log = LogManager.getLogger();
     private final static String LOGIN_REGEX = "^[a-zA-Z][a-zA-Z0-9-_\\.]{1,20}$";
     private final static String EMAIL_REGEX = "^[-\\w.]+@([A-z0-9][-A-z0-9]+\\.)+[A-z]{2,4}$";
-    private final static String NAME_REGEX = "^[a-zA-Z][a-z]{1,20}$";
+    private final static String NAME_REGEX = "^[a-zA-Zа-яА-Я][a-zа-я]{1,20}$";
     private final static String SURNAME_REGEX = "^[a-zA-Z][a-z]{1,20}$";
     private final static String PASSWORD_REGEX = "^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?!.*\\s).*$";
-    private final static String EVENT_NAME_REGEX = "^[a-zA-Z][a-z]{1,20}$";
-    private final static String EVENT_DESCRIPTION_REGEX = "^\\w{1,120}$";
+    private final static String EVENT_NAME_REGEX = "^[a-zA-Zа-яА-Я][a-zа-я]{1,20}$";
+    private final static String EVENT_DESCRIPTION_REGEX = "^[a-zA-Zа-яА-Я][a-zа-я]{1,120}$";
     private final static String EVENT_DATE_REGEX = "^(19|20)\\d\\d-((0[1-9]|1[012])-(0[1-9]|[12]\\d)|(0[13-9]|1[012])-30|(0[13578]|1[02])-31)$";
     private final static String EVENT_TIME_REGEX = "^([0-1]\\d|2[0-3])(:[0-5]\\d)$";
     private final static String TICKET_PRICE_REGEX = "^\\d{1,4}$";
     private final static String ORDER_LINE_QUANTITY_REGEX = "^\\d{1,3}$";
-    private final static String VENUE_NAME_REGEX = "^[a-zA-Z][a-z]{1,20}$";
+    private final static String VENUE_NAME_REGEX = "^[a-zA-Zа-яА-Я][a-zа-я]{1,20}$";
     private final static String VENUE_CAPACITY_REGEX = "^\\d{1,4}$";
 
 
@@ -104,6 +104,7 @@ public class Validator {
         Pattern pattern = Pattern.compile(EVENT_NAME_REGEX);
         Matcher matcher = pattern.matcher(content.getRequestParameter(ParameterName.EVENT_NAME));
         if (!matcher.matches()) {
+            log.info(content.getRequestParameter(ParameterName.EVENT_NAME));
             content.setRequestAttribute(AttributeName.ERROR_EVENT_NAME_MESSSAGE, MessageManager.INSTANCE.getProperty(MessageType.INPUT_ERROR));
             result = false;
         }

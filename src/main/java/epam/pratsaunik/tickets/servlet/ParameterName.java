@@ -24,6 +24,7 @@ public class ParameterName {
     public final static String VENUE_CAPACITY="capacity";
     public final static String IMAGE_ENTITY="entity";
     public final static String MODE="mode";
+    public final static String CURRENT_PAGE="currentPage";
 
 
 

@@ -59,10 +59,14 @@ public class EventServiceImpl implements Service, EventService {
     public Venue findVenueByName(String name) throws ServiceLevelException {
         EventDao eventDao = new EventDaoImpl();
         Venue venue = null;
+        List<Venue>venues;
         EntityTransaction entityTransaction = new EntityTransaction();
         try {
             entityTransaction.begin(eventDao);
-            venue = eventDao.findVenueByName(name).get(0);
+            venues = eventDao.findVenueByName(name);
+            if (!venues.isEmpty()){
+                venue=venues.get(0);
+            }
             entityTransaction.commit();
         } catch (DaoException e) {
             entityTransaction.rollback();
@@ -70,7 +74,6 @@ public class EventServiceImpl implements Service, EventService {
         } finally {
             entityTransaction.end();
         }
-        log.debug("venue"+venue.getName());
         return venue;
     }
 
@@ -316,15 +319,19 @@ public class EventServiceImpl implements Service, EventService {
     }
 
     public Event findEventByName(String name) throws ServiceLevelException {
-        Event event;
+        List<Event>events;
+        Event event=null;
         EventDao eventDao = new EventDaoImpl();
         UserDaoImpl userDao = new UserDaoImpl();
         EntityTransaction entityTransaction = new EntityTransaction();
         entityTransaction.begin(eventDao,userDao);
         try {
-            event = (Event) eventDao.findEventByName(name).get(0);
-            User owner= userDao.findById(event.getOwner().getUserId()).get(0);
-            event.setOwner(owner);
+            events = eventDao.findEventByName(name);
+            if (!events.isEmpty()){
+                event=events.get(0);
+                User owner= userDao.findById(event.getOwner().getUserId()).get(0);
+                event.setOwner(owner);
+            }
             entityTransaction.commit();
         } catch (DaoException e) {
             entityTransaction.rollback();
