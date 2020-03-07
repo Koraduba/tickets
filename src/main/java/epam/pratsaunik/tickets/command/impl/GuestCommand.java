@@ -12,9 +12,9 @@ import epam.pratsaunik.tickets.util.ConfigurationManager2;
 import epam.pratsaunik.tickets.util.LocaleName;
 import epam.pratsaunik.tickets.util.MessageManager;
 
-import java.util.Locale;
 /**
- * Class{@code AddVenueCommand} is used to create and save new venue in data base
+ * Class{@code GuestCommand} to enter as a guest
+ *
  * @version 1.0
  * @see AbstractCommand
  */
@@ -22,8 +22,8 @@ public class GuestCommand extends AbstractCommand {
     public GuestCommand(Service service) {
         super(service);
     }
+
     /**
-     *
      * @param content{@code RequestContent} instance to provide request parameters ans session attributes access
      * @return {@code CommandResult} instance with information about response type and further destination page
      * @throws CommandException custom exception to be thrown in case of exception on service level
@@ -36,10 +36,10 @@ public class GuestCommand extends AbstractCommand {
         User user = new User();
         user.setRole(Role.GUEST);
         user.setName(Role.GUEST.toString());
-        content.setSessionAttribute(AttributeName.USER_ROLE,Role.GUEST.toString());
+        content.setSessionAttribute(AttributeName.USER_ROLE, Role.GUEST.toString());
         MessageManager.INSTANCE.changeResource(LocaleName.LOCALE_EN);
         content.setSessionAttribute(AttributeName.LOCALE, LocaleName.LOCALE_EN);
-        content.setSessionAttribute(AttributeName.USER,user);
+        content.setSessionAttribute(AttributeName.USER, user);
         commandResult.setResponsePage(ConfigurationManager2.HOME_PAGE_PATH.getProperty());
         commandResult.setResponseType(CommandResult.ResponseType.FORWARD);
         return commandResult;

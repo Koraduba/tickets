@@ -6,7 +6,6 @@ import epam.pratsaunik.tickets.command.RequestContent;
 import epam.pratsaunik.tickets.entity.Event;
 import epam.pratsaunik.tickets.entity.Ticket;
 import epam.pratsaunik.tickets.entity.TicketCat;
-import epam.pratsaunik.tickets.entity.User;
 import epam.pratsaunik.tickets.exception.CommandException;
 import epam.pratsaunik.tickets.exception.ServiceLevelException;
 import epam.pratsaunik.tickets.service.Service;
@@ -22,21 +21,21 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.math.BigDecimal;
-import java.util.Date;
 import java.util.List;
+
 /**
- * Class{@code AddVenueCommand} is used to create and save new venue in data base
- * @version 1.0
+ * Class{@code EditEventCommand} is used to implement changes in Event
+ *
  * @see AbstractCommand
  */
 public class EditEventCommand extends AbstractCommand {
-    private final Logger log =LogManager.getLogger();
+    private final Logger log = LogManager.getLogger();
 
     public EditEventCommand(Service service) {
         super(service);
     }
+
     /**
-     *
      * @param content{@code RequestContent} instance to provide request parameters ans session attributes access
      * @return {@code CommandResult} instance with information about response type and further destination page
      * @throws CommandException custom exception to be thrown in case of exception on service level
@@ -52,10 +51,10 @@ public class EditEventCommand extends AbstractCommand {
             commandResult.setResponseType(CommandResult.ResponseType.FORWARD);
             return commandResult;
         }
-        Event event = (Event)content.getSessionAttribute(AttributeName.EVENT);
-        List<Ticket> ticketList=null;
+        Event event = (Event) content.getSessionAttribute(AttributeName.EVENT);
+        List<Ticket> ticketList = null;
         try {
-            ticketList = ((EventServiceImpl)service).findTicketsByEvent(event);
+            ticketList = ((EventServiceImpl) service).findTicketsByEvent(event);
         } catch (ServiceLevelException e) {
             e.printStackTrace();
         }
@@ -63,33 +62,33 @@ public class EditEventCommand extends AbstractCommand {
         event.setDate(content.getRequestParameter(ParameterName.EVENT_DATE));
         event.setTime(content.getRequestParameter(ParameterName.EVENT_TIME));
         event.setDescription(content.getRequestParameter(ParameterName.EVENT_DESCRIPTION));
-        String path=(String)content.getSessionAttribute(AttributeName.EVENT_IMAGE);
+        String path = (String) content.getSessionAttribute(AttributeName.EVENT_IMAGE);
         event.setImage(path);
         String venue = content.getRequestParameter(ParameterName.EVENT_VENUE);
         try {
-            if (venue!=null && !venue.isEmpty()) {
+            if (venue != null && !venue.isEmpty()) {
                 event.setVenue(((EventServiceImpl) service).findVenueByName(venue));
             }
             ((EventServiceImpl) service).update(event);
             if (ticketList != null) {
                 for (Ticket ticket : ticketList) {
-                    if(ticket.getCategory()==TicketCat.STANDARD){
+                    if (ticket.getCategory() == TicketCat.STANDARD) {
                         ticket.setPrice(new BigDecimal(content.getRequestParameter(ParameterName.TICKET_PRICE_STANDARD)));
                     }
-                    if(ticket.getCategory()==TicketCat.VIP){
+                    if (ticket.getCategory() == TicketCat.VIP) {
                         ticket.setPrice(new BigDecimal(content.getRequestParameter(ParameterName.TICKET_PRICE_VIP)));
                     }
-                    ((EventServiceImpl)service).updateTicket(ticket);
+                    ((EventServiceImpl) service).updateTicket(ticket);
                 }
             }
 
             InputKeeper.getInstance().clearEvent(content);
-            content.setSessionAttribute(AttributeName.HOME_MESSAGE,MessageManager.INSTANCE.getProperty(MessageType.EVENT_EDITED));
+            content.setSessionAttribute(AttributeName.HOME_MESSAGE, MessageManager.INSTANCE.getProperty(MessageType.EVENT_EDITED));
             commandResult.setResponsePage(ConfigurationManager2.HOME_PAGE_PATH.getProperty());
             commandResult.setResponseType(CommandResult.ResponseType.REDIRECT);
             InputKeeper.getInstance().clearEvent(content);
         } catch (ServiceLevelException e) {
-            throw new CommandException("EditEventCommand",e);
+            throw new CommandException("EditEventCommand", e);
         }
         return commandResult;
     }

@@ -15,11 +15,11 @@ import epam.pratsaunik.tickets.util.ConfigurationManager2;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Class{@code AddVenueCommand} is used to create and save new venue in data base
+ * Class{@code EditEventPageCommand} to forward to EditEventPage with providing of deeded data
+ *
  * @version 1.0
  * @see AbstractCommand
  */
@@ -29,8 +29,8 @@ public class EditEventPageCommand extends AbstractCommand {
     public EditEventPageCommand(Service service) {
         super(service);
     }
+
     /**
-     *
      * @param content{@code RequestContent} instance to provide request parameters ans session attributes access
      * @return {@code CommandResult} instance with information about response type and further destination page
      * @throws CommandException custom exception to be thrown in case of exception on service level
@@ -48,15 +48,15 @@ public class EditEventPageCommand extends AbstractCommand {
             content.setSessionAttribute(AttributeName.VENUE_LIST, venueList);
             if (content.getSessionAttribute(AttributeName.EVENT) == null) {
                 event = ((EventServiceImpl) service).findEventById(Long.parseLong(content.getRequestParameter("eventId")));
-                ticketList=((EventServiceImpl) service).findTicketsByEvent(event);
+                ticketList = ((EventServiceImpl) service).findTicketsByEvent(event);
                 content.setSessionAttribute(AttributeName.EVENT, event);
-                content.setSessionAttribute(AttributeName.TICKET_LIST,ticketList);
-                content.setSessionAttribute(AttributeName.EVENT_NAME,event.getName());
-                content.setSessionAttribute(AttributeName.EVENT_DATE,event.getDate());
-                content.setSessionAttribute(AttributeName.EVENT_TIME,event.getTime());
-                content.setSessionAttribute(AttributeName.EVENT_DESCRIPTION,event.getDescription());
-                content.setSessionAttribute(AttributeName.EVENT_NAME,event.getName());
-                content.setSessionAttribute(AttributeName.EVENT_VENUE,event.getVenue());
+                content.setSessionAttribute(AttributeName.TICKET_LIST, ticketList);
+                content.setSessionAttribute(AttributeName.EVENT_NAME, event.getName());
+                content.setSessionAttribute(AttributeName.EVENT_DATE, event.getDate());
+                content.setSessionAttribute(AttributeName.EVENT_TIME, event.getTime());
+                content.setSessionAttribute(AttributeName.EVENT_DESCRIPTION, event.getDescription());
+                content.setSessionAttribute(AttributeName.EVENT_NAME, event.getName());
+                content.setSessionAttribute(AttributeName.EVENT_VENUE, event.getVenue());
             }
             if (content.getSessionAttribute(AttributeName.EVENT_IMAGE) == null) {
                 content.setSessionAttribute(AttributeName.EVENT_IMAGE, event.getImage());

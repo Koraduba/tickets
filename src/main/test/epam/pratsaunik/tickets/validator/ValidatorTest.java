@@ -1,18 +1,14 @@
 package epam.pratsaunik.tickets.validator;
 
 import epam.pratsaunik.tickets.command.RequestContent;
-import epam.pratsaunik.tickets.entity.Event;
-import epam.pratsaunik.tickets.entity.User;
-import epam.pratsaunik.tickets.hash.PasswordHash;
 import epam.pratsaunik.tickets.servlet.ParameterName;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.Parameterized;
 import org.mockito.Mockito;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 public class ValidatorTest {
     private static RequestContent content;

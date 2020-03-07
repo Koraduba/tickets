@@ -15,18 +15,21 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.util.List;
+
 /**
  * Class{@code UsersCommand} is used to provide paginated data of users present in data base
+ *
  * @version 1.0
  * @see AbstractCommand
  */
 public class UsersCommand extends AbstractCommand {
-    private final static int RECORDS_PER_PAGE=3;
+    private final static int RECORDS_PER_PAGE = 3;
     private final static Logger log = LogManager.getLogger();
 
-    public UsersCommand (Service service){
+    public UsersCommand(Service service) {
         super(service);
     }
+
     /**
      * @param content{@code RequestContent} instance to provide request parameters ans session attributes access
      * @return {@code CommandResult} instance with information about response type and further destination page
@@ -36,19 +39,19 @@ public class UsersCommand extends AbstractCommand {
      */
     @Override
     public CommandResult execute(RequestContent content) throws CommandException {
-        CommandResult commandResult=new CommandResult();
+        CommandResult commandResult = new CommandResult();
         List<User> list = null;
         try {
-            int nOfRecords = ((UserServiceImpl)service).getNumberOfRecords();
+            int nOfRecords = ((UserServiceImpl) service).getNumberOfRecords();
             int nOfPages = nOfRecords / RECORDS_PER_PAGE;
             if (nOfRecords % RECORDS_PER_PAGE > 0) {
                 nOfPages++;
             }
-            int currentPage=Integer.parseInt(content.getRequestParameter(ParameterName.CURRENT_PAGE));
-            list = ((UserServiceImpl)service).findRange(currentPage, RECORDS_PER_PAGE);
-            log.debug("Current page:"+currentPage+" nOfPages:"+nOfPages+" Size of list"+list.size());
-            content.setSessionAttribute(AttributeName.NUMBER_OF_PAGES,nOfPages);
-            content.setSessionAttribute(AttributeName.CURRENT_PAGE,currentPage);
+            int currentPage = Integer.parseInt(content.getRequestParameter(ParameterName.CURRENT_PAGE));
+            list = ((UserServiceImpl) service).findRange(currentPage, RECORDS_PER_PAGE);
+            log.debug("Current page:" + currentPage + " nOfPages:" + nOfPages + " Size of list" + list.size());
+            content.setSessionAttribute(AttributeName.NUMBER_OF_PAGES, nOfPages);
+            content.setSessionAttribute(AttributeName.CURRENT_PAGE, currentPage);
             content.setSessionAttribute(AttributeName.USERS, list);
         } catch (ServiceLevelException e) {
             throw new CommandException(e);

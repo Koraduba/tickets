@@ -10,6 +10,9 @@ import java.io.InputStream;
 import java.math.BigDecimal;
 import java.util.List;
 
+/**
+ * to keep data in form from initial input to no enter again in case of form resubmit.
+ */
 public class InputKeeper {
 
     private static InputKeeper instance;
@@ -17,6 +20,10 @@ public class InputKeeper {
     private InputKeeper() {
     }
 
+    /**
+     * Singleton
+     * @return instance of InputKeeper
+     */
     public static InputKeeper getInstance() {
         if (instance == null) {
             instance = new InputKeeper();
@@ -24,6 +31,10 @@ public class InputKeeper {
         return instance;
     }
 
+    /**
+     * to keep user data by putting them in request attributes
+     * @param content instance to provide request parameters ans session attributes
+     */
     public void keepUser(RequestContent content) {
         content.setRequestAttribute(AttributeName.USER_EMAIL, content.getRequestParameter(ParameterName.USER_EMAIL));
         content.setRequestAttribute(AttributeName.USER_SURNAME, content.getRequestParameter(ParameterName.USER_SURNAME));
@@ -31,6 +42,10 @@ public class InputKeeper {
         content.setRequestAttribute(AttributeName.USER_LOGIN, content.getRequestParameter(ParameterName.USER_LOGIN));
     }
 
+    /**
+     * to keep event data by putting them in request attributes
+     * @param content instance to provide request parameters ans session attributes
+     */
     public void keepEvent(RequestContent content) {
         content.setSessionAttribute(AttributeName.EVENT_NAME, content.getRequestParameter(ParameterName.EVENT_NAME));
         content.setSessionAttribute(AttributeName.EVENT_DATE, content.getRequestParameter(ParameterName.EVENT_DATE));
@@ -52,6 +67,10 @@ public class InputKeeper {
 
     }
 
+    /**
+     * to clear event data by setting {@code null} to attributes
+     * @param content instance to provide request parameters ans session attributes
+     */
     public void clearEvent(RequestContent content) {
         content.setSessionAttribute(AttributeName.EVENT, null);
         content.setSessionAttribute(AttributeName.EVENT_NAME, null);
@@ -67,6 +86,10 @@ public class InputKeeper {
     }
 
 
+    /**
+     * to keep venue data by putting them in request attributes
+     * @param content instance to provide request parameters ans session attributes
+     */
     public void keepVenue(RequestContent content) {
         content.setRequestAttribute(AttributeName.VENUE_NAME, content.getRequestParameter(ParameterName.VENUE_NAME));
         content.setRequestAttribute(AttributeName.VENUE_CAPACITY, content.getRequestParameter(ParameterName.VENUE_CAPACITY));

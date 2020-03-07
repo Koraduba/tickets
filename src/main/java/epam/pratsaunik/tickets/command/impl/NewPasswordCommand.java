@@ -7,15 +7,16 @@ import epam.pratsaunik.tickets.email.EmailSender;
 import epam.pratsaunik.tickets.entity.User;
 import epam.pratsaunik.tickets.exception.CommandException;
 import epam.pratsaunik.tickets.exception.ServiceLevelException;
-import epam.pratsaunik.tickets.hash.PasswordHash;
 import epam.pratsaunik.tickets.service.Service;
 import epam.pratsaunik.tickets.service.impl.UserServiceImpl;
 import epam.pratsaunik.tickets.util.ConfigurationManager2;
 import epam.pratsaunik.tickets.util.MessageManager;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
 /**
  * Class{@code NewPasswordCommand} is used to change user password
+ *
  * @version 1.0
  * @see AbstractCommand
  */
@@ -25,8 +26,8 @@ public class NewPasswordCommand extends AbstractCommand {
     public NewPasswordCommand(Service service) {
         super(service);
     }
+
     /**
-     *
      * @param content{@code RequestContent} instance to provide request parameters ans session attributes access
      * @return {@code CommandResult} instance with information about response type and further destination page
      * @throws CommandException custom exception to be thrown in case of exception on service level
@@ -41,15 +42,15 @@ public class NewPasswordCommand extends AbstractCommand {
         String oldPassword = content.getRequestParameter("oldPassword");
         String newPassword = content.getRequestParameter("newPassword");
         String login = user.getLogin();
-        boolean hasAccess = userService.checkUser(login,oldPassword, user);
+        boolean hasAccess = userService.checkUser(login, oldPassword, user);
         log.debug(hasAccess);
         if (hasAccess) {
             try {
                 user.setPassword(newPassword);
-                boolean result=userService.update(user);
-                if(result){
+                boolean result = userService.update(user);
+                if (result) {
                     EmailSender emailSender = new EmailSender();
-                    emailSender.sendConfirmation(user.getEmail(),"password changed","Your password was changed\nNew password is "+newPassword);
+                    emailSender.sendConfirmation(user.getEmail(), "password changed", "Your password was changed\nNew password is " + newPassword);
                 }
             } catch (ServiceLevelException e) {
                 throw new CommandException(e);

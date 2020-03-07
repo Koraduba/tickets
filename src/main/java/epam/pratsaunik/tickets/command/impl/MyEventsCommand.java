@@ -10,13 +10,16 @@ import epam.pratsaunik.tickets.exception.ServiceLevelException;
 import epam.pratsaunik.tickets.service.Service;
 import epam.pratsaunik.tickets.service.impl.EventServiceImpl;
 import epam.pratsaunik.tickets.servlet.AttributeName;
+import epam.pratsaunik.tickets.servlet.ParameterName;
 import epam.pratsaunik.tickets.util.ConfigurationManager2;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.util.List;
+
 /**
- * Class{@code AddVenueCommand} is used to create and save new venue in data base
+ * Class{@code MyEventsCommand} is used to create and save new venue in data base
+ *
  * @version 1.0
  * @see AbstractCommand
  */
@@ -27,8 +30,8 @@ public class MyEventsCommand extends AbstractCommand {
     public MyEventsCommand(Service service) {
         super(service);
     }
+
     /**
-     *
      * @param content{@code RequestContent} instance to provide request parameters ans session attributes access
      * @return {@code CommandResult} instance with information about response type and further destination page
      * @throws CommandException custom exception to be thrown in case of exception on service level
@@ -36,25 +39,24 @@ public class MyEventsCommand extends AbstractCommand {
      * @see CommandResult
      */
     @Override
-    public CommandResult execute(RequestContent content) {
-        CommandResult commandResult=new CommandResult();
+    public CommandResult execute(RequestContent content) throws CommandException {
+        CommandResult commandResult = new CommandResult();
         List<Event> list;
-        User owner = (User)content.getSessionAttribute("user");
+        User owner = (User) content.getSessionAttribute(AttributeName.USER);
         try {
-            int nOfRecords =  ((EventServiceImpl)service).getNumberOfEventsByHost(owner);
+            int nOfRecords = ((EventServiceImpl) service).getNumberOfEventsByHost(owner);
             int nOfPages = nOfRecords / EVENTS_PER_PAGE;
             if (nOfRecords % EVENTS_PER_PAGE > 0) {
                 nOfPages++;
             }
-            int currentPage = Integer.parseInt(content.getRequestParameter("currentPage"));
+            int currentPage = Integer.parseInt(content.getRequestParameter(ParameterName.CURRENT_PAGE));
             list = ((EventServiceImpl) service).findEventsByHost(owner, currentPage, EVENTS_PER_PAGE);
             log.debug(list);
-            log.debug("nOfRecords" + nOfRecords + " nOfPages:" + nOfPages + " Size of list" + list.size());
-            content.setSessionAttribute("nOfPages", nOfPages);
-            content.setSessionAttribute("currentPage", currentPage);
+            content.setSessionAttribute(AttributeName.NUMBER_OF_PAGES, nOfPages);
+            content.setSessionAttribute(AttributeName.CURRENT_PAGE, currentPage);
             content.setSessionAttribute(AttributeName.EVENTS, list);
         } catch (ServiceLevelException e) {
-            e.printStackTrace();
+            throw new CommandException(e);
         }
         commandResult.setResponsePage(ConfigurationManager2.MY_EVENTS_PAGE_PATH.getProperty());
         commandResult.setResponseType(CommandResult.ResponseType.FORWARD);

@@ -18,9 +18,11 @@ import org.apache.logging.log4j.Logger;
 
 import java.util.ArrayList;
 import java.util.List;
+
 /**
  * Class{@code OrderLineCommand} is used to create new order line for shopping cart
  * and save it in session
+ *
  * @version 1.0
  * @see AbstractCommand
  */
@@ -30,8 +32,8 @@ public class OrderLineCommand extends AbstractCommand {
     public OrderLineCommand(Service service) {
         super(service);
     }
+
     /**
-     *
      * @param content{@code RequestContent} instance to provide request parameters ans session attributes access
      * @return {@code CommandResult} instance with information about response type and further destination page
      * @throws CommandException custom exception to be thrown in case of exception on service level

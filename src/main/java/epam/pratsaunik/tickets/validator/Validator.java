@@ -1,11 +1,10 @@
 package epam.pratsaunik.tickets.validator;
 
 import epam.pratsaunik.tickets.command.RequestContent;
-import epam.pratsaunik.tickets.service.Service;
 import epam.pratsaunik.tickets.servlet.AttributeName;
 import epam.pratsaunik.tickets.servlet.ParameterName;
-import epam.pratsaunik.tickets.util.MessageType;
 import epam.pratsaunik.tickets.util.MessageManager;
+import epam.pratsaunik.tickets.util.MessageType;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -25,7 +24,7 @@ public class Validator {
     private final static String SURNAME_REGEX = "^[a-zA-Z][a-z]{1,20}$";
     private final static String PASSWORD_REGEX = "^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?!.*\\s).*$";
     private final static String EVENT_NAME_REGEX = "^[a-zA-Zа-яА-Я][a-zа-я]{1,20}$";
-    private final static String EVENT_DESCRIPTION_REGEX = "^[a-zA-Zа-яА-Я][a-zа-я]{1,120}$";
+    private final static String EVENT_DESCRIPTION_REGEX = ".+";
     private final static String EVENT_DATE_REGEX = "^(19|20)\\d\\d-((0[1-9]|1[012])-(0[1-9]|[12]\\d)|(0[13-9]|1[012])-30|(0[13578]|1[02])-31)$";
     private final static String EVENT_TIME_REGEX = "^([0-1]\\d|2[0-3])(:[0-5]\\d)$";
     private final static String TICKET_PRICE_REGEX = "^\\d{1,4}$";

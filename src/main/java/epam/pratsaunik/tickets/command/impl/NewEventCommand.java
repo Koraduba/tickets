@@ -21,11 +21,11 @@ import epam.pratsaunik.tickets.validator.Validator;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import javax.management.Attribute;
 import java.math.BigDecimal;
-import java.util.Date;
+
 /**
- * Class{@code AddVenueCommand} is used to create and save new venue in data base
+ * Class{@code NewEventCommand} is used to create and save new event
+ *
  * @version 1.0
  * @see AbstractCommand
  */
@@ -36,8 +36,8 @@ public class NewEventCommand extends AbstractCommand {
     public NewEventCommand(Service service) {
         super(service);
     }
+
     /**
-     *
      * @param content{@code RequestContent} instance to provide request parameters ans session attributes access
      * @return {@code CommandResult} instance with information about response type and further destination page
      * @throws CommandException custom exception to be thrown in case of exception on service level
@@ -49,7 +49,6 @@ public class NewEventCommand extends AbstractCommand {
         CommandResult commandResult = new CommandResult();
         InputKeeper.getInstance().keepEvent(content);
         if (!Validator.validateEvent(content)) {
-            InputKeeper.getInstance().keepEvent(content);
             commandResult.setResponsePage(ConfigurationManager2.NEW_EVENT_PAGE_PATH.getProperty());
             commandResult.setResponseType(CommandResult.ResponseType.FORWARD);
             return commandResult;

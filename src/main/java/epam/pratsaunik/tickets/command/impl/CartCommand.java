@@ -5,10 +5,11 @@ import epam.pratsaunik.tickets.command.CommandResult;
 import epam.pratsaunik.tickets.command.RequestContent;
 import epam.pratsaunik.tickets.exception.CommandException;
 import epam.pratsaunik.tickets.service.Service;
-import epam.pratsaunik.tickets.util.ConfigurationManager;
 import epam.pratsaunik.tickets.util.ConfigurationManager2;
+
 /**
  * Class{@code CartCommand} is used to forward request to shopping cart jsp page
+ *
  * @author Dzmitry Mikulich
  * @version 1.0
  * @see AbstractCommand
@@ -19,7 +20,6 @@ public class CartCommand extends AbstractCommand {
     }
 
     /**
-     *
      * @param content{@code RequestContent} instance to provide request parameters ans session attributes access
      * @return {@code CommandResult} instance with information about response type and further destination page
      * @throws CommandException custom exception to be thrown in case of exception on service level
@@ -28,7 +28,7 @@ public class CartCommand extends AbstractCommand {
      */
     @Override
     public CommandResult execute(RequestContent content) throws CommandException {
-        CommandResult commandResult=new CommandResult();
+        CommandResult commandResult = new CommandResult();
         commandResult.setResponsePage(ConfigurationManager2.CART_PAGE_PATH.getProperty());
         commandResult.setResponseType(CommandResult.ResponseType.FORWARD);
         return commandResult;

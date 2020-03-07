@@ -1,7 +1,5 @@
 package epam.pratsaunik.tickets.servlet;
 
-import epam.pratsaunik.tickets.command.CommandType;
-import epam.pratsaunik.tickets.util.ConfigurationManager;
 import epam.pratsaunik.tickets.util.ConfigurationManager2;
 import epam.pratsaunik.tickets.util.MessageManager;
 import epam.pratsaunik.tickets.util.MessageType;
@@ -28,14 +26,17 @@ public class UploadServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
-        switch ((String)req.getSession().getAttribute(AttributeName.MODE)){
-            case NEW_UPLOAD:getServletContext().getRequestDispatcher(ConfigurationManager2.NEW_EVENT_PAGE_PATH.getProperty()).forward(req, resp);
-            break;
-            case EDIT_UPLOAD:getServletContext().getRequestDispatcher(ConfigurationManager2.EDIT_EVENT_PAGE_PATH.getProperty()).forward(req,resp);
-            break;
-            default: throw new ServletException();
+        switch ((String) req.getSession().getAttribute(AttributeName.MODE)) {
+            case NEW_UPLOAD:
+                getServletContext().getRequestDispatcher(ConfigurationManager2.NEW_EVENT_PAGE_PATH.getProperty()).forward(req, resp);
+                break;
+            case EDIT_UPLOAD:
+                getServletContext().getRequestDispatcher(ConfigurationManager2.EDIT_EVENT_PAGE_PATH.getProperty()).forward(req, resp);
+                break;
+            default:
+                throw new ServletException();
         }
-     }
+    }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -53,8 +54,7 @@ public class UploadServlet extends HttpServlet {
                     req.getSession().setAttribute(AttributeName.EVENT_IMAGE, UPLOAD_PATH + File.separator + part.getSubmittedFileName());
                 }
             }
-        } catch (IOException e)
-        {
+        } catch (IOException e) {
             req.setAttribute(AttributeName.ERROR_UPLOAD_MESSAGE, MessageManager.INSTANCE.getProperty(MessageType.NO_CHOSEN_FILE));
             getServletContext().getRequestDispatcher(ConfigurationManager2.UPLOAD_PAGE_PATH.getProperty()).forward(req, resp);
             return;

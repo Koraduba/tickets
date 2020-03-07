@@ -10,15 +10,19 @@ import epam.pratsaunik.tickets.service.Service;
 import epam.pratsaunik.tickets.service.impl.EventServiceImpl;
 import epam.pratsaunik.tickets.servlet.AttributeName;
 import epam.pratsaunik.tickets.servlet.ParameterName;
-import epam.pratsaunik.tickets.util.*;
+import epam.pratsaunik.tickets.util.ConfigurationManager2;
+import epam.pratsaunik.tickets.util.InputKeeper;
+import epam.pratsaunik.tickets.util.MessageManager;
+import epam.pratsaunik.tickets.util.MessageType;
 import epam.pratsaunik.tickets.validator.Validator;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.util.ArrayList;
 import java.util.List;
+
 /**
  * Class{@code AddVenueCommand} is used to create and save new venue in data base
+ *
  * @version 1.0
  * @see AbstractCommand
  */
@@ -32,7 +36,6 @@ public class AddVenueCommand extends AbstractCommand {
     }
 
     /**
-     *
      * @param content{@code RequestContent} instance to provide request parameters ans session attributes access
      * @return {@code CommandResult} instance with information about response type  and further destination page
      * @throws CommandException custom exception to be thrown in case of exception on service level
@@ -62,7 +65,7 @@ public class AddVenueCommand extends AbstractCommand {
             throw new CommandException(e);
         }
         List<Venue> venueList = null;
-        venue=new Venue();
+        venue = new Venue();
         venue.setName(name);
         venue.setCapacity(Integer.parseInt(content.getRequestParameter(ParameterName.VENUE_CAPACITY)));
         try {

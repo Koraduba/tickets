@@ -1,11 +1,11 @@
 package epam.pratsaunik.tickets.filter;
 
-import epam.pratsaunik.tickets.util.ConfigurationManager;
+import epam.pratsaunik.tickets.servlet.AttributeName;
+import epam.pratsaunik.tickets.util.ConfigurationManager2;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import javax.servlet.*;
-import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
@@ -27,7 +27,7 @@ public class CurrentPageFilter implements Filter {
         String url = request.getHeader(REFERER);
         logger.info(url);
         String path = substringPathWithRegex(url);
-        session.setAttribute("current_page", path);
+        session.setAttribute(AttributeName.CURRENT_PAGE, path);
         chain.doFilter(req, resp);
     }
 
@@ -41,7 +41,7 @@ public class CurrentPageFilter implements Filter {
                 path = matcher.group(0);
                 System.out.println(path);
             } else {
-                path =ConfigurationManager.USERS_PAGE_PATH;
+                path = ConfigurationManager2.LOGIN_PAGE_PATH.getProperty();
             }
         }
         return path;

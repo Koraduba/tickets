@@ -1,12 +1,13 @@
 package epam.pratsaunik.tickets.filter;
 
-import epam.pratsaunik.tickets.command.CommandResult;
 import epam.pratsaunik.tickets.command.CommandType;
 import epam.pratsaunik.tickets.entity.Role;
-import epam.pratsaunik.tickets.util.ConfigurationManager;
+import epam.pratsaunik.tickets.servlet.AttributeName;
+import epam.pratsaunik.tickets.servlet.ParameterName;
 import epam.pratsaunik.tickets.util.ConfigurationManager2;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -15,6 +16,9 @@ import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ * filter for authorization of users based on commands available for them
+ */
 public class AuthorizationFilter implements Filter {
 
     private final static Logger log = LogManager.getLogger();
@@ -78,9 +82,6 @@ public class AuthorizationFilter implements Filter {
         ADMIN_AVAILABLE.add(CommandType.STATISTIC);
         ADMIN_AVAILABLE.add(CommandType.USERS);
         ADMIN_AVAILABLE.add(CommandType.CHANGE_LOCALE);
-
-
-
     }
 
     @Override
@@ -89,7 +90,7 @@ public class AuthorizationFilter implements Filter {
         HttpServletRequest req = (HttpServletRequest) request;
         HttpServletResponse res = (HttpServletResponse) response;
         HttpSession session = req.getSession(false);
-        String command = req.getParameter("command");
+        String command = req.getParameter(ParameterName.COMMAND);
         log.debug("command: "+command);
         if (command==null
                 ||command.equalsIgnoreCase(CommandType.LOGIN.toString())
@@ -107,7 +108,7 @@ public class AuthorizationFilter implements Filter {
         } else {
             Role role = null;
             try {
-                role =  Role.valueOf((String)session.getAttribute("role"));
+                role =  Role.valueOf((String)session.getAttribute(AttributeName.USER_ROLE));
             } catch (Exception e) {
                 log.info(e);
             }
@@ -123,7 +124,7 @@ public class AuthorizationFilter implements Filter {
                             chain.doFilter(request, response);
                         } else {
                             log.info("Command is not available for USER!");
-                            session.removeAttribute("user");
+                            session.removeAttribute(AttributeName.USER);
                             try {
                                 log.debug("path"+req.getContextPath());
                                 res.sendRedirect(req.getContextPath() + ConfigurationManager2.LOGIN_PAGE_PATH.getProperty());
@@ -137,7 +138,7 @@ public class AuthorizationFilter implements Filter {
                             chain.doFilter(request, response);
                         } else {
                             log.info("Command is not available for ADMIN!");
-                            session.removeAttribute("user");
+                            session.removeAttribute(AttributeName.USER);
                             res.sendRedirect(req.getContextPath() + LOGIN_PATH);
                         }
                         break;
@@ -146,7 +147,7 @@ public class AuthorizationFilter implements Filter {
                             chain.doFilter(request, response);
                         } else {
                             log.info("Command is not available for HOST!");
-                            session.removeAttribute("user");
+                            session.removeAttribute(AttributeName.USER);
                             res.sendRedirect(req.getContextPath() + LOGIN_PATH);
                         }
                         break;
@@ -155,13 +156,13 @@ public class AuthorizationFilter implements Filter {
                             chain.doFilter(request, response);
                         } else {
                             log.info("Command is not available for GUEST!");
-                            session.removeAttribute("user");
+                            session.removeAttribute(AttributeName.USER);
                             res.sendRedirect(req.getContextPath() + LOGIN_PATH);
                         }
                         break;
                     default:
                         log.info("Role is undefined");
-                        session.removeAttribute("user");
+                        session.removeAttribute(AttributeName.USER);
                         res.sendRedirect(req.getContextPath() + LOGIN_PATH);
                         break;
                 }

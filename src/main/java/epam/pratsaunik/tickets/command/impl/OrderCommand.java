@@ -21,20 +21,23 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+
 /**
- * Class{@code AddVenueCommand} is used to create and save new order in data base
+ * Class{@code OrderCommand} is used to create and save new order in data base
+ *
  * @version 1.0
  * @see AbstractCommand
  */
 public class OrderCommand extends AbstractCommand {
 
     private final static Logger log = LogManager.getLogger();
-    private final String DATA_FORMAT="yyyy-MM-dd HH:mm";
+    private final String DATA_FORMAT = "yyyy-MM-dd HH:mm";
+
     public OrderCommand(Service service) {
         super(service);
     }
+
     /**
-     *
      * @param content{@code RequestContent} instance to provide request parameters ans session attributes access
      * @return {@code CommandResult} instance with information about response type and further destination page
      * @throws CommandException custom exception to be thrown in case of exception on service level
@@ -43,27 +46,27 @@ public class OrderCommand extends AbstractCommand {
      */
     @Override
     public CommandResult execute(RequestContent content) throws CommandException {
-        CommandResult commandResult=new CommandResult();
-        List<OrderLine> orderLines=(List<OrderLine>)content.getSessionAttribute(AttributeName.SHOPPING_CART);
+        CommandResult commandResult = new CommandResult();
+        List<OrderLine> orderLines = (List<OrderLine>) content.getSessionAttribute(AttributeName.SHOPPING_CART);
         Order order = new Order();
-        User user =(User)(content.getSessionAttribute(AttributeName.USER));
+        User user = (User) (content.getSessionAttribute(AttributeName.USER));
         order.setUser(user);
         DateFormat dateFormat = new SimpleDateFormat(DATA_FORMAT);
         Date now = new Date();
-        String date=dateFormat.format(now);
+        String date = dateFormat.format(now);
         order.setDate(date);
         Long orderId;
         try {
-            orderId=((OrderServiceImpl)service).create(order);
+            orderId = ((OrderServiceImpl) service).create(order);
             order.setOrderId(orderId);
             orderLines.forEach(orderLine -> orderLine.setOrder(order));
-            for (OrderLine orderLine:orderLines) {
-                ((OrderServiceImpl)service).createOrderLine(orderLine);
+            for (OrderLine orderLine : orderLines) {
+                ((OrderServiceImpl) service).createOrderLine(orderLine);
             }
         } catch (ServiceLevelException e) {
             throw new CommandException(e);
         }
-        content.setSessionAttribute(AttributeName.HOME_MESSAGE,MessageManager.INSTANCE.getProperty(MessageType.ORDER_PLACED));
+        content.setSessionAttribute(AttributeName.HOME_MESSAGE, MessageManager.INSTANCE.getProperty(MessageType.ORDER_PLACED));
 
         commandResult.setResponsePage(ConfigurationManager2.HOME_PAGE_PATH.getProperty());
         commandResult.setResponseType(CommandResult.ResponseType.FORWARD);

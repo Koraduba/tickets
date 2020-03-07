@@ -1,7 +1,6 @@
 package epam.pratsaunik.tickets.connection;
 
 import epam.pratsaunik.tickets.exception.ConnectionException;
-import epam.pratsaunik.tickets.util.ConfigurationManager;
 import epam.pratsaunik.tickets.util.ConfigurationManager2;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -21,7 +20,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
-import static epam.pratsaunik.tickets.connection.DbConfigurationManager.*;
 
 public class ConnectionPoll {
 
@@ -41,6 +39,10 @@ public class ConnectionPoll {
         }
     }
 
+    /**
+     * Singleton for Connection Pool
+     * @return instance of Connection Pool
+     */
     public static ConnectionPoll getInstance() {
         if (isNotCreated.get()) {
             lock.lock();
@@ -56,6 +58,12 @@ public class ConnectionPoll {
         return instance;
     }
 
+    /**
+     * Inner method of Connection Pool to get connection from data base
+     * @return connection wrapped by ProxyConnection
+     * @throws ConnectionException exception in ConnectionPool
+     * @see ProxyConnection
+     */
     private ProxyConnection getConnection() throws ConnectionException {
 
         InputStream inputStream = getClass().getClassLoader().getResourceAsStream("database.properties");
@@ -74,12 +82,16 @@ public class ConnectionPoll {
         } catch (SQLException e) {
             throw new ConnectionException(e);
         }
-
-
         log.debug("CONNECTION POLL:"+connection);
         return new ProxyConnection(connection);
     }
 
+    /**
+     * public method providing connection from pool ({@code BlockingQueue}
+     * @return connection instance wrapped by ({@code ProxyConnection}
+     * @throws ConnectionException exception in ConnectionPool
+     * @see BlockingQueue
+     */
     public Connection retrieveConnection() throws ConnectionException {
         ProxyConnection connection;
         try {
@@ -93,25 +105,37 @@ public class ConnectionPoll {
                 lock.unlock();
                 connection = availableCon.take();
             }
+            log.info("Connection retrieved " + connection);
         } catch (InterruptedException e) {
             throw new ConnectionException(e);
         }
         return connection;
     }
-
+    /**
+     * public method providing to return connection to pool ({@code BlockingQueue}
+     * @throws ConnectionException exception in ConnectionPool
+     * @see BlockingQueue
+     */
     public void returnConnection(Connection connection) throws ConnectionException {
         if (connection.getClass() == ProxyConnection.class) {
             availableCon.offer((ProxyConnection) connection);
-            consCount.decrementAndGet();
             log.info("Connection returned " + connection);
         } else
             throw new ConnectionException();
     }
 
+    /**
+     * closing of all connections in pool
+     * @throws ConnectionException exception in ConnectionPool
+     */
     public void destroyPoll() throws ConnectionException {
+        log.debug(consCount.get());
+        int num=consCount.get();
         for (int i = 0; i < consCount.get(); i++) {
             try {
-                availableCon.take().reallyClose();
+                ProxyConnection connection= availableCon.take();
+                connection.reallyClose();
+                consCount.decrementAndGet();
             } catch (InterruptedException e) {
                 throw new ConnectionException(e);
             }
