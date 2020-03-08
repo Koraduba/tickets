@@ -31,6 +31,7 @@ public class Validator {
     private final static String ORDER_LINE_QUANTITY_REGEX = "^\\d{1,3}$";
     private final static String VENUE_NAME_REGEX = "^[a-zA-Zа-яА-Я][a-zа-я]{1,20}$";
     private final static String VENUE_CAPACITY_REGEX = "^\\d{1,4}$";
+    private final static String ORDER_AMOUNT_REGEX="^\\d{1,5}$";
 
 
     /**
@@ -182,6 +183,34 @@ public class Validator {
             result = false;
         }
 
+        return result;
+    }
+
+    /**
+     *
+     * @param content {@code RequestContent} instance to provide request parameters ans session attributes
+     * @return {@code true} if quantity input correspond to given regular expression
+     * @see RequestContent
+     */
+    public static boolean validateOrderAmount(RequestContent content) {
+        boolean result = true;
+        Pattern pattern = Pattern.compile(ORDER_AMOUNT_REGEX);
+        Matcher matcher = pattern.matcher(content.getRequestParameter(ParameterName.ORDER_AMOUNT));
+        if (!matcher.matches()) {
+            content.setRequestAttribute(AttributeName.ERROR_ORDER_AMOUNT_MESSAGE, MessageManager.INSTANCE.getProperty(MessageType.INPUT_ERROR));
+            result = false;
+        }
+        return result;
+    }
+
+    public static boolean validatePassword(RequestContent content) {
+        boolean result = true;
+        Pattern pattern = Pattern.compile(PASSWORD_REGEX);
+        Matcher matcher = pattern.matcher(content.getRequestParameter(ParameterName.NEW_PASSWORD));
+        if (!matcher.matches()) {
+            content.setRequestAttribute(AttributeName.ERROR_USER_PASSWORD_MESSAGE, MessageManager.INSTANCE.getProperty(MessageType.INPUT_ERROR));
+            result = false;
+        }
         return result;
     }
 

@@ -26,9 +26,11 @@ public class AttributeName {
     public final static String VENUE_IMAGE = "venue_path";
     public final static String VENUE_NAME = "name";
     public final static String VENUE_CAPACITY = "capacity";
-    public final static String ORDER_LIST="orders";
-    public final static String ORDER_SUMS="sums";
-
+    public final static String ORDER_LIST = "orders";
+    public final static String ORDER_SUMS = "sums";
+    public final static String ORDER = "order";
+    public final static String ORDERLINE_LIST = "orderLines";
+    public final static String COMMAND = "command";
 
 
     public final static String ERROR_EVENT_NAME_MESSSAGE = "errorEventNameMessage";
@@ -43,8 +45,9 @@ public class AttributeName {
     public final static String ERROR_USER_LOGIN_MESSAGE = "errorUserLoginMessage";
     public final static String ERROR_USER_PASSWORD_MESSAGE = "errorUserPasswordMessage";
     public final static String ERROR_ORDER_LINE_QUANTITY_MESSAGE = "errorOrderLineQuantityMessage";
-    public final static String ERROR_VENUE_NAME_MESSAGE="errorVenueNameMessage";
-    public final static String ERROR_VENUE_CAPACITY_MESSAGE="errorVenueCapacityMessage";
+    public final static String ERROR_VENUE_NAME_MESSAGE = "errorVenueNameMessage";
+    public final static String ERROR_VENUE_CAPACITY_MESSAGE = "errorVenueCapacityMessage";
+    public final static String ERROR_ORDER_AMOUNT_MESSAGE = "errorOrderAmountMessage";
 
 
     public final static String ERROR_LOGIN_PASS_MESSAGE = "errorLoginPassMessage";
@@ -57,7 +60,7 @@ public class AttributeName {
     public final static String MODE = "mode";
     public final static String REDIRECT_PAGE = "page";
     public final static String EVENT = "event";
-    public static final String SHOPPING_CART = "cart" ;
-    public static final String NUMBER_OF_PAGES="nOfPages";
-    public static final String CURRENT_PAGE="currentPage";
+    public static final String SHOPPING_CART = "cart";
+    public static final String NUMBER_OF_PAGES = "nOfPages";
+    public static final String CURRENT_PAGE = "currentPage";
 }

@@ -47,14 +47,11 @@ public class MainServlet extends HttpServlet {
         AbstractCommand commandAction = CommandFactory.instance.getCommand(commandName);
         if (commandAction != null) {
             CommandResult commandResult = null;
-            try {
-                commandResult = commandAction.execute(content);
-            } catch (CommandException e) {
-                log.error(e);
-                throw new ServletException(e);
-            }
+
+            commandResult = commandAction.execute(content);
+
             content.insertAttributes(request);
-            log.debug("Main servlet. user: "+request.getSession().getAttribute("user"));
+            log.debug("Main servlet. user: " + request.getSession().getAttribute("user"));
             switch (commandResult.getResponseType()) {
                 case FORWARD:
                     getServletContext().getRequestDispatcher(commandResult.getResponsePage()).forward(request, response);

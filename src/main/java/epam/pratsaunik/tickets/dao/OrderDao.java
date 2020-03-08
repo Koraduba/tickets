@@ -13,6 +13,7 @@ import java.util.List;
 public abstract class OrderDao extends AbstractDAO {
 
     public abstract List<Order> findOrdersByEvent (Event event) throws DaoException;
+    public abstract List<Order> findOrderById (long id) throws DaoException;
     public abstract List<Order> findOrdersAboveAmount (BigDecimal amount) throws DaoException;
     public abstract List<Order> findOrdersBelowAmount (BigDecimal amount) throws DaoException;
     public abstract List<Order> findOrdersByUser (User user) throws DaoException;

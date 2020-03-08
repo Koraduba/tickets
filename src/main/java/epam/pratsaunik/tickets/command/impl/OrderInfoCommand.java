@@ -4,48 +4,39 @@ import epam.pratsaunik.tickets.command.AbstractCommand;
 import epam.pratsaunik.tickets.command.CommandResult;
 import epam.pratsaunik.tickets.command.CommandType;
 import epam.pratsaunik.tickets.command.RequestContent;
-import epam.pratsaunik.tickets.entity.Venue;
+import epam.pratsaunik.tickets.entity.Order;
+import epam.pratsaunik.tickets.entity.OrderLine;
+import epam.pratsaunik.tickets.entity.User;
 import epam.pratsaunik.tickets.exception.CommandException;
 import epam.pratsaunik.tickets.exception.ServiceLevelException;
 import epam.pratsaunik.tickets.service.Service;
-import epam.pratsaunik.tickets.service.impl.EventServiceImpl;
+import epam.pratsaunik.tickets.service.impl.OrderServiceImpl;
 import epam.pratsaunik.tickets.servlet.AttributeName;
+import epam.pratsaunik.tickets.servlet.ParameterName;
 import epam.pratsaunik.tickets.util.ConfigurationManager2;
-import epam.pratsaunik.tickets.util.InputKeeper;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import javax.smartcardio.ATR;
+import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Class{@code NewEventPageCommand} to forwad to NewEventPage
- *
- * @version 1.0
- * @see AbstractCommand
- */
-public class NewEventPageCommand extends AbstractCommand {
+public class OrderInfoCommand extends AbstractCommand {
     private final static Logger log = LogManager.getLogger();
-
-    public NewEventPageCommand(Service service) {
+    public OrderInfoCommand(Service service) {
         super(service);
     }
 
-    /**
-     * @param content{@code RequestContent} instance to provide request parameters ans session attributes access
-     * @return {@code CommandResult} instance with information about response type and further destination page
-     * @throws CommandException custom exception to be thrown in case of exception on service level
-     * @see RequestContent
-     * @see CommandResult
-     */
     @Override
-    public CommandResult execute(RequestContent content) {
+    public CommandResult execute(RequestContent content)  {
         CommandResult commandResult = new CommandResult();
-        if (content.getSessionAttribute("event") != null) {
-            InputKeeper.getInstance().clearEvent(content);
-        }
-        List<Venue> venueList;
+        Order order;
+        List<OrderLine> orderLines;
         try {
-            venueList = ((EventServiceImpl) service).findAllVenues();
+            long id = Long.parseLong(content.getRequestParameter(ParameterName.ORDER_ID));
+            order = ((OrderServiceImpl) service).findOrderById(id).get(0);
+            orderLines=((OrderServiceImpl)service).findOrderLinesByOrder(order);
         } catch (ServiceLevelException e) {
             log.error(e);
             content.setRequestAttribute(AttributeName.COMMAND, CommandType.HOME.toString());
@@ -53,10 +44,10 @@ public class NewEventPageCommand extends AbstractCommand {
             commandResult.setResponseType(CommandResult.ResponseType.FORWARD);
             return commandResult;
         }
-        content.setSessionAttribute(AttributeName.VENUE_LIST, venueList);
-        commandResult.setResponsePage(ConfigurationManager2.NEW_EVENT_PAGE_PATH.getProperty());
+        content.setRequestAttribute(AttributeName.ORDER,order);
+        content.setRequestAttribute(AttributeName.ORDERLINE_LIST,orderLines);
+        commandResult.setResponsePage(ConfigurationManager2.ORDER_PAGE_PATH.getProperty());
         commandResult.setResponseType(CommandResult.ResponseType.FORWARD);
-        content.setSessionAttribute(AttributeName.HOME_MESSAGE, null);
         return commandResult;
     }
 }

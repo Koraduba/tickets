@@ -2,6 +2,7 @@ package epam.pratsaunik.tickets.command.impl;
 
 import epam.pratsaunik.tickets.command.AbstractCommand;
 import epam.pratsaunik.tickets.command.CommandResult;
+import epam.pratsaunik.tickets.command.CommandType;
 import epam.pratsaunik.tickets.command.RequestContent;
 import epam.pratsaunik.tickets.entity.User;
 import epam.pratsaunik.tickets.exception.CommandException;
@@ -41,7 +42,7 @@ public class LoginCommand extends AbstractCommand {
      * @see CommandResult
      */
     @Override
-    public CommandResult execute(RequestContent content) throws CommandException {
+    public CommandResult execute(RequestContent content) {
         CommandResult commandResult = new CommandResult();
         log.info("LoginCommand works");
         String login = content.getRequestParameter(ParameterName.USER_LOGIN);
@@ -68,7 +69,11 @@ public class LoginCommand extends AbstractCommand {
                 commandResult.setResponseType(CommandResult.ResponseType.FORWARD);
             }
         } catch (ServiceLevelException e) {
-            throw new CommandException(e);
+            log.error(e);
+            content.setRequestAttribute(AttributeName.COMMAND, CommandType.LOGIN_PAGE.toString());
+            commandResult.setResponsePage(ConfigurationManager2.ERROR_PAGE_PATH.getProperty());
+            commandResult.setResponseType(CommandResult.ResponseType.FORWARD);
+            return commandResult;
         }
 
 

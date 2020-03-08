@@ -26,7 +26,6 @@
   </form>
 
   <nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <a class="navbar-brand" href="${pageContext.request.contextPath}/">TICKETS</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
@@ -34,41 +33,45 @@
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav mr-auto">
         <li class="nav-item">
-          <a class="nav-link" href="${pageContext.request.contextPath}/mainservlet?command=logout"><fmt:message key="label.logout" bundle="${rb}"/></a>
+          <a class="nav-link" href="${pageContext.request.contextPath}/mainservlet?command=home"><fmt:message key="label.HOME" bundle="${rb}"/></a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="${pageContext.request.contextPath}/mainservlet?command=logout"><fmt:message key="label.LOGOUT" bundle="${rb}"/></a>
         </li>
          <li class="nav-item">
-           <a class="nav-link" href="${pageContext.request.contextPath}/mainservlet?command=catalog&currentPage=1"><fmt:message key="label.events" bundle="${rb}"/></a>
+           <a class="nav-link" href="${pageContext.request.contextPath}/mainservlet?command=catalog&currentPage=1"><fmt:message key="label.EVENTS" bundle="${rb}"/></a>
          </li>
          <c:if test="${role=='USER'}">
          <li class="nav-item">
-            <a class="nav-link" href="${pageContext.request.contextPath}/mainservlet?command=cart"><fmt:message key="label.cart" bundle="${rb}"/></a>
+            <a class="nav-link" href="${pageContext.request.contextPath}/mainservlet?command=cart"><fmt:message key="label.CART" bundle="${rb}"/></a>
         </li>
         <li class="nav-item">
-                 <a class="nav-link" href="${pageContext.request.contextPath}/mainservlet?command=orders"><fmt:message key="label.orders" bundle="${rb}"/></a>
+                 <a class="nav-link" href="${pageContext.request.contextPath}/mainservlet?command=orders"><fmt:message key="label.ORDERS" bundle="${rb}"/></a>
         </li>
         </c:if>
         <c:if test="${role=='USER'||role=='HOST'}">
         <li class="nav-item">
-          <a class="nav-link" href="${pageContext.request.contextPath}/mainservlet?command=profile"><fmt:message key="label.profile" bundle="${rb}"/></a>
+          <a class="nav-link" href="${pageContext.request.contextPath}/mainservlet?command=profile"><fmt:message key="label.PROFILE" bundle="${rb}"/></a>
         </li>
+
         </c:if>
         <c:if test="${role=='ADMINISTRATOR'}">
         <li class="nav-item">
-            <a class="nav-link" href="${pageContext.request.contextPath}/mainservlet?command=users&currentPage=1"><fmt:message key="label.users" bundle="${rb}"/></a>
+            <a class="nav-link" href="${pageContext.request.contextPath}/mainservlet?command=users&currentPage=1"><fmt:message key="label.USERS" bundle="${rb}"/></a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="${pageContext.request.contextPath}/mainservlet?command=new_user_page"><fmt:message key="label.newuser" bundle="${rb}"/></a>
+          <a class="nav-link" href="${pageContext.request.contextPath}/mainservlet?command=new_user_page"><fmt:message key="label.NEW_USER" bundle="${rb}"/></a>
         </li>
          <li class="nav-item">
-           <a class="nav-link" href="${pageContext.request.contextPath}/mainservlet?command=statistic"><fmt:message key="label.statistic" bundle="${rb}"/></a>
+           <a class="nav-link" href="${pageContext.request.contextPath}/mainservlet?command=statistic"><fmt:message key="label.STATISTIC" bundle="${rb}"/></a>
          </li>
         </c:if>
           <c:if test="${role=='HOST'}">
           <li class="nav-item">
-            <a class="nav-link" href="${pageContext.request.contextPath}/mainservlet?command=new_event_page">New event</a>
+            <a class="nav-link" href="${pageContext.request.contextPath}/mainservlet?command=new_event_page"><fmt:message key="label.NEW_EVENT" bundle="${rb}"/></a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="${pageContext.request.contextPath}/mainservlet?command=my_events&currentPage=1">My events</a>
+            <a class="nav-link" href="${pageContext.request.contextPath}/mainservlet?command=my_events&currentPage=1"><fmt:message key="label.MY_EVENTS" bundle="${rb}"/></a>
           </li>
         </c:if>
       </ul>

@@ -2,6 +2,7 @@ package epam.pratsaunik.tickets.command.impl;
 
 import epam.pratsaunik.tickets.command.AbstractCommand;
 import epam.pratsaunik.tickets.command.CommandResult;
+import epam.pratsaunik.tickets.command.CommandType;
 import epam.pratsaunik.tickets.command.RequestContent;
 import epam.pratsaunik.tickets.entity.Event;
 import epam.pratsaunik.tickets.entity.User;
@@ -39,7 +40,7 @@ public class MyEventsCommand extends AbstractCommand {
      * @see CommandResult
      */
     @Override
-    public CommandResult execute(RequestContent content) throws CommandException {
+    public CommandResult execute(RequestContent content)  {
         CommandResult commandResult = new CommandResult();
         List<Event> list;
         User owner = (User) content.getSessionAttribute(AttributeName.USER);
@@ -55,8 +56,13 @@ public class MyEventsCommand extends AbstractCommand {
             content.setSessionAttribute(AttributeName.NUMBER_OF_PAGES, nOfPages);
             content.setSessionAttribute(AttributeName.CURRENT_PAGE, currentPage);
             content.setSessionAttribute(AttributeName.EVENTS, list);
+            content.setSessionAttribute(AttributeName.HOME_MESSAGE, null);
         } catch (ServiceLevelException e) {
-            throw new CommandException(e);
+            log.error(e);
+            content.setRequestAttribute(AttributeName.COMMAND, CommandType.HOME.toString());
+            commandResult.setResponsePage(ConfigurationManager2.ERROR_PAGE_PATH.getProperty());
+            commandResult.setResponseType(CommandResult.ResponseType.FORWARD);
+            return commandResult;
         }
         commandResult.setResponsePage(ConfigurationManager2.MY_EVENTS_PAGE_PATH.getProperty());
         commandResult.setResponseType(CommandResult.ResponseType.FORWARD);

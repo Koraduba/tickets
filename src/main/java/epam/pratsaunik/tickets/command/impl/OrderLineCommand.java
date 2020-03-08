@@ -2,6 +2,7 @@ package epam.pratsaunik.tickets.command.impl;
 
 import epam.pratsaunik.tickets.command.AbstractCommand;
 import epam.pratsaunik.tickets.command.CommandResult;
+import epam.pratsaunik.tickets.command.CommandType;
 import epam.pratsaunik.tickets.command.RequestContent;
 import epam.pratsaunik.tickets.entity.OrderLine;
 import epam.pratsaunik.tickets.entity.Ticket;
@@ -41,7 +42,7 @@ public class OrderLineCommand extends AbstractCommand {
      * @see CommandResult
      */
     @Override
-    public CommandResult execute(RequestContent content) throws CommandException {
+    public CommandResult execute(RequestContent content)  {
         log.debug("OrderLineCommand");
         CommandResult commandResult = new CommandResult();
         if (!Validator.validateOrderLine(content)) {
@@ -61,7 +62,11 @@ public class OrderLineCommand extends AbstractCommand {
         try {
             ticket = ((EventServiceImpl) service).findTicketById(ticketId);
         } catch (ServiceLevelException e) {
-            throw new CommandException(e);
+            log.error(e);
+            content.setRequestAttribute(AttributeName.COMMAND, CommandType.HOME.toString());
+            commandResult.setResponsePage(ConfigurationManager2.ERROR_PAGE_PATH.getProperty());
+            commandResult.setResponseType(CommandResult.ResponseType.FORWARD);
+            return commandResult;
         }
         orderLine.setTicket(ticket);
         orderLineList.add(orderLine);

@@ -3,6 +3,7 @@ package epam.pratsaunik.tickets.command.impl;
 
 import epam.pratsaunik.tickets.command.AbstractCommand;
 import epam.pratsaunik.tickets.command.CommandResult;
+import epam.pratsaunik.tickets.command.CommandType;
 import epam.pratsaunik.tickets.command.RequestContent;
 import epam.pratsaunik.tickets.email.EmailSender;
 import epam.pratsaunik.tickets.entity.Role;
@@ -45,7 +46,7 @@ public class RegisterCommand extends AbstractCommand {
      * @see CommandResult
      */
     @Override
-    public CommandResult execute(RequestContent content) throws CommandException {
+    public CommandResult execute(RequestContent content)  {
         CommandResult commandResult = new CommandResult();
         InputKeeper.getInstance().keepUser(content);
         if (!Validator.validateUser(content)) {
@@ -54,11 +55,20 @@ public class RegisterCommand extends AbstractCommand {
             return commandResult;
         }
         String login = content.getRequestParameter(ParameterName.USER_LOGIN);
+        String role=(String) content.getSessionAttribute(AttributeName.USER_ROLE);
         List<User> users;
         try {
             users = ((UserServiceImpl) service).findUserByLogin(login);
         } catch (ServiceLevelException e) {
-            throw new CommandException(e);
+            log.error(e);
+            if (role.equalsIgnoreCase(Role.ADMINISTRATOR.toString())){
+                content.setRequestAttribute(AttributeName.COMMAND, CommandType.HOME.toString());
+            }else{
+                content.setRequestAttribute(AttributeName.COMMAND, CommandType.LOGIN_PAGE.toString());
+            }
+            commandResult.setResponsePage(ConfigurationManager2.ERROR_PAGE_PATH.getProperty());
+            commandResult.setResponseType(CommandResult.ResponseType.FORWARD);
+            return commandResult;
         }
         if (!users.isEmpty()) {
             commandResult.setResponsePage(ConfigurationManager2.REGISTRATION_PAGE_PATH.getProperty());
@@ -74,13 +84,15 @@ public class RegisterCommand extends AbstractCommand {
         user.setPassword(password);
         user.setLogin(login);
         user.setRole(Role.valueOf(content.getRequestParameter(ParameterName.USER_ROLE)));
+
         try {
+
             long result = ((UserServiceImpl) service).create(user);
             if (result > 0) {
                 EmailSender emailSender = new EmailSender();
                 emailSender.sendConfirmation(user.getEmail(), "confirmation", "Your account is created\n");
             }
-            String role = (String) content.getSessionAttribute(AttributeName.USER_ROLE);
+
             if (role == null) {
                 content.setSessionAttribute(AttributeName.USER, user);
                 content.setSessionAttribute(AttributeName.USER_ROLE, user.getRole().toString());
@@ -90,7 +102,15 @@ public class RegisterCommand extends AbstractCommand {
             commandResult.setResponsePage(ConfigurationManager2.HOME_PAGE_PATH.getProperty());
             commandResult.setResponseType(CommandResult.ResponseType.REDIRECT);
         } catch (ServiceLevelException e) {
-            throw new CommandException(e);
+            log.error(e);
+            if (role.equalsIgnoreCase(Role.ADMINISTRATOR.toString())){
+                content.setRequestAttribute(AttributeName.COMMAND, CommandType.HOME.toString());
+            }else{
+                content.setRequestAttribute(AttributeName.COMMAND, CommandType.LOGIN_PAGE.toString());
+            }
+            commandResult.setResponsePage(ConfigurationManager2.ERROR_PAGE_PATH.getProperty());
+            commandResult.setResponseType(CommandResult.ResponseType.FORWARD);
+            return commandResult;
         }
         return commandResult;
     }

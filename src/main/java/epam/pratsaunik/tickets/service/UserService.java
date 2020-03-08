@@ -17,8 +17,7 @@ public interface UserService {
 
     User createAdmin() throws ServiceLevelException;
 
-    boolean deleteAdmin();
-
+    boolean delete(User user) throws ServiceLevelException;
 
 }
 

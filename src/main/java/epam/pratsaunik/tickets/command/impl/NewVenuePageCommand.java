@@ -3,23 +3,20 @@ package epam.pratsaunik.tickets.command.impl;
 import epam.pratsaunik.tickets.command.AbstractCommand;
 import epam.pratsaunik.tickets.command.CommandResult;
 import epam.pratsaunik.tickets.command.RequestContent;
-import epam.pratsaunik.tickets.entity.Role;
-import epam.pratsaunik.tickets.entity.User;
-import epam.pratsaunik.tickets.exception.CommandException;
 import epam.pratsaunik.tickets.service.Service;
 import epam.pratsaunik.tickets.servlet.AttributeName;
+import epam.pratsaunik.tickets.servlet.ParameterName;
 import epam.pratsaunik.tickets.util.ConfigurationManager2;
-import epam.pratsaunik.tickets.util.LocaleName;
-import epam.pratsaunik.tickets.util.MessageManager;
+import epam.pratsaunik.tickets.util.InputKeeper;
 
 /**
- * Class{@code GuestCommand} to enter as a guest
+ * Class{@code NewVenuePageCommand} to forward to NewVenuePage
  *
  * @version 1.0
  * @see AbstractCommand
  */
-public class GuestCommand extends AbstractCommand {
-    public GuestCommand(Service service) {
+public class NewVenuePageCommand extends AbstractCommand {
+    public NewVenuePageCommand(Service service) {
         super(service);
     }
 
@@ -32,14 +29,9 @@ public class GuestCommand extends AbstractCommand {
     @Override
     public CommandResult execute(RequestContent content) {
         CommandResult commandResult = new CommandResult();
-        User user = new User();
-        user.setRole(Role.GUEST);
-        user.setName(Role.GUEST.toString());
-        content.setSessionAttribute(AttributeName.USER_ROLE, Role.GUEST.toString());
-        MessageManager.INSTANCE.changeResource(LocaleName.LOCALE_EN);
-        content.setSessionAttribute(AttributeName.LOCALE, LocaleName.LOCALE_EN);
-        content.setSessionAttribute(AttributeName.USER, user);
-        commandResult.setResponsePage(ConfigurationManager2.HOME_PAGE_PATH.getProperty());
+        InputKeeper.getInstance().keepEvent(content);
+        content.setSessionAttribute(AttributeName.MODE, content.getRequestParameter(ParameterName.MODE));
+        commandResult.setResponsePage(ConfigurationManager2.NEW_VENUE_PAGE_PATH.getProperty());
         commandResult.setResponseType(CommandResult.ResponseType.FORWARD);
         return commandResult;
     }

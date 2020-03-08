@@ -19,7 +19,7 @@ import java.math.BigDecimal;
 import java.util.List;
 
 public class OrderServiceImpl implements OrderService, Service {
-    private static Logger log=LogManager.getLogger();
+    private static Logger log = LogManager.getLogger();
 
     @Override
     public List<Order> findOrdersByUser(User user) throws ServiceLevelException {
@@ -29,6 +29,24 @@ public class OrderServiceImpl implements OrderService, Service {
         entityTransaction.begin(orderDao);
         try {
             orderList = orderDao.findOrdersByUser(user);
+            entityTransaction.commit();
+        } catch (DaoException e) {
+            entityTransaction.rollback();
+            throw new ServiceLevelException(e);
+        } finally {
+            entityTransaction.end();
+        }
+        return orderList;
+    }
+
+    @Override
+    public List<Order> findOrderById(long id) throws ServiceLevelException {
+        List<Order> orderList;
+        OrderDao orderDao = new OrderDaoImpl();
+        EntityTransaction entityTransaction = new EntityTransaction();
+        entityTransaction.begin(orderDao);
+        try {
+            orderList = orderDao.findOrderById(id);
             entityTransaction.commit();
         } catch (DaoException e) {
             entityTransaction.rollback();
@@ -50,7 +68,12 @@ public class OrderServiceImpl implements OrderService, Service {
             orderList = orderDao.findOrdersBelowAmount(amount);
             for (Order order : orderList) {
                 long id = order.getUser().getUserId();
-                order.setUser((User) userDao.findById(id).get(0));
+                log.debug("<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<" + id);
+                User user = (User) userDao.findById(id).get(0);
+                log.debug("<<<<<<<<<<<<<<<<<<<<<"+user);
+                log.debug(user.getLogin());
+                order.setUser(user);
+
             }
         } catch (DaoException e) {
             entityTransaction.rollback();
@@ -122,13 +145,13 @@ public class OrderServiceImpl implements OrderService, Service {
             orderLines = orderDao.findOrderLinesByOrder(order);
             for (OrderLine line : orderLines) {
                 long id = line.getTicket().getTicketId();
-                log.debug("ticketId"+id);
+                log.debug("ticketId" + id);
                 line.setTicket(eventDao.findTicketById(id).get(0));
             }
         } catch (DaoException e) {
             entityTransaction.rollback();
             throw new ServiceLevelException(e);
-        }finally {
+        } finally {
             entityTransaction.end();
         }
 

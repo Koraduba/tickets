@@ -118,7 +118,7 @@ public class UserServiceImpl implements UserService, Service {
 
     @Override
     public User createAdmin() throws ServiceLevelException {
-        UserDao userDao = new UserDaoImpl();
+        UserDaoImpl userDao = new UserDaoImpl();
         EntityTransaction entityTransaction = new EntityTransaction();
         entityTransaction.begin(userDao);
         User admin = null;
@@ -147,12 +147,25 @@ public class UserServiceImpl implements UserService, Service {
     }
 
     @Override
-    public boolean deleteAdmin() {
-        return false;
+    public boolean delete(User user) throws ServiceLevelException {
+        UserDao userDao = new UserDaoImpl();
+        EntityTransaction entityTransaction = new EntityTransaction();
+        entityTransaction.begin(userDao);
+        try {
+            userDao.delete(user.getUserId());
+            entityTransaction.commit();
+        } catch (DaoException e) {
+            entityTransaction.rollback();
+            throw new ServiceLevelException(e);
+        } finally {
+            entityTransaction.end();
+        }
+        return true;
     }
 
+
     public List<User> findUserByLogin(String login) throws ServiceLevelException {
-        UserDao userDao = new UserDaoImpl();
+        UserDaoImpl userDao = new UserDaoImpl();
         List<User> user;
         EntityTransaction entityTransaction = new EntityTransaction();
         entityTransaction.begin(userDao);

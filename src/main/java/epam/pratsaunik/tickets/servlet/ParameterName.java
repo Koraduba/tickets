@@ -22,9 +22,14 @@ public class ParameterName {
     public final static String TICKET_PRICE_STANDARD="price_STANDARD";
     public final static String VENUE_NAME="name";
     public final static String VENUE_CAPACITY="capacity";
-    public final static String IMAGE_ENTITY="entity";
     public final static String MODE="mode";
     public final static String CURRENT_PAGE="currentPage";
+    public final static String ORDER_AMOUNT="amount";
+    public final static String ORDER_ID="order_id";
+    public final static String OLD_PASSWORD="oldPassword";
+    public final static String NEW_PASSWORD="newPassword";
+
+
 
 
 

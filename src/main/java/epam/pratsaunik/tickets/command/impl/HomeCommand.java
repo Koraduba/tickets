@@ -26,7 +26,7 @@ public class HomeCommand extends AbstractCommand {
      * @see CommandResult
      */
     @Override
-    public CommandResult execute(RequestContent content) throws CommandException {
+    public CommandResult execute(RequestContent content) {
         CommandResult commandResult = new CommandResult();
         commandResult.setResponsePage(ConfigurationManager2.HOME_PAGE_PATH.getProperty());
         commandResult.setResponseType(CommandResult.ResponseType.FORWARD);

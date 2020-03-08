@@ -32,7 +32,7 @@ public class UploadPageCommand extends AbstractCommand {
      * @see CommandResult
      */
     @Override
-    public CommandResult execute(RequestContent content) throws CommandException {
+    public CommandResult execute(RequestContent content)  {
         CommandResult commandResult = new CommandResult();
         log.debug("UploadPageCommand launched");
         log.debug(content.getSessionAttribute("current_page"));

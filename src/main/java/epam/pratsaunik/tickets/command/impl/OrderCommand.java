@@ -2,6 +2,7 @@ package epam.pratsaunik.tickets.command.impl;
 
 import epam.pratsaunik.tickets.command.AbstractCommand;
 import epam.pratsaunik.tickets.command.CommandResult;
+import epam.pratsaunik.tickets.command.CommandType;
 import epam.pratsaunik.tickets.command.RequestContent;
 import epam.pratsaunik.tickets.entity.Order;
 import epam.pratsaunik.tickets.entity.OrderLine;
@@ -45,9 +46,16 @@ public class OrderCommand extends AbstractCommand {
      * @see CommandResult
      */
     @Override
-    public CommandResult execute(RequestContent content) throws CommandException {
+    public CommandResult execute(RequestContent content)  {
         CommandResult commandResult = new CommandResult();
+
         List<OrderLine> orderLines = (List<OrderLine>) content.getSessionAttribute(AttributeName.SHOPPING_CART);
+        if (orderLines==null){
+            content.setSessionAttribute(AttributeName.HOME_MESSAGE, MessageManager.INSTANCE.getProperty(MessageType.CART_IS_EMPTY));
+            commandResult.setResponsePage(ConfigurationManager2.HOME_PAGE_PATH.getProperty());
+            commandResult.setResponseType(CommandResult.ResponseType.FORWARD);
+            return commandResult;
+        }
         Order order = new Order();
         User user = (User) (content.getSessionAttribute(AttributeName.USER));
         order.setUser(user);
@@ -64,10 +72,14 @@ public class OrderCommand extends AbstractCommand {
                 ((OrderServiceImpl) service).createOrderLine(orderLine);
             }
         } catch (ServiceLevelException e) {
-            throw new CommandException(e);
+            log.error(e);
+            content.setRequestAttribute(AttributeName.COMMAND, CommandType.HOME.toString());
+            commandResult.setResponsePage(ConfigurationManager2.ERROR_PAGE_PATH.getProperty());
+            commandResult.setResponseType(CommandResult.ResponseType.FORWARD);
+            return commandResult;
         }
         content.setSessionAttribute(AttributeName.HOME_MESSAGE, MessageManager.INSTANCE.getProperty(MessageType.ORDER_PLACED));
-
+        content.setSessionAttribute(AttributeName.SHOPPING_CART,null);
         commandResult.setResponsePage(ConfigurationManager2.HOME_PAGE_PATH.getProperty());
         commandResult.setResponseType(CommandResult.ResponseType.FORWARD);
         return commandResult;

@@ -2,6 +2,7 @@ package epam.pratsaunik.tickets.command.impl;
 
 import epam.pratsaunik.tickets.command.AbstractCommand;
 import epam.pratsaunik.tickets.command.CommandResult;
+import epam.pratsaunik.tickets.command.CommandType;
 import epam.pratsaunik.tickets.command.RequestContent;
 import epam.pratsaunik.tickets.entity.Event;
 import epam.pratsaunik.tickets.entity.Ticket;
@@ -45,7 +46,7 @@ public class NewEventCommand extends AbstractCommand {
      * @see CommandResult
      */
     @Override
-    public CommandResult execute(RequestContent content) throws CommandException {
+    public CommandResult execute(RequestContent content) {
         CommandResult commandResult = new CommandResult();
         InputKeeper.getInstance().keepEvent(content);
         if (!Validator.validateEvent(content)) {
@@ -64,7 +65,11 @@ public class NewEventCommand extends AbstractCommand {
                 return commandResult;
             }
         } catch (ServiceLevelException e) {
-            throw new CommandException(e);
+            log.error(e);
+            content.setRequestAttribute(AttributeName.COMMAND, CommandType.HOME.toString());
+            commandResult.setResponsePage(ConfigurationManager2.ERROR_PAGE_PATH.getProperty());
+            commandResult.setResponseType(CommandResult.ResponseType.FORWARD);
+            return commandResult;
         }
 
 
@@ -98,7 +103,11 @@ public class NewEventCommand extends AbstractCommand {
             commandResult.setResponseType(CommandResult.ResponseType.REDIRECT);
             InputKeeper.getInstance().clearEvent(content);
         } catch (ServiceLevelException e) {
-            throw new CommandException("NewEventCommand", e);
+            log.error(e);
+            content.setRequestAttribute(AttributeName.COMMAND, CommandType.HOME.toString());
+            commandResult.setResponsePage(ConfigurationManager2.ERROR_PAGE_PATH.getProperty());
+            commandResult.setResponseType(CommandResult.ResponseType.FORWARD);
+            return commandResult;
         }
         return commandResult;
     }

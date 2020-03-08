@@ -5,6 +5,7 @@ import epam.pratsaunik.tickets.command.CommandResult;
 import epam.pratsaunik.tickets.command.RequestContent;
 import epam.pratsaunik.tickets.exception.CommandException;
 import epam.pratsaunik.tickets.service.Service;
+import epam.pratsaunik.tickets.servlet.AttributeName;
 import epam.pratsaunik.tickets.util.ConfigurationManager2;
 
 /**
@@ -27,10 +28,11 @@ public class CartCommand extends AbstractCommand {
      * @see CommandResult
      */
     @Override
-    public CommandResult execute(RequestContent content) throws CommandException {
+    public CommandResult execute(RequestContent content) {
         CommandResult commandResult = new CommandResult();
         commandResult.setResponsePage(ConfigurationManager2.CART_PAGE_PATH.getProperty());
         commandResult.setResponseType(CommandResult.ResponseType.FORWARD);
+        content.setSessionAttribute(AttributeName.HOME_MESSAGE, null);
         return commandResult;
 
     }

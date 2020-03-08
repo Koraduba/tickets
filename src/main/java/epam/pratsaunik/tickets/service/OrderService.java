@@ -10,6 +10,8 @@ public interface OrderService {
 
     List<Order> findOrdersByUser(User user) throws ServiceLevelException;
 
+    List<Order> findOrderById(long id) throws ServiceLevelException;
+
     List<Order> findOrdersBelowAmount(BigDecimal amount) throws ServiceLevelException;
 
     List<Order> findOrdersAboveAmount(BigDecimal amount) throws ServiceLevelException;

@@ -5,18 +5,16 @@ import epam.pratsaunik.tickets.command.CommandResult;
 import epam.pratsaunik.tickets.command.RequestContent;
 import epam.pratsaunik.tickets.exception.CommandException;
 import epam.pratsaunik.tickets.service.Service;
+import epam.pratsaunik.tickets.servlet.AttributeName;
+import epam.pratsaunik.tickets.util.ConfigurationManager2;
 
 /**
- * Class{@code EditUserCommand} is used to create and save new venue in data base
- *
- * @version 1.0
- * @see AbstractCommand
+ * Class{@code ClearCartCommand}is used to remove items from Shopping Cart
  */
-public class EditUserCommand extends AbstractCommand {
-    public EditUserCommand(Service service) {
+public class ClearCartCommand extends AbstractCommand {
+    public ClearCartCommand(Service service) {
         super(service);
     }
-
     /**
      * @param content{@code RequestContent} instance to provide request parameters ans session attributes access
      * @return {@code CommandResult} instance with information about response type and further destination page
@@ -25,7 +23,12 @@ public class EditUserCommand extends AbstractCommand {
      * @see CommandResult
      */
     @Override
-    public CommandResult execute(RequestContent content) throws CommandException {
-        return null;
+    public CommandResult execute(RequestContent content)  {
+        CommandResult commandResult = new CommandResult();
+        content.setSessionAttribute(AttributeName.SHOPPING_CART,null);
+        commandResult.setResponsePage(ConfigurationManager2.CART_PAGE_PATH.getProperty());
+        commandResult.setResponseType(CommandResult.ResponseType.FORWARD);
+        return commandResult;
+
     }
 }

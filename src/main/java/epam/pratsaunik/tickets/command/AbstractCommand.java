@@ -13,5 +13,5 @@ public abstract class AbstractCommand {
     public AbstractCommand(Service service){
         this.service=service;
     }
-    public abstract CommandResult execute(RequestContent content) throws CommandException;
+    public abstract CommandResult execute(RequestContent content);
 }

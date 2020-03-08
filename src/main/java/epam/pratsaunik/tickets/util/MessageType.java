@@ -12,6 +12,8 @@ public class MessageType {
     public static final String USER_EXISTS = "message.userexists";
     public static final String VENUE_EXISTS = "message.venueexists";
     public static final String EVENT_EXISTS = "message.eventexists";
+    public static final String CART_IS_EMPTY = "message.cartisempty";
+
 
 
 }

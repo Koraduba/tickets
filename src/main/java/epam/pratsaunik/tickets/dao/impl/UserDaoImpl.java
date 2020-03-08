@@ -26,7 +26,7 @@ public class UserDaoImpl extends UserDao {
     private final static String SQL_FIND_USER_BY_ID = "SELECT user_id, user.name, surname, email, login, " +
             "password, role.name FROM user,role WHERE user_id=? AND user.role=role_id";
     private final static String SQL_FIND_ALL_USERS = "SELECT user_id, user.name, surname, email, login, " +
-            "password, role.name FROM user,role WHERE user.role=role_id";
+            "password, role.name FROM user,role WHERE user.role=role_id)";
     private final static String SQL_FIND_RANGE_OF_USERS = "SELECT user_id, user.name, surname, email, login, " +
             "password, role.name FROM user,role WHERE user.role=role_id LIMIT ?,?";
 
@@ -144,7 +144,7 @@ public class UserDaoImpl extends UserDao {
             statement.setLong(1, id);
             statement.execute();
         } catch (SQLException e) {
-            log.info("User cannot be deleted", e);
+            log.info("<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<User cannot be deleted", e);
             return false;
         } finally {
             try {
@@ -171,6 +171,8 @@ public class UserDaoImpl extends UserDao {
             while (resultSet.next()) {
                 User user = new User();
                 user.setUserId(resultSet.getLong(ColumnName.USER_ID));
+                user.setLogin(resultSet.getString(ColumnName.USER_LOGIN));
+                user.setPassword(resultSet.getString(ColumnName.USER_PASSWORD));
                 user.setEmail(resultSet.getString(ColumnName.USER_EMAIL));
                 user.setName(resultSet.getString(ColumnName.USER_NAME));
                 user.setSurname(resultSet.getString(ColumnName.USER_SURNAME));

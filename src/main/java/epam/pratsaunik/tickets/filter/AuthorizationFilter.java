@@ -1,5 +1,6 @@
 package epam.pratsaunik.tickets.filter;
 
+import epam.pratsaunik.tickets.command.CommandResult;
 import epam.pratsaunik.tickets.command.CommandType;
 import epam.pratsaunik.tickets.entity.Role;
 import epam.pratsaunik.tickets.servlet.AttributeName;
@@ -37,6 +38,7 @@ public class AuthorizationFilter implements Filter {
         GUEST_AVAILABLE.add(CommandType.GUEST);
         GUEST_AVAILABLE.add(CommandType.HOME);
         GUEST_AVAILABLE.add(CommandType.CHANGE_LOCALE);
+        GUEST_AVAILABLE.add(CommandType.LOGIN_PAGE);
 
         USER_AVAILABLE.add(CommandType.CART);
         USER_AVAILABLE.add(CommandType.CATALOG);
@@ -50,6 +52,9 @@ public class AuthorizationFilter implements Filter {
         USER_AVAILABLE.add(CommandType.ORDERS);
         USER_AVAILABLE.add(CommandType.PROFILE);
         USER_AVAILABLE.add(CommandType.CHANGE_LOCALE);
+        USER_AVAILABLE.add(CommandType.LOGIN_PAGE);
+        USER_AVAILABLE.add(CommandType.CLEAR_CART);
+        USER_AVAILABLE.add(CommandType.ORDER_INFO);
 
         HOST_AVAILABLE.add(CommandType.NEW_EVENT);
         HOST_AVAILABLE.add(CommandType.NEW_EVENT_PAGE);
@@ -62,15 +67,15 @@ public class AuthorizationFilter implements Filter {
         HOST_AVAILABLE.add(CommandType.HOME);
         HOST_AVAILABLE.add(CommandType.LOGIN);
         HOST_AVAILABLE.add(CommandType.MY_EVENTS);
-        HOST_AVAILABLE.add(CommandType.NEW_VENUE);
+        HOST_AVAILABLE.add(CommandType.NEW_VENUE_PAGE);
         HOST_AVAILABLE.add(CommandType.NEW_PASSWORD);
         HOST_AVAILABLE.add(CommandType.LOGOUT);
         HOST_AVAILABLE.add(CommandType.PROFILE);
         HOST_AVAILABLE.add(CommandType.UPLOAD_PAGE);
         HOST_AVAILABLE.add(CommandType.CHANGE_LOCALE);
+        HOST_AVAILABLE.add(CommandType.LOGIN_PAGE);
 
         ADMIN_AVAILABLE.add(CommandType.CATALOG);
-        ADMIN_AVAILABLE.add(CommandType.EDIT_USER);
         ADMIN_AVAILABLE.add(CommandType.HOME);
         ADMIN_AVAILABLE.add(CommandType.LOGIN);
         ADMIN_AVAILABLE.add(CommandType.LOGOUT);
@@ -82,6 +87,9 @@ public class AuthorizationFilter implements Filter {
         ADMIN_AVAILABLE.add(CommandType.STATISTIC);
         ADMIN_AVAILABLE.add(CommandType.USERS);
         ADMIN_AVAILABLE.add(CommandType.CHANGE_LOCALE);
+        ADMIN_AVAILABLE.add(CommandType.LOGIN_PAGE);
+        ADMIN_AVAILABLE.add(CommandType.DELETE_USER);
+        ADMIN_AVAILABLE.add(CommandType.ORDER_INFO);
     }
 
     @Override
@@ -94,6 +102,7 @@ public class AuthorizationFilter implements Filter {
         log.debug("command: "+command);
         if (command==null
                 ||command.equalsIgnoreCase(CommandType.LOGIN.toString())
+                ||command.equalsIgnoreCase(CommandType.LOGIN_PAGE.toString())
                 ||command.equalsIgnoreCase(CommandType.GUEST.toString())
                 ||command.equalsIgnoreCase(CommandType.NEW_USER_PAGE.toString())
                 ||command.equalsIgnoreCase(CommandType.REGISTER.toString())){

@@ -3,20 +3,18 @@ package epam.pratsaunik.tickets.command.impl;
 import epam.pratsaunik.tickets.command.AbstractCommand;
 import epam.pratsaunik.tickets.command.CommandResult;
 import epam.pratsaunik.tickets.command.RequestContent;
+import epam.pratsaunik.tickets.exception.CommandException;
 import epam.pratsaunik.tickets.service.Service;
-import epam.pratsaunik.tickets.servlet.AttributeName;
-import epam.pratsaunik.tickets.servlet.ParameterName;
 import epam.pratsaunik.tickets.util.ConfigurationManager2;
-import epam.pratsaunik.tickets.util.InputKeeper;
 
 /**
- * Class{@code NewVenueCommand} to forward to NewVenuePage
+ * Class{@code LoginPageCommand} to forward to LoginPage
  *
  * @version 1.0
  * @see AbstractCommand
  */
-public class NewVenueCommand extends AbstractCommand {
-    public NewVenueCommand(Service service) {
+public class LoginPageCommand extends AbstractCommand {
+    public LoginPageCommand(Service service) {
         super(service);
     }
 
@@ -29,9 +27,7 @@ public class NewVenueCommand extends AbstractCommand {
     @Override
     public CommandResult execute(RequestContent content) {
         CommandResult commandResult = new CommandResult();
-        InputKeeper.getInstance().keepEvent(content);
-        content.setSessionAttribute(AttributeName.MODE, content.getRequestParameter(ParameterName.MODE));
-        commandResult.setResponsePage(ConfigurationManager2.NEW_VENUE_PAGE_PATH.getProperty());
+        commandResult.setResponsePage(ConfigurationManager2.LOGIN_PAGE_PATH.getProperty());
         commandResult.setResponseType(CommandResult.ResponseType.FORWARD);
         return commandResult;
     }

@@ -1,4 +1,5 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <fmt:setLocale value="${locale}" scope="session" />
 <fmt:setBundle basename="property.pagecontent" var="rb" />
@@ -19,30 +20,30 @@
 
             <form action="${pageContext.request.contextPath}/mainservlet?command=register" method="post">
                 <div class="form-group">
-                    <label for="exampleInputEmail1">Email address</label>
+                    <label for="exampleInputEmail1"><fmt:message key="label.email_address" bundle="${rb}" /></label>
                     <input type="email" name="email" class="form-control" id="exampleInputEmail1"
                            aria-describedby="emailHelp"  value="${email}">
                     <font color="red">${errorUserEmailMessage}</font>
                 </div>
                 <div class="form-group">
-                    <label for="firstName">First name</label>
+                    <label for="firstName"><fmt:message key="label.first_name" bundle="${rb}" /></label>
                     <input type="firstName" name="name" class="form-control" id="firstName"
                            value="${name}">
                     <font color="red">${errorUserNameMessage}</font>
                 </div>
                 <div class="form-group">
-                    <label for="lastName">Last name</label>
+                    <label for="lastName"><fmt:message key="label.last_name" bundle="${rb}" /></label>
                     <input type="lastName" name="surname" class="form-control" id="lastName"
                            value="${surname}">
                     <font color="red">${errorUserSurnameMessage}</font>
                 </div>
                 <div class="form-group">
-                    <label for="login">Login</label>
+                    <label for="login"><fmt:message key="label.login" bundle="${rb}" /></label>
                     <input type="login" name="login" class="form-control" id="login" value="${login}">
                     <font color="red">${errorUserLoginMessage}</font>
                 </div>
                 <div class="form-group">
-                    <label for="password">Password</label>
+                    <label for="password"><fmt:message key="label.password" bundle="${rb}" /></label>
                     <input type="password" name="password" class="form-control" id="password">
                     <font color="red">${errorUserPasswordMessage}</font>
                 </div>
@@ -70,15 +71,24 @@
                 <c:if test="${role!='ADMINISTRATOR'}">
                     <input type="hidden" name="role" value="USER" />
                 </c:if>
-                <button type="submit" class="btn btn-primary">Register</button>
+                <button type="submit" class="btn btn-primary"><fmt:message key="label.register" bundle="${rb}" /></button>
             </form>
         </div>
         <div class="col-md-3"></div>
     </div>
 </div>
+
+<c:if test="${role=='ADMINISTRATOR'}">
 <form action="mainservlet">
-    <input type="hidden" name="command" value="login">
-    <button type="submit">Back to Login</button>
+    <input type="hidden" name="command" value="home">
+    <button type="submit"><fmt:message key="label.back_to_home" bundle="${rb}" /></button>
 </form>
+</c:if>
+<c:if test="${role!='ADMINISTRATOR'}">
+<form action="mainservlet">
+    <input type="hidden" name="command" value="login_page">
+    <button type="submit"><fmt:message key="label.back_to_login" bundle="${rb}" /></button>
+</form>
+</c:if>
 
 <jsp:include page="footer.jsp"/>

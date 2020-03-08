@@ -2,6 +2,7 @@ package epam.pratsaunik.tickets.command.impl;
 
 import epam.pratsaunik.tickets.command.AbstractCommand;
 import epam.pratsaunik.tickets.command.CommandResult;
+import epam.pratsaunik.tickets.command.CommandType;
 import epam.pratsaunik.tickets.command.RequestContent;
 import epam.pratsaunik.tickets.entity.Event;
 import epam.pratsaunik.tickets.entity.Ticket;
@@ -38,7 +39,7 @@ public class EditEventPageCommand extends AbstractCommand {
      * @see CommandResult
      */
     @Override
-    public CommandResult execute(RequestContent content) throws CommandException {
+    public CommandResult execute(RequestContent content) {
         CommandResult commandResult = new CommandResult();
         List<Venue> venueList;
         List<Ticket> ticketList = null;
@@ -62,11 +63,15 @@ public class EditEventPageCommand extends AbstractCommand {
                 content.setSessionAttribute(AttributeName.EVENT_IMAGE, event.getImage());
             }
         } catch (ServiceLevelException e) {
-            log.error("Error in EditEventPageCommand:" + e);
-            throw new CommandException(e);
+            log.error(e);
+            content.setRequestAttribute(AttributeName.COMMAND, CommandType.HOME.toString());
+            commandResult.setResponsePage(ConfigurationManager2.ERROR_PAGE_PATH.getProperty());
+            commandResult.setResponseType(CommandResult.ResponseType.FORWARD);
+            return commandResult;
         }
         commandResult.setResponsePage(ConfigurationManager2.EDIT_EVENT_PAGE_PATH.getProperty());
         commandResult.setResponseType(CommandResult.ResponseType.FORWARD);
+        content.setSessionAttribute(AttributeName.HOME_MESSAGE, null);
         return commandResult;
     }
 }

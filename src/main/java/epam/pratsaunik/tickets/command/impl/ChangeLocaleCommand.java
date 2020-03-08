@@ -32,7 +32,7 @@ public class ChangeLocaleCommand extends AbstractCommand {
      * @see CommandResult
      */
     @Override
-    public CommandResult execute(RequestContent content) throws CommandException {
+    public CommandResult execute(RequestContent content)  {
         CommandResult commandResult = new CommandResult();
         if (content.getSessionAttribute("locale") == LocaleName.LOCALE_RU) {
             content.setSessionAttribute("locale", LocaleName.LOCALE_EN);

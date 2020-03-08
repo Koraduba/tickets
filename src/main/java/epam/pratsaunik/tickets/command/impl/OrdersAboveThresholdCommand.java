@@ -2,6 +2,7 @@ package epam.pratsaunik.tickets.command.impl;
 
 import epam.pratsaunik.tickets.command.AbstractCommand;
 import epam.pratsaunik.tickets.command.CommandResult;
+import epam.pratsaunik.tickets.command.CommandType;
 import epam.pratsaunik.tickets.command.RequestContent;
 import epam.pratsaunik.tickets.entity.Order;
 import epam.pratsaunik.tickets.entity.OrderLine;
@@ -9,7 +10,10 @@ import epam.pratsaunik.tickets.exception.CommandException;
 import epam.pratsaunik.tickets.exception.ServiceLevelException;
 import epam.pratsaunik.tickets.service.Service;
 import epam.pratsaunik.tickets.service.impl.OrderServiceImpl;
+import epam.pratsaunik.tickets.servlet.AttributeName;
+import epam.pratsaunik.tickets.servlet.ParameterName;
 import epam.pratsaunik.tickets.util.ConfigurationManager2;
+import epam.pratsaunik.tickets.validator.Validator;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -40,9 +44,15 @@ public class OrdersAboveThresholdCommand extends AbstractCommand {
      * @see CommandResult
      */
     @Override
-    public CommandResult execute(RequestContent content) throws CommandException {
+    public CommandResult execute(RequestContent content) {
         CommandResult commandResult = new CommandResult();
-        BigDecimal amount = BigDecimal.valueOf(Long.parseLong(content.getRequestParameter("amount")));
+        if (!Validator.validateOrderAmount(content)) {
+            commandResult.setResponsePage(ConfigurationManager2.STATISTIC_PAGE_PATH.getProperty());
+            commandResult.setResponseType(CommandResult.ResponseType.FORWARD);
+            return commandResult;
+        }
+
+        BigDecimal amount = BigDecimal.valueOf(Long.parseLong(content.getRequestParameter(ParameterName.ORDER_AMOUNT)));
         List<Order> orderList;
         List<BigDecimal> orderSumList;
         try {
@@ -57,10 +67,14 @@ public class OrdersAboveThresholdCommand extends AbstractCommand {
                 orderSumList.add(sum);
             }
         } catch (ServiceLevelException e) {
-            throw new CommandException(e);
+            log.error(e);
+            content.setRequestAttribute(AttributeName.COMMAND, CommandType.STATISTIC.toString());
+            commandResult.setResponsePage(ConfigurationManager2.ERROR_PAGE_PATH.getProperty());
+            commandResult.setResponseType(CommandResult.ResponseType.FORWARD);
+            return commandResult;
         }
-        content.setRequestAttribute("orders", orderList);
-        content.setRequestAttribute("sums", orderSumList);
+        content.setRequestAttribute(AttributeName.ORDER_LIST, orderList);
+        content.setRequestAttribute(AttributeName.ORDER_SUMS, orderSumList);
         commandResult.setResponsePage(ConfigurationManager2.ORDERS_PAGE_PATH.getProperty());
         commandResult.setResponseType(CommandResult.ResponseType.FORWARD);
         return commandResult;

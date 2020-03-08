@@ -4,7 +4,7 @@
 <fmt:setLocale value="${locale}" scope="session" />
 <fmt:setBundle basename="property.pagecontent" var="rb" />
 <jsp:include page="header.jsp"/>
-EVENT
+<fmt:message key="label.EVENT" bundle="${rb}" />
 <div class="row col-md-6">
 	<table class="table table-striped table-bordered table-sm">
             <tr>
@@ -29,7 +29,7 @@ EVENT
             </tr>
     </table>
 </div>
-VENUE
+<fmt:message key="label.VENUE" bundle="${rb}" />
 <div class="row col-md-6">
 	<table class="table table-striped table-bordered table-sm">
             <tr>
@@ -42,7 +42,7 @@ VENUE
             </tr>
     </table>
 </div>
-TICKETS
+<fmt:message key="label.TICKETS" bundle="${rb}" />
 <div class="row col-md-6">
 	<table class="table table-striped table-bordered table-sm">
             <c:forEach items="${tickets}" var="ticket">

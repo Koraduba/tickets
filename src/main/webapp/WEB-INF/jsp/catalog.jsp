@@ -4,7 +4,7 @@
 <fmt:setLocale value="${locale}" scope="session" />
 <fmt:setBundle basename="property.pagecontent" var="rb" />
 <jsp:include page="header.jsp"/>
-<fmt:message key="label.events" bundle="${rb}" />
+<fmt:message key="label.EVENTS" bundle="${rb}" />
 <div class="row col-md-6">
     <table class="table table-striped table-bordered table-sm">
         <tr>
@@ -20,7 +20,8 @@
                 <td>${eachEvent.date}</td>
                 <td>${eachEvent.time}</td>
                 <td>${eachEvent.venue.name}</td>
-                <td><a class="nav-link" href="${pageContext.request.contextPath}/mainservlet?command=event&eventId=${eachEvent.eventId}">Details</a></td>
+
+                <td><a class="nav-link" href="${pageContext.request.contextPath}/mainservlet?command=event&eventId=${eachEvent.eventId}"><fmt:message key="label.details" bundle="${rb}"/><br/></a></td>
             </tr>
         </c:forEach>
     </table>
@@ -30,7 +31,7 @@
     <ul class="pagination">
         <c:if test="${currentPage != 1}">
             <li class="page-item"><a class="page-link"
-                href="mainservlet?command=catalog&currentPage=${currentPage-1}">Previous</a>
+                href="mainservlet?command=catalog&currentPage=${currentPage-1}"><fmt:message key="label.previous" bundle="${rb}"/><br/></a>
             </li>
         </c:if>
 
@@ -51,7 +52,7 @@
 
         <c:if test="${currentPage lt nOfPages}">
             <li class="page-item"><a class="page-link"
-                href="mainservlet?command=catalog&currentPage=${currentPage+1}">Next</a>
+                href="mainservlet?command=catalog&currentPage=${currentPage+1}"><fmt:message key="label.next" bundle="${rb}"/><br/></a>
             </li>
         </c:if>
     </ul>

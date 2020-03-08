@@ -36,6 +36,7 @@ public class OrderDaoImpl extends OrderDao {
             "INNER JOIN ticket ON order_line.ticket=ticket.ticket_id GROUP BY order_id) AS sums " +
             "WHERE sum<?";
     private final static String SQL_FIND_ORDERS_BY_USER = "SELECT order_id, user, date FROM `order` WHERE user=?";
+    private final static String SQL_FIND_ORDER_BY_ID = "SELECT order_id, user, date FROM `order` WHERE order_id=?";
     private final static String SQL_CREATE_ORDER_LINE = "INSERT INTO order_line(ticket,quantity,`order`) VALUES(?,?,?)";
     private final static String SQL_UPDATE_ORDER_LINE = "UPDATE order_line SET ticket=?,quantity=?,`order`=? " +
             "WHERE order_line_id=?";
@@ -62,6 +63,43 @@ public class OrderDaoImpl extends OrderDao {
         try {
             statement = connection.prepareStatement(SQL_FIND_ORDERS_BY_EVENT);
             statement.setLong(1, event.getEventId());
+            resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                Order order = new Order();
+                order.setOrderId(resultSet.getLong(ColumnName.ORDER_ID));
+                User user = new User();
+                user.setUserId(resultSet.getLong(ColumnName.ORDER_USER));
+                order.setUser(user);
+                Date date = new Date(resultSet.getLong(ColumnName.ORDER_DATE));
+                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+                order.setDate(simpleDateFormat.format(date));
+                orderList.add(order);
+            }
+        } catch (SQLException e) {
+            throw new DaoException(e);
+        } finally {
+            try {
+                if (resultSet != null) {
+                    resultSet.close();
+                }
+                if (statement != null) {
+                    statement.close();
+                }
+            } catch (SQLException e) {
+                log.warn(e);
+            }
+        }
+        return orderList;
+    }
+
+    @Override
+    public List<Order> findOrderById(long id) throws DaoException {
+        List<Order> orderList = new ArrayList<>();
+        PreparedStatement statement = null;
+        ResultSet resultSet = null;
+        try {
+            statement = connection.prepareStatement(SQL_FIND_ORDER_BY_ID);
+            statement.setLong(1, id);
             resultSet = statement.executeQuery();
             while (resultSet.next()) {
                 Order order = new Order();

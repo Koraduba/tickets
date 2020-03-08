@@ -2,6 +2,7 @@ package epam.pratsaunik.tickets.command.impl;
 
 import epam.pratsaunik.tickets.command.AbstractCommand;
 import epam.pratsaunik.tickets.command.CommandResult;
+import epam.pratsaunik.tickets.command.CommandType;
 import epam.pratsaunik.tickets.command.RequestContent;
 import epam.pratsaunik.tickets.entity.Event;
 import epam.pratsaunik.tickets.entity.Ticket;
@@ -43,7 +44,7 @@ public class EditEventCommand extends AbstractCommand {
      * @see CommandResult
      */
     @Override
-    public CommandResult execute(RequestContent content) throws CommandException {
+    public CommandResult execute(RequestContent content) {
         CommandResult commandResult = new CommandResult();
         InputKeeper.getInstance().keepEvent(content);
         if (!Validator.validateEvent(content)) {
@@ -56,7 +57,11 @@ public class EditEventCommand extends AbstractCommand {
         try {
             ticketList = ((EventServiceImpl) service).findTicketsByEvent(event);
         } catch (ServiceLevelException e) {
-            e.printStackTrace();
+            log.error(e);
+            content.setRequestAttribute(AttributeName.COMMAND, CommandType.HOME.toString());
+            commandResult.setResponsePage(ConfigurationManager2.ERROR_PAGE_PATH.getProperty());
+            commandResult.setResponseType(CommandResult.ResponseType.FORWARD);
+            return commandResult;
         }
         event.setName(content.getRequestParameter(ParameterName.EVENT_NAME));
         event.setDate(content.getRequestParameter(ParameterName.EVENT_DATE));
@@ -88,7 +93,11 @@ public class EditEventCommand extends AbstractCommand {
             commandResult.setResponseType(CommandResult.ResponseType.REDIRECT);
             InputKeeper.getInstance().clearEvent(content);
         } catch (ServiceLevelException e) {
-            throw new CommandException("EditEventCommand", e);
+            log.error(e);
+            content.setRequestAttribute(AttributeName.COMMAND, CommandType.HOME.toString());
+            commandResult.setResponsePage(ConfigurationManager2.ERROR_PAGE_PATH.getProperty());
+            commandResult.setResponseType(CommandResult.ResponseType.FORWARD);
+            return commandResult;
         }
         return commandResult;
     }
