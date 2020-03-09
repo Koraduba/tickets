@@ -10,7 +10,7 @@ import epam.pratsaunik.tickets.exception.DaoException;
 import java.math.BigDecimal;
 import java.util.List;
 
-public abstract class OrderDao extends AbstractDAO {
+public abstract class OrderDao extends AbstractDAO<Order> {
 
     public abstract List<Order> findOrdersByEvent (Event event) throws DaoException;
     public abstract List<Order> findOrderById (long id) throws DaoException;

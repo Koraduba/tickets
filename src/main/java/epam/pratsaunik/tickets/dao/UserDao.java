@@ -7,7 +7,7 @@ import epam.pratsaunik.tickets.exception.DaoException;
 
 import java.util.List;
 
-public abstract class UserDao<T extends User> extends AbstractDAO {
+public abstract class UserDao<T extends User> extends AbstractDAO<User> {
 
     public abstract List<T> findUserByName(String name) throws DaoException;
     public abstract List<T> findUsersByEvent(Event event) throws DaoException;

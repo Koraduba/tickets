@@ -434,10 +434,9 @@ public class OrderDaoImpl extends OrderDao {
     }
 
     @Override
-    public long create(Entity entity) throws DaoException {
+    public long create(Order order) throws DaoException {
         long id = 0;
         log.debug("OrderDaoImpl::create");
-        Order order = (Order) entity;
         PreparedStatement statement = null;
         ResultSet resultSet = null;
         try {
@@ -477,8 +476,7 @@ public class OrderDaoImpl extends OrderDao {
     }
 
     @Override
-    public Order update(Entity entity) throws DaoException {
-        Order order = (Order) entity;
+    public Order update(Order order) throws DaoException {
         Order oldOrder = findById(order.getOrderId()).get(0);
         long id = 0;
         PreparedStatement statement = null;

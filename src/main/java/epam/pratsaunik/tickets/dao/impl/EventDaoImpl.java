@@ -77,7 +77,7 @@ public class EventDaoImpl extends EventDao {
     }
 
     @Override
-    public long create(Entity entity) throws DaoException {
+    public long create(Event entity) throws DaoException {
         Event event = (Event) entity;
         PreparedStatement statement = null;
         ResultSet resultSet = null;
@@ -129,7 +129,7 @@ public class EventDaoImpl extends EventDao {
     }
 
     @Override
-    public Entity update(Entity entity) throws DaoException {
+    public Event update(Event entity) throws DaoException {
         Event event = (Event) entity;
         Event oldEvent = findById(event.getEventId()).get(0);
         PreparedStatement statement = null;

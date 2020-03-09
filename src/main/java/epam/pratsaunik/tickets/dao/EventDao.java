@@ -9,7 +9,7 @@ import epam.pratsaunik.tickets.exception.DaoException;
 import java.util.Date;
 import java.util.List;
 
-public abstract class EventDao extends AbstractDAO {
+public abstract class EventDao extends AbstractDAO<Event> {
 
     public abstract Integer getNumberOfEventsByHost (User owner) throws DaoException;
     public abstract List<Event> findEventsByDate(Date date  ) throws DaoException;
