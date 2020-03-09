@@ -18,13 +18,13 @@ import java.util.regex.Pattern;
  */
 public class Validator {
     private final static Logger log = LogManager.getLogger();
-    private final static String LOGIN_REGEX = "^[a-zA-Z][a-zA-Z0-9-_\\.]{1,20}$";
-    private final static String EMAIL_REGEX = "^[-\\w.]+@([A-z0-9][-A-z0-9]+\\.)+[A-z]{2,4}$";
+    private final static String LOGIN_REGEX = "^[a-zA-Z][a-zA-Z0-9-_.]{1,20}$";
+    private final static String EMAIL_REGEX = "^[\\w.]+@([A-z0-9][-A-z0-9]+\\.)+[A-z]{2,4}$";
     private final static String NAME_REGEX = "^[a-zA-Zа-яА-Я][a-zа-я]{1,20}$";
-    private final static String SURNAME_REGEX = "^[a-zA-Z][a-z]{1,20}$";
+    private final static String SURNAME_REGEX = "[a-zA-Zа-яА-Я][a-zа-я]{1,20}$";
     private final static String PASSWORD_REGEX = "^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?!.*\\s).*$";
-    private final static String EVENT_NAME_REGEX = "^[a-zA-Zа-яА-Я][a-zа-я]{1,20}$";
-    private final static String EVENT_DESCRIPTION_REGEX = ".+";
+    private final static String EVENT_NAME_REGEX = "^[a-zA-Zа-яА-Я][a-zа-я0-9]{1,20}$";
+    private final static String EVENT_DESCRIPTION_REGEX = ".{1,200}";
     private final static String EVENT_DATE_REGEX = "^(19|20)\\d\\d-((0[1-9]|1[012])-(0[1-9]|[12]\\d)|(0[13-9]|1[012])-30|(0[13578]|1[02])-31)$";
     private final static String EVENT_TIME_REGEX = "^([0-1]\\d|2[0-3])(:[0-5]\\d)$";
     private final static String TICKET_PRICE_REGEX = "^\\d{1,4}$";

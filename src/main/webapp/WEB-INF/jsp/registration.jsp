@@ -22,29 +22,29 @@
                 <div class="form-group">
                     <label for="exampleInputEmail1"><fmt:message key="label.email_address" bundle="${rb}" /></label>
                     <input type="email" name="email" class="form-control" id="exampleInputEmail1"
-                           aria-describedby="emailHelp"  value="${email}">
+                           aria-describedby="emailHelp"  value="${email}" required minlength="5" maxlength="20" pattern="^[\w.]+@([A-z0-9][-A-z0-9]+\.)+[A-z]{2,4}$">
                     <font color="red">${errorUserEmailMessage}</font>
                 </div>
                 <div class="form-group">
                     <label for="firstName"><fmt:message key="label.first_name" bundle="${rb}" /></label>
                     <input type="firstName" name="name" class="form-control" id="firstName"
-                           value="${name}">
+                           value="${name}" required minlength="1" maxlength="20">
                     <font color="red">${errorUserNameMessage}</font>
                 </div>
                 <div class="form-group">
                     <label for="lastName"><fmt:message key="label.last_name" bundle="${rb}" /></label>
                     <input type="lastName" name="surname" class="form-control" id="lastName"
-                           value="${surname}">
+                           value="${surname}" required minlength="1" maxlength="20">
                     <font color="red">${errorUserSurnameMessage}</font>
                 </div>
                 <div class="form-group">
                     <label for="login"><fmt:message key="label.login" bundle="${rb}" /></label>
-                    <input type="login" name="login" class="form-control" id="login" value="${login}">
+                    <input type="login" name="login" class="form-control" id="login" value="${login}" required minlength="1" maxlength="20" >
                     <font color="red">${errorUserLoginMessage}</font>
                 </div>
                 <div class="form-group">
                     <label for="password"><fmt:message key="label.password" bundle="${rb}" /></label>
-                    <input type="password" name="password" class="form-control" id="password">
+                    <input type="password" name="password" class="form-control" id="password" required minlength="3" maxlength="20">
                     <font color="red">${errorUserPasswordMessage}</font>
                 </div>
 

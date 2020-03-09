@@ -6,8 +6,6 @@ import epam.pratsaunik.tickets.command.CommandType;
 import epam.pratsaunik.tickets.command.RequestContent;
 import epam.pratsaunik.tickets.entity.Order;
 import epam.pratsaunik.tickets.entity.OrderLine;
-import epam.pratsaunik.tickets.entity.User;
-import epam.pratsaunik.tickets.exception.CommandException;
 import epam.pratsaunik.tickets.exception.ServiceLevelException;
 import epam.pratsaunik.tickets.service.Service;
 import epam.pratsaunik.tickets.service.impl.OrderServiceImpl;
@@ -17,9 +15,6 @@ import epam.pratsaunik.tickets.util.ConfigurationManager2;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import javax.smartcardio.ATR;
-import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.List;
 
 public class OrderInfoCommand extends AbstractCommand {

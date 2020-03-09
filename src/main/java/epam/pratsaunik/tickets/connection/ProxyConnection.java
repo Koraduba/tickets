@@ -1,6 +1,5 @@
 package epam.pratsaunik.tickets.connection;
 
-import epam.pratsaunik.tickets.exception.CommandException;
 import epam.pratsaunik.tickets.exception.ConnectionException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

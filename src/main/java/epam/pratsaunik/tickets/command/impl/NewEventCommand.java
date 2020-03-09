@@ -8,7 +8,6 @@ import epam.pratsaunik.tickets.entity.Event;
 import epam.pratsaunik.tickets.entity.Ticket;
 import epam.pratsaunik.tickets.entity.TicketCat;
 import epam.pratsaunik.tickets.entity.User;
-import epam.pratsaunik.tickets.exception.CommandException;
 import epam.pratsaunik.tickets.exception.ServiceLevelException;
 import epam.pratsaunik.tickets.service.Service;
 import epam.pratsaunik.tickets.service.impl.EventServiceImpl;

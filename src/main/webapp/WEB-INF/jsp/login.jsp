@@ -19,7 +19,7 @@
             <br/><fmt:message key="label.password" bundle="${rb}" /><br/>
             <input type="password" name="password" required/>
             <br/>
-            ${errorLoginPassMessage}
+            <font color="red">${errorLoginPassMessage}</font>
             <br/>
             <fmt:message key="label.enter" bundle="${rb}" var="localizedEnter"/><br/>
             <input type="submit" value="${localizedEnter}"/>

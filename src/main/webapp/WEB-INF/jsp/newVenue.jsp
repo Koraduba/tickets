@@ -13,7 +13,7 @@
           <div class="form-group">
             <label for="name" class="col-sm-2 col-form-label">Name</label>
             <div class="col-sm-10">
-              <input type="text" class="form-control" id="name" name="name" value="${name}">
+              <input type="text" class="form-control" id="name" name="name" value="${venueName}">
               <font color="red">${errorVenueNameMessage}</font>
             </div>
           </div>

@@ -51,7 +51,7 @@
 				<td>${ticket.category}</td>
 				<td>${ticket.price}</td>
 				<td><input type="number" class="form-control" id="quantity" name="quantity">
-				${errorOrderLineQuantityMessage}
+				<font color="red>"${errorOrderLineQuantityMessage}</font>
 				</td>
 				<fmt:message key="label.tocart" bundle="${rb}" var="localizedToCart" />
 				<td><input type="submit" value="${localizedToCart}"/></td>

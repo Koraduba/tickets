@@ -13,6 +13,7 @@ public class MessageType {
     public static final String VENUE_EXISTS = "message.venueexists";
     public static final String EVENT_EXISTS = "message.eventexists";
     public static final String CART_IS_EMPTY = "message.cartisempty";
+    public static final String COMMAND_IS_NOT_AVAILABLE = "message.commandisnotavailable";
 
 
 

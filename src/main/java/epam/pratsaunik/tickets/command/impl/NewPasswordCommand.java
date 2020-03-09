@@ -6,7 +6,6 @@ import epam.pratsaunik.tickets.command.CommandType;
 import epam.pratsaunik.tickets.command.RequestContent;
 import epam.pratsaunik.tickets.email.EmailSender;
 import epam.pratsaunik.tickets.entity.User;
-import epam.pratsaunik.tickets.exception.CommandException;
 import epam.pratsaunik.tickets.exception.ServiceLevelException;
 import epam.pratsaunik.tickets.service.Service;
 import epam.pratsaunik.tickets.service.impl.UserServiceImpl;
@@ -42,6 +41,8 @@ public class NewPasswordCommand extends AbstractCommand {
     public CommandResult execute(RequestContent content)  {
         CommandResult commandResult = new CommandResult();
         UserServiceImpl userService = (UserServiceImpl) service;
+        content.setSessionAttribute(AttributeName.ERROR_CHANGE_PASSWORD_MESSAGE,null);
+        content.setSessionAttribute(AttributeName.ERROR_USER_PASSWORD_MESSAGE,null);
 
         User user = ((User) content.getSessionAttribute(AttributeName.USER));
         String oldPassword = content.getRequestParameter(ParameterName.OLD_PASSWORD);
@@ -49,7 +50,7 @@ public class NewPasswordCommand extends AbstractCommand {
         String login = user.getLogin();
         boolean hasAccess = userService.checkUser(login, oldPassword, user);
         if (!hasAccess) {
-            content.setSessionAttribute("errorChangePasswordMessage", MessageManager.INSTANCE.getProperty("message.wrongpassword"));
+            content.setSessionAttribute(AttributeName.ERROR_CHANGE_PASSWORD_MESSAGE, MessageManager.INSTANCE.getProperty("message.wrongpassword"));
             commandResult.setResponsePage(ConfigurationManager2.CHANGE_PASSWORD_PAGE_PATH.getProperty());
             commandResult.setResponseType(CommandResult.ResponseType.FORWARD);
             return commandResult;

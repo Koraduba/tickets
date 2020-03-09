@@ -7,6 +7,12 @@
 <fmt:message key="label.PROFILE" bundle="${rb}"/>
 <div class="row col-md-6">
     <table class="table table-striped table-bordered table-sm">
+
+
+            <tr>
+                <th><fmt:message key="label.login" bundle="${rb}"/></th>
+                <td>${user.login}</td>
+            </tr>
         <tr>
             <th><fmt:message key="label.name" bundle="${rb}"/></th>
             <td>${user.name}</td>
@@ -19,6 +25,8 @@
             <th><fmt:message key="label.email" bundle="${rb}"/></th>
             <td>${user.email}</td>
         </tr>
+
+
     </table>
 </div>
             <form name="changePassword" method="POST" action="mainservlet">

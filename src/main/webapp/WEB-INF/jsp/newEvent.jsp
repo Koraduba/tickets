@@ -16,7 +16,7 @@ ${errorNewEventMessage}
   <div class="form-group">
     <label for="name"><fmt:message key="label.event_name" bundle="${rb}" /></label>
     <div class="col-sm-10">
-      <input type="text" class="form-control" id="name" name="name" value="${name}">
+      <input type="text" class="form-control" id="name" name="name" value="${name}" maxlength="21">
       <font color="red">${errorEventNameMessage}</font>
     </div>
   </div>
@@ -36,7 +36,7 @@ ${errorNewEventMessage}
     <div class="form-group">
       <label for="description"><fmt:message key="label.description" bundle="${rb}" /></label>
       <div class="col-sm-10">
-        <textarea class="form-control" id="description" name="description" rows="2" >${description}</textarea>
+        <textarea class="form-control" id="description" name="description" maxlength="200" rows="2" >${description}</textarea>
         <font color="red">${errorEventDescriptionMessage}</font>
       </div>
   </div>
@@ -53,13 +53,13 @@ ${errorNewEventMessage}
     <div class="form-group">
       <label for="price-standard"><fmt:message key="label.standard_ticket_price" bundle="${rb}" /></label>
       <div class="col-sm-10">
-        <input type="number" class="form-control" id="price-standard" name="price_STANDARD" value="${price_standard}">
+        <input type="number" class="form-control" id="price-standard" name="price_STANDARD" value="${price_standard}" min="1" max="9999">
           <font color="red">${errorStandardTicketPriceMessage}</font>
     </div>
       <div class="form-group">
         <label for="price-vip"><fmt:message key="label.vip_ticket_price" bundle="${rb}" /></label>
         <div class="col-sm-10">
-          <input type="number" class="form-control" id="price-vip" name="price_VIP" value="${price_vip}">
+          <input type="number" class="form-control" id="price-vip" name="price_VIP" value="${price_vip}" min="9" max="9999">
           <font color="red">${errorVipTicketPriceMessage}</font>
       </div>
         <div class="form-group">
@@ -69,7 +69,7 @@ ${errorNewEventMessage}
           <br/>
         </c:if>
         <c:if test="${event_path==null}">
-        <fmt:message key="label.add_image" bundle="${rb}" var="localizedAddImage" />
+        <fmt:message key="label.new_image" bundle="${rb}" var="localizedAddImage" />
           <input type="submit" value="${localizedAddImage}" name="image" id="image" onclick="setCommand('upload_page')">
           <br/>
         </c:if>

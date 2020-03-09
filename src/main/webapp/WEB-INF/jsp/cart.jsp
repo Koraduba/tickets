@@ -6,6 +6,10 @@
 <jsp:include page="header.jsp"/>
 <fmt:message key="label.CART" bundle="${rb}" />
 
+<c:if test="${car==null}">
+<fmt:message key="label.is_empty" bundle="${rb}" />
+</c:if>
+ <c:if test="${cart!=null}">
 <div class="row col-md-6">
     <table class="table table-striped table-bordered table-sm">
         <tr>
@@ -36,7 +40,7 @@
                 <input type="hidden" name="command" value="clear_cart" />
             </form>
   </div>
- <c:if test="${cart!=null}">
+
   <div class="btn-group" role="group">
             <form name="order" method="POST" action="mainservlet">
 				<td>${ticket.category}</td>

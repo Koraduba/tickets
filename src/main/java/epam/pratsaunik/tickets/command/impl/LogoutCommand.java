@@ -36,7 +36,7 @@ public class LogoutCommand extends AbstractCommand {
         MessageManager.INSTANCE.changeResource(Locale.getDefault());
         content.setSessionAttribute(AttributeName.LOCALE, Locale.getDefault());
         commandResult.setResponsePage(ConfigurationManager2.LOGIN_PAGE_PATH.getProperty());
-        commandResult.setResponseType(CommandResult.ResponseType.FORWARD);
+        commandResult.setResponseType(CommandResult.ResponseType.REDIRECT);
         return commandResult;
     }
 }

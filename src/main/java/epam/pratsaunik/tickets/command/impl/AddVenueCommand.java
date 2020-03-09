@@ -5,7 +5,6 @@ import epam.pratsaunik.tickets.command.CommandResult;
 import epam.pratsaunik.tickets.command.CommandType;
 import epam.pratsaunik.tickets.command.RequestContent;
 import epam.pratsaunik.tickets.entity.Venue;
-import epam.pratsaunik.tickets.exception.CommandException;
 import epam.pratsaunik.tickets.exception.ServiceLevelException;
 import epam.pratsaunik.tickets.service.Service;
 import epam.pratsaunik.tickets.service.impl.EventServiceImpl;
@@ -46,8 +45,8 @@ public class AddVenueCommand extends AbstractCommand {
     @Override
     public CommandResult execute(RequestContent content) {
         CommandResult commandResult = new CommandResult();
+        InputKeeper.getInstance().keepVenue(content);
         if (!Validator.validateVenue(content)) {
-            InputKeeper.getInstance().keepVenue(content);
             commandResult.setResponsePage(ConfigurationManager2.NEW_VENUE_PAGE_PATH.getProperty());
             commandResult.setResponseType(CommandResult.ResponseType.FORWARD);
             return commandResult;

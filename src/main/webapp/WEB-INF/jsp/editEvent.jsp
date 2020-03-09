@@ -15,7 +15,7 @@
   <div class="form-group">
     <label for="name"><fmt:message key="label.event_name" bundle="${rb}" /></label>
     <div class="col-sm-10">
-      <input type="text" class="form-control" id="name" name="name" value="${name}">
+      <input type="text" class="form-control" id="name" name="name" value="${name}" maxlength="21">
             <font color="red">${errorEventNameMessage}</font>
     </div>
   </div>
@@ -35,7 +35,7 @@
     <div class="form-group">
       <label for="description"><fmt:message key="label.description" bundle="${rb}" /></label>
       <div class="col-sm-10">
-        <textarea class="form-control" id="description" name="description" rows="3">${description}</textarea>
+        <textarea class="form-control" id="description" name="description" rows="2" maxlength="200">${description}</textarea>
               <font color="red">${errorEventDescriptionMessage}</font>
       </div>
   </div>
@@ -54,7 +54,7 @@
     <div class="form-group">
       <label for="${ticket.ticketId}">${ticket.category} <fmt:message key="label.price" bundle="${rb}" /></label>
       <div class="col-sm-10">
-        <input type="number" class="form-control" id="${ticket.ticketId}" name="price_${ticket.category}" value="${ticket.price}">
+        <input type="number" class="form-control" id="${ticket.ticketId}" name="price_${ticket.category}" value="${ticket.price}" min="1" max="9999">
           <font color="red">${errorStandardTicketPriceMessage}</font>
         </div>
     </div>

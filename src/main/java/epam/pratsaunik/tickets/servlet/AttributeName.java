@@ -24,14 +24,13 @@ public class AttributeName {
     public final static String TICKET_PRICE_STANDARD = "price_standard";
     public final static String TICKET_PRICE_VIP = "price_vip";
     public final static String VENUE_IMAGE = "venue_path";
-    public final static String VENUE_NAME = "name";
+    public final static String VENUE_NAME = "venueName";
     public final static String VENUE_CAPACITY = "capacity";
     public final static String ORDER_LIST = "orders";
     public final static String ORDER_SUMS = "sums";
     public final static String ORDER = "order";
     public final static String ORDERLINE_LIST = "orderLines";
     public final static String COMMAND = "command";
-
 
     public final static String ERROR_EVENT_NAME_MESSSAGE = "errorEventNameMessage";
     public final static String ERROR_EVENT_DATE_MESSAGE = "errorEventDateMessage";
@@ -48,11 +47,11 @@ public class AttributeName {
     public final static String ERROR_VENUE_NAME_MESSAGE = "errorVenueNameMessage";
     public final static String ERROR_VENUE_CAPACITY_MESSAGE = "errorVenueCapacityMessage";
     public final static String ERROR_ORDER_AMOUNT_MESSAGE = "errorOrderAmountMessage";
-
-
     public final static String ERROR_LOGIN_PASS_MESSAGE = "errorLoginPassMessage";
     public final static String ERROR_NEW_EVENT_MESSAGE = "errorNewEventMessage";
     public final static String ERROR_UPLOAD_MESSAGE = "errorUploadMessage";
+    public final static String ERROR_CHANGE_PASSWORD_MESSAGE = "errorChangePasswordMessage";
+
 
     public final static String HOME_MESSAGE = "HomeMessage";
     public final static String VENUE_LIST = "venues";
