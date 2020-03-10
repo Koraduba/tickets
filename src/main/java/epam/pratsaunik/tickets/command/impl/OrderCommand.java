@@ -40,7 +40,6 @@ public class OrderCommand extends AbstractCommand {
     /**
      * @param content{@code RequestContent} instance to provide request parameters ans session attributes access
      * @return {@code CommandResult} instance with information about response type and further destination page
-     * @throws CommandException custom exception to be thrown in case of exception on service level
      * @see RequestContent
      * @see CommandResult
      */

@@ -32,14 +32,13 @@ public class NewEventPageCommand extends AbstractCommand {
     /**
      * @param content{@code RequestContent} instance to provide request parameters ans session attributes access
      * @return {@code CommandResult} instance with information about response type and further destination page
-     * @throws CommandException custom exception to be thrown in case of exception on service level
      * @see RequestContent
      * @see CommandResult
      */
     @Override
     public CommandResult execute(RequestContent content) {
         CommandResult commandResult = new CommandResult();
-        if (content.getSessionAttribute("event") != null) {
+        if (content.getSessionAttribute(AttributeName.EVENT) != null) {
             InputKeeper.getInstance().clearEvent(content);
         }
         List<Venue> venueList;

@@ -38,7 +38,6 @@ public class EditEventCommand extends AbstractCommand {
     /**
      * @param content{@code RequestContent} instance to provide request parameters ans session attributes access
      * @return {@code CommandResult} instance with information about response type and further destination page
-     * @throws CommandException custom exception to be thrown in case of exception on service level
      * @see RequestContent
      * @see CommandResult
      */
@@ -90,7 +89,6 @@ public class EditEventCommand extends AbstractCommand {
             content.setSessionAttribute(AttributeName.HOME_MESSAGE, MessageManager.INSTANCE.getProperty(MessageType.EVENT_EDITED));
             commandResult.setResponsePage(ConfigurationManager2.HOME_PAGE_PATH.getProperty());
             commandResult.setResponseType(CommandResult.ResponseType.REDIRECT);
-            InputKeeper.getInstance().clearEvent(content);
         } catch (ServiceLevelException e) {
             log.error(e);
             content.setRequestAttribute(AttributeName.COMMAND, CommandType.HOME.toString());

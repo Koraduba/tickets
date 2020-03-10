@@ -31,11 +31,10 @@ public class Validator {
     private final static String ORDER_LINE_QUANTITY_REGEX = "^\\d{1,3}$";
     private final static String VENUE_NAME_REGEX = "^[a-zA-Zа-яА-Я][a-zа-я]{1,20}$";
     private final static String VENUE_CAPACITY_REGEX = "^\\d{1,4}$";
-    private final static String ORDER_AMOUNT_REGEX="^\\d{1,5}$";
+    private final static String ORDER_AMOUNT_REGEX = "^\\d{1,5}$";
 
 
     /**
-     *
      * @param login login input
      * @return {@codetrue} if login corresponds to given regular expression
      */
@@ -47,7 +46,6 @@ public class Validator {
     }
 
     /**
-     *
      * @param content {@code RequestContent} instance to provide request parameters ans session attributes
      * @return {@code true} if all user data fields correspond to given regular expressions
      * @see RequestContent
@@ -93,8 +91,8 @@ public class Validator {
 
         return result;
     }
+
     /**
-     *
      * @param content {@code RequestContent} instance to provide request parameters ans session attributes
      * @return {@code true} if all event data fields correspond to given regular expressions
      * @see RequestContent
@@ -145,7 +143,6 @@ public class Validator {
     }
 
     /**
-     *
      * @param content {@code RequestContent} instance to provide request parameters ans session attributes
      * @return {@code true} if quantity input correspond to given regular expression
      * @see RequestContent
@@ -163,7 +160,6 @@ public class Validator {
     }
 
     /**
-     *
      * @param content {@code RequestContent} instance to provide request parameters ans session attributes
      * @return {@code true} if all venue data fields correspond to given regular expressions
      * @see RequestContent
@@ -187,7 +183,6 @@ public class Validator {
     }
 
     /**
-     *
      * @param content {@code RequestContent} instance to provide request parameters ans session attributes
      * @return {@code true} if quantity input correspond to given regular expression
      * @see RequestContent
@@ -213,8 +208,7 @@ public class Validator {
         }
         return result;
     }
-
-
-
-
 }
+
+
+

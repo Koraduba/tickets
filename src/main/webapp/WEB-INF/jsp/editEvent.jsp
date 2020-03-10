@@ -42,9 +42,13 @@
         <div class="form-group">
             <label for="venue"><fmt:message key="label.venue" bundle="${rb}" /></label>
             <select id="venue" class="form-control" name="event_venue">
-               <option selected>${event.venue.name}</option>
             <c:forEach items="${venues}" var="venue">
-               <option>${venue.name}</option>
+            <c:if test="${venue.name==event.venue.name}">
+               <option selected>${venue.name}</option>
+            </c:if>
+            <c:if test="${venue.name!=event.venue.name}">
+               <option >${venue.name}</option>
+            </c:if>
             </c:forEach>
             </select>
             <fmt:message key="label.add_venue" bundle="${rb}" var="localizedAddVenue"/>

@@ -6,8 +6,10 @@ import epam.pratsaunik.tickets.command.RequestContent;
 import epam.pratsaunik.tickets.service.Service;
 import epam.pratsaunik.tickets.servlet.AttributeName;
 import epam.pratsaunik.tickets.util.ConfigurationManager2;
+import epam.pratsaunik.tickets.util.InputKeeper;
 import epam.pratsaunik.tickets.util.MessageManager;
 
+import java.time.Instant;
 import java.util.Locale;
 
 /**
@@ -29,6 +31,7 @@ public class LogoutCommand extends AbstractCommand {
      */
     @Override
     public CommandResult execute(RequestContent content) {
+        InputKeeper.getInstance().clearEvent(content);
         CommandResult commandResult = new CommandResult();
         content.setSessionAttribute(AttributeName.HOME_MESSAGE, null);
         content.setSessionAttribute(AttributeName.USER_ROLE, null);

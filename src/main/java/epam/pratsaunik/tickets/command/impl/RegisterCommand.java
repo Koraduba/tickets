@@ -40,7 +40,6 @@ public class RegisterCommand extends AbstractCommand {
     /**
      * @param content{@code RequestContent} instance to provide request parameters ans session attributes access
      * @return {@code CommandResult} instance with information about response type and further destination page
-     * @throws CommandException custom exception to be thrown in case of exception on service level
      * @see RequestContent
      * @see CommandResult
      */
@@ -87,6 +86,7 @@ public class RegisterCommand extends AbstractCommand {
         try {
 
             long result = ((UserServiceImpl) service).create(user);
+            user.setUserId(result);
             if (result > 0) {
                 EmailSender emailSender = new EmailSender();
                 emailSender.sendConfirmation(user.getEmail(), "confirmation", "Your account is created\n");

@@ -50,8 +50,7 @@
             <form name="to_cart" method="POST" action="mainservlet">
 				<td>${ticket.category}</td>
 				<td>${ticket.price}</td>
-				<td><input type="number" class="form-control" id="quantity" name="quantity">
-				<font color="red>"${errorOrderLineQuantityMessage}</font>
+				<td><input type="number" class="form-control" id="quantity" name="quantity" min="1" max="999">
 				</td>
 				<fmt:message key="label.tocart" bundle="${rb}" var="localizedToCart" />
 				<td><input type="submit" value="${localizedToCart}"/></td>
@@ -61,6 +60,7 @@
             </form>
             </tr>
 			</c:forEach>
+							<font color="red">${errorOrderLineQuantityMessage}</font>
 	</table>
  </div>
 <jsp:include page="footer.jsp"/>
