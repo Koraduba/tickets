@@ -9,7 +9,7 @@ import epam.pratsaunik.tickets.exception.ServiceLevelException;
 import epam.pratsaunik.tickets.service.Service;
 import epam.pratsaunik.tickets.service.impl.EventServiceImpl;
 import epam.pratsaunik.tickets.servlet.AttributeName;
-import epam.pratsaunik.tickets.util.ConfigurationManager2;
+import epam.pratsaunik.tickets.util.ConfigurationManager;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -57,11 +57,11 @@ public class CatalogCommand extends AbstractCommand {
         } catch (ServiceLevelException e) {
             log.error(e);
             content.setRequestAttribute(AttributeName.COMMAND, CommandType.HOME.toString());
-            commandResult.setResponsePage(ConfigurationManager2.ERROR_PAGE_PATH.getProperty());
+            commandResult.setResponsePage(ConfigurationManager.ERROR_PAGE_PATH.getProperty());
             commandResult.setResponseType(CommandResult.ResponseType.FORWARD);
             return commandResult;
         }
-        commandResult.setResponsePage(ConfigurationManager2.CATALOG_PAGE_PATH.getProperty());
+        commandResult.setResponsePage(ConfigurationManager.CATALOG_PAGE_PATH.getProperty());
         commandResult.setResponseType(CommandResult.ResponseType.FORWARD);
         return commandResult;
     }

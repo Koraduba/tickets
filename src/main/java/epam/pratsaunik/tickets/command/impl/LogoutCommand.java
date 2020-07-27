@@ -5,11 +5,10 @@ import epam.pratsaunik.tickets.command.CommandResult;
 import epam.pratsaunik.tickets.command.RequestContent;
 import epam.pratsaunik.tickets.service.Service;
 import epam.pratsaunik.tickets.servlet.AttributeName;
-import epam.pratsaunik.tickets.util.ConfigurationManager2;
+import epam.pratsaunik.tickets.util.ConfigurationManager;
 import epam.pratsaunik.tickets.util.InputKeeper;
 import epam.pratsaunik.tickets.util.MessageManager;
 
-import java.time.Instant;
 import java.util.Locale;
 
 /**
@@ -38,7 +37,7 @@ public class LogoutCommand extends AbstractCommand {
         content.setSessionAttribute(AttributeName.USER, null);
         MessageManager.INSTANCE.changeResource(Locale.getDefault());
         content.setSessionAttribute(AttributeName.LOCALE, Locale.getDefault());
-        commandResult.setResponsePage(ConfigurationManager2.LOGIN_PAGE_PATH.getProperty());
+        commandResult.setResponsePage(ConfigurationManager.LOGIN_PAGE_PATH.getProperty());
         commandResult.setResponseType(CommandResult.ResponseType.REDIRECT);
         return commandResult;
     }

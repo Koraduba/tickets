@@ -10,7 +10,7 @@ import epam.pratsaunik.tickets.service.Service;
 import epam.pratsaunik.tickets.service.impl.UserServiceImpl;
 import epam.pratsaunik.tickets.servlet.AttributeName;
 import epam.pratsaunik.tickets.servlet.ParameterName;
-import epam.pratsaunik.tickets.util.ConfigurationManager2;
+import epam.pratsaunik.tickets.util.ConfigurationManager;
 import epam.pratsaunik.tickets.util.LocaleName;
 import epam.pratsaunik.tickets.util.MessageManager;
 import epam.pratsaunik.tickets.util.MessageType;
@@ -58,18 +58,18 @@ public class LoginCommand extends AbstractCommand {
                 MessageManager.INSTANCE.changeResource(LocaleName.LOCALE_EN);
                 content.setSessionAttribute(AttributeName.LOCALE, LocaleName.LOCALE_EN);
                 content.setSessionAttribute(AttributeName.USER, user.get(0));
-                commandResult.setResponsePage(ConfigurationManager2.HOME_PAGE_PATH.getProperty());
+                commandResult.setResponsePage(ConfigurationManager.HOME_PAGE_PATH.getProperty());
                 commandResult.setResponseType(CommandResult.ResponseType.FORWARD);
                 log.debug("LoginCommand. user:" + user.get(0));
             } else {
                 content.setRequestAttribute(AttributeName.ERROR_LOGIN_PASS_MESSAGE, MessageManager.INSTANCE.getProperty(MessageType.NO_SUCH_USER));
-                commandResult.setResponsePage(ConfigurationManager2.LOGIN_PAGE_PATH.getProperty());
+                commandResult.setResponsePage(ConfigurationManager.LOGIN_PAGE_PATH.getProperty());
                 commandResult.setResponseType(CommandResult.ResponseType.FORWARD);
             }
         } catch (ServiceLevelException e) {
             log.error(e);
             content.setRequestAttribute(AttributeName.COMMAND, CommandType.LOGIN_PAGE.toString());
-            commandResult.setResponsePage(ConfigurationManager2.ERROR_PAGE_PATH.getProperty());
+            commandResult.setResponsePage(ConfigurationManager.ERROR_PAGE_PATH.getProperty());
             commandResult.setResponseType(CommandResult.ResponseType.FORWARD);
             return commandResult;
         }

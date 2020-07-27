@@ -11,7 +11,7 @@ import epam.pratsaunik.tickets.service.Service;
 import epam.pratsaunik.tickets.service.impl.OrderServiceImpl;
 import epam.pratsaunik.tickets.servlet.AttributeName;
 import epam.pratsaunik.tickets.servlet.ParameterName;
-import epam.pratsaunik.tickets.util.ConfigurationManager2;
+import epam.pratsaunik.tickets.util.ConfigurationManager;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -35,13 +35,13 @@ public class OrderInfoCommand extends AbstractCommand {
         } catch (ServiceLevelException e) {
             log.error(e);
             content.setRequestAttribute(AttributeName.COMMAND, CommandType.HOME.toString());
-            commandResult.setResponsePage(ConfigurationManager2.ERROR_PAGE_PATH.getProperty());
+            commandResult.setResponsePage(ConfigurationManager.ERROR_PAGE_PATH.getProperty());
             commandResult.setResponseType(CommandResult.ResponseType.FORWARD);
             return commandResult;
         }
         content.setRequestAttribute(AttributeName.ORDER,order);
         content.setRequestAttribute(AttributeName.ORDERLINE_LIST,orderLines);
-        commandResult.setResponsePage(ConfigurationManager2.ORDER_PAGE_PATH.getProperty());
+        commandResult.setResponsePage(ConfigurationManager.ORDER_PAGE_PATH.getProperty());
         commandResult.setResponseType(CommandResult.ResponseType.FORWARD);
         return commandResult;
     }

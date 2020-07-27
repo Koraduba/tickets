@@ -11,7 +11,6 @@
   <welcome-file-list>
     <welcome-file>index.jsp</welcome-file>
   </welcome-file-list>
-
   <context-param>
     <param-name>mail</param-name>
     <param-value>/WEB-INF/classes/mail.properties</param-value>
@@ -20,6 +19,7 @@
   <servlet>
     <servlet-name>MainServlet</servlet-name>
     <servlet-class>epam.pratsaunik.tickets.servlet.MainServlet</servlet-class>
+    <load-on-startup>1</load-on-startup>
   </servlet>
 
   <servlet>

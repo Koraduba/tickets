@@ -7,7 +7,7 @@ import epam.pratsaunik.tickets.entity.Role;
 import epam.pratsaunik.tickets.entity.User;
 import epam.pratsaunik.tickets.service.Service;
 import epam.pratsaunik.tickets.servlet.AttributeName;
-import epam.pratsaunik.tickets.util.ConfigurationManager2;
+import epam.pratsaunik.tickets.util.ConfigurationManager;
 import epam.pratsaunik.tickets.util.LocaleName;
 import epam.pratsaunik.tickets.util.MessageManager;
 
@@ -38,7 +38,7 @@ public class GuestCommand extends AbstractCommand {
         MessageManager.INSTANCE.changeResource(LocaleName.LOCALE_EN);
         content.setSessionAttribute(AttributeName.LOCALE, LocaleName.LOCALE_EN);
         content.setSessionAttribute(AttributeName.USER, user);
-        commandResult.setResponsePage(ConfigurationManager2.HOME_PAGE_PATH.getProperty());
+        commandResult.setResponsePage(ConfigurationManager.HOME_PAGE_PATH.getProperty());
         commandResult.setResponseType(CommandResult.ResponseType.FORWARD);
         return commandResult;
     }

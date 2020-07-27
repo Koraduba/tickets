@@ -1,7 +1,7 @@
 package epam.pratsaunik.tickets.filter;
 
 import epam.pratsaunik.tickets.servlet.AttributeName;
-import epam.pratsaunik.tickets.util.ConfigurationManager2;
+import epam.pratsaunik.tickets.util.ConfigurationManager;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -41,7 +41,7 @@ public class CurrentPageFilter implements Filter {
                 path = matcher.group(0);
                 System.out.println(path);
             } else {
-                path = ConfigurationManager2.LOGIN_PAGE_PATH.getProperty();
+                path = ConfigurationManager.LOGIN_PAGE_PATH.getProperty();
             }
         }
         return path;

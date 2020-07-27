@@ -5,7 +5,7 @@ import epam.pratsaunik.tickets.command.CommandResult;
 import epam.pratsaunik.tickets.command.RequestContent;
 import epam.pratsaunik.tickets.service.Service;
 import epam.pratsaunik.tickets.servlet.AttributeName;
-import epam.pratsaunik.tickets.util.ConfigurationManager2;
+import epam.pratsaunik.tickets.util.ConfigurationManager;
 
 /**
  * Class{@code ClearCartCommand}is used to remove items from Shopping Cart
@@ -24,7 +24,7 @@ public class ClearCartCommand extends AbstractCommand {
     public CommandResult execute(RequestContent content)  {
         CommandResult commandResult = new CommandResult();
         content.setSessionAttribute(AttributeName.SHOPPING_CART,null);
-        commandResult.setResponsePage(ConfigurationManager2.CART_PAGE_PATH.getProperty());
+        commandResult.setResponsePage(ConfigurationManager.CART_PAGE_PATH.getProperty());
         commandResult.setResponseType(CommandResult.ResponseType.FORWARD);
         return commandResult;
 

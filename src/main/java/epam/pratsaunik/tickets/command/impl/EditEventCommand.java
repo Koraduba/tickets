@@ -12,7 +12,7 @@ import epam.pratsaunik.tickets.service.Service;
 import epam.pratsaunik.tickets.service.impl.EventServiceImpl;
 import epam.pratsaunik.tickets.servlet.AttributeName;
 import epam.pratsaunik.tickets.servlet.ParameterName;
-import epam.pratsaunik.tickets.util.ConfigurationManager2;
+import epam.pratsaunik.tickets.util.ConfigurationManager;
 import epam.pratsaunik.tickets.util.InputKeeper;
 import epam.pratsaunik.tickets.util.MessageManager;
 import epam.pratsaunik.tickets.util.MessageType;
@@ -46,7 +46,7 @@ public class EditEventCommand extends AbstractCommand {
         CommandResult commandResult = new CommandResult();
         InputKeeper.getInstance().keepEvent(content);
         if (!Validator.validateEvent(content)) {
-            commandResult.setResponsePage(ConfigurationManager2.EDIT_EVENT_PAGE_PATH.getProperty());
+            commandResult.setResponsePage(ConfigurationManager.EDIT_EVENT_PAGE_PATH.getProperty());
             commandResult.setResponseType(CommandResult.ResponseType.FORWARD);
             return commandResult;
         }
@@ -57,7 +57,7 @@ public class EditEventCommand extends AbstractCommand {
         } catch (ServiceLevelException e) {
             log.error(e);
             content.setRequestAttribute(AttributeName.COMMAND, CommandType.HOME.toString());
-            commandResult.setResponsePage(ConfigurationManager2.ERROR_PAGE_PATH.getProperty());
+            commandResult.setResponsePage(ConfigurationManager.ERROR_PAGE_PATH.getProperty());
             commandResult.setResponseType(CommandResult.ResponseType.FORWARD);
             return commandResult;
         }
@@ -87,12 +87,12 @@ public class EditEventCommand extends AbstractCommand {
 
             InputKeeper.getInstance().clearEvent(content);
             content.setSessionAttribute(AttributeName.HOME_MESSAGE, MessageManager.INSTANCE.getProperty(MessageType.EVENT_EDITED));
-            commandResult.setResponsePage(ConfigurationManager2.HOME_PAGE_PATH.getProperty());
+            commandResult.setResponsePage(ConfigurationManager.HOME_PAGE_PATH.getProperty());
             commandResult.setResponseType(CommandResult.ResponseType.REDIRECT);
         } catch (ServiceLevelException e) {
             log.error(e);
             content.setRequestAttribute(AttributeName.COMMAND, CommandType.HOME.toString());
-            commandResult.setResponsePage(ConfigurationManager2.ERROR_PAGE_PATH.getProperty());
+            commandResult.setResponsePage(ConfigurationManager.ERROR_PAGE_PATH.getProperty());
             commandResult.setResponseType(CommandResult.ResponseType.FORWARD);
             return commandResult;
         }

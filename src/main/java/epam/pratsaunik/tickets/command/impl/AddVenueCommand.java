@@ -10,7 +10,7 @@ import epam.pratsaunik.tickets.service.Service;
 import epam.pratsaunik.tickets.service.impl.EventServiceImpl;
 import epam.pratsaunik.tickets.servlet.AttributeName;
 import epam.pratsaunik.tickets.servlet.ParameterName;
-import epam.pratsaunik.tickets.util.ConfigurationManager2;
+import epam.pratsaunik.tickets.util.ConfigurationManager;
 import epam.pratsaunik.tickets.util.InputKeeper;
 import epam.pratsaunik.tickets.util.MessageManager;
 import epam.pratsaunik.tickets.util.MessageType;
@@ -46,7 +46,7 @@ public class AddVenueCommand extends AbstractCommand {
         CommandResult commandResult = new CommandResult();
         InputKeeper.getInstance().keepVenue(content);
         if (!Validator.validateVenue(content)) {
-            commandResult.setResponsePage(ConfigurationManager2.NEW_VENUE_PAGE_PATH.getProperty());
+            commandResult.setResponsePage(ConfigurationManager.NEW_VENUE_PAGE_PATH.getProperty());
             commandResult.setResponseType(CommandResult.ResponseType.FORWARD);
             return commandResult;
         }
@@ -55,7 +55,7 @@ public class AddVenueCommand extends AbstractCommand {
         try {
             venue = ((EventServiceImpl) service).findVenueByName(name);
             if (venue != null) {
-                commandResult.setResponsePage(ConfigurationManager2.NEW_VENUE_PAGE_PATH.getProperty());
+                commandResult.setResponsePage(ConfigurationManager.NEW_VENUE_PAGE_PATH.getProperty());
                 commandResult.setResponseType(CommandResult.ResponseType.FORWARD);
                 content.setRequestAttribute(AttributeName.ERROR_VENUE_NAME_MESSAGE, MessageManager.INSTANCE.getProperty(MessageType.VENUE_EXISTS));
                 return commandResult;
@@ -63,7 +63,7 @@ public class AddVenueCommand extends AbstractCommand {
         } catch (ServiceLevelException e) {
             log.error(e);
             content.setRequestAttribute(AttributeName.COMMAND, CommandType.HOME.toString());
-            commandResult.setResponsePage(ConfigurationManager2.ERROR_PAGE_PATH.getProperty());
+            commandResult.setResponsePage(ConfigurationManager.ERROR_PAGE_PATH.getProperty());
             commandResult.setResponseType(CommandResult.ResponseType.FORWARD);
             return commandResult;
         }
@@ -77,17 +77,17 @@ public class AddVenueCommand extends AbstractCommand {
             content.setSessionAttribute("venues", venueList);
             switch ((String) content.getSessionAttribute(AttributeName.MODE)) {
                 case NEW_EVENT:
-                    commandResult.setResponsePage(ConfigurationManager2.NEW_EVENT_PAGE_PATH.getProperty());
+                    commandResult.setResponsePage(ConfigurationManager.NEW_EVENT_PAGE_PATH.getProperty());
                     break;
                 case EDIT_EVENT:
-                    commandResult.setResponsePage(ConfigurationManager2.EDIT_EVENT_PAGE_PATH.getProperty());
+                    commandResult.setResponsePage(ConfigurationManager.EDIT_EVENT_PAGE_PATH.getProperty());
                     break;
             }
             commandResult.setResponseType(CommandResult.ResponseType.REDIRECT);
         } catch (ServiceLevelException e) {
             log.error(e);
             content.setRequestAttribute(AttributeName.COMMAND, CommandType.HOME.toString());
-            commandResult.setResponsePage(ConfigurationManager2.ERROR_PAGE_PATH.getProperty());
+            commandResult.setResponsePage(ConfigurationManager.ERROR_PAGE_PATH.getProperty());
             commandResult.setResponseType(CommandResult.ResponseType.FORWARD);
             return commandResult;
         }

@@ -5,7 +5,7 @@ import epam.pratsaunik.tickets.command.CommandResult;
 import epam.pratsaunik.tickets.command.RequestContent;
 import epam.pratsaunik.tickets.service.Service;
 import epam.pratsaunik.tickets.servlet.AttributeName;
-import epam.pratsaunik.tickets.util.ConfigurationManager2;
+import epam.pratsaunik.tickets.util.ConfigurationManager;
 
 /**
  * Class{@code ProfileCommand} is used to forward to profile jsp
@@ -27,7 +27,7 @@ public class ProfileCommand extends AbstractCommand {
     @Override
     public CommandResult execute(RequestContent content)  {
         CommandResult commandResult = new CommandResult();
-        commandResult.setResponsePage(ConfigurationManager2.PROFILE_PAGE_PATH.getProperty());
+        commandResult.setResponsePage(ConfigurationManager.PROFILE_PAGE_PATH.getProperty());
         commandResult.setResponseType(CommandResult.ResponseType.REDIRECT);
         content.setSessionAttribute(AttributeName.HOME_MESSAGE, null);
         return commandResult;

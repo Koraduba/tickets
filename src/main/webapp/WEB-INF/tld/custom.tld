@@ -10,4 +10,15 @@
         <tag-class>epam.pratsaunik.tickets.tag.CustomTag</tag-class>
         <body-content>empty</body-content>
     </tag>
+    <tag>
+        <name>simple</name>
+        <tag-class>epam.pratsaunik.tickets.tag.SimpleTag</tag-class>
+        <body-content>tagdependent</body-content>
+    </tag>
+    <tag>
+        <name>classic</name>
+        <tag-class>epam.pratsaunik.tickets.tag.ClassicTag</tag-class>
+        <body-content>tagdependent</body-content>
+    </tag>
+
 </taglib>

@@ -2,7 +2,7 @@ package epam.pratsaunik.tickets.util;
 
 import java.util.ResourceBundle;
 
-public enum ConfigurationManager2 {
+public enum ConfigurationManager {
     USERS_PAGE_PATH("users.page.path"),
     LOGIN_PAGE_PATH("login.page.path"),
     REGISTRATION_PAGE_PATH("registration.page.path"),
@@ -29,7 +29,7 @@ public enum ConfigurationManager2 {
     private ResourceBundle resourceBundle;
     private final static String BUNDLE_NAME = "config";
 
-    ConfigurationManager2(String key) {
+    ConfigurationManager(String key) {
         this.key = key;
         resourceBundle = ResourceBundle.getBundle(BUNDLE_NAME);
     }

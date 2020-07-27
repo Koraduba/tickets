@@ -11,7 +11,7 @@ import epam.pratsaunik.tickets.exception.ServiceLevelException;
 import epam.pratsaunik.tickets.service.Service;
 import epam.pratsaunik.tickets.service.impl.OrderServiceImpl;
 import epam.pratsaunik.tickets.servlet.AttributeName;
-import epam.pratsaunik.tickets.util.ConfigurationManager2;
+import epam.pratsaunik.tickets.util.ConfigurationManager;
 import epam.pratsaunik.tickets.util.MessageManager;
 import epam.pratsaunik.tickets.util.MessageType;
 import org.apache.logging.log4j.LogManager;
@@ -50,7 +50,7 @@ public class OrderCommand extends AbstractCommand {
         List<OrderLine> orderLines = (List<OrderLine>) content.getSessionAttribute(AttributeName.SHOPPING_CART);
         if (orderLines==null){
             content.setSessionAttribute(AttributeName.HOME_MESSAGE, MessageManager.INSTANCE.getProperty(MessageType.CART_IS_EMPTY));
-            commandResult.setResponsePage(ConfigurationManager2.HOME_PAGE_PATH.getProperty());
+            commandResult.setResponsePage(ConfigurationManager.HOME_PAGE_PATH.getProperty());
             commandResult.setResponseType(CommandResult.ResponseType.FORWARD);
             return commandResult;
         }
@@ -72,13 +72,13 @@ public class OrderCommand extends AbstractCommand {
         } catch (ServiceLevelException e) {
             log.error(e);
             content.setRequestAttribute(AttributeName.COMMAND, CommandType.HOME.toString());
-            commandResult.setResponsePage(ConfigurationManager2.ERROR_PAGE_PATH.getProperty());
+            commandResult.setResponsePage(ConfigurationManager.ERROR_PAGE_PATH.getProperty());
             commandResult.setResponseType(CommandResult.ResponseType.FORWARD);
             return commandResult;
         }
         content.setSessionAttribute(AttributeName.HOME_MESSAGE, MessageManager.INSTANCE.getProperty(MessageType.ORDER_PLACED));
         content.setSessionAttribute(AttributeName.SHOPPING_CART,null);
-        commandResult.setResponsePage(ConfigurationManager2.HOME_PAGE_PATH.getProperty());
+        commandResult.setResponsePage(ConfigurationManager.HOME_PAGE_PATH.getProperty());
         commandResult.setResponseType(CommandResult.ResponseType.FORWARD);
         return commandResult;
     }

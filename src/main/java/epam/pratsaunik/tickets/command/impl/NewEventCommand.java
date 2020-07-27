@@ -13,7 +13,7 @@ import epam.pratsaunik.tickets.service.Service;
 import epam.pratsaunik.tickets.service.impl.EventServiceImpl;
 import epam.pratsaunik.tickets.servlet.AttributeName;
 import epam.pratsaunik.tickets.servlet.ParameterName;
-import epam.pratsaunik.tickets.util.ConfigurationManager2;
+import epam.pratsaunik.tickets.util.ConfigurationManager;
 import epam.pratsaunik.tickets.util.InputKeeper;
 import epam.pratsaunik.tickets.util.MessageManager;
 import epam.pratsaunik.tickets.util.MessageType;
@@ -48,7 +48,7 @@ public class NewEventCommand extends AbstractCommand {
         CommandResult commandResult = new CommandResult();
         InputKeeper.getInstance().keepEvent(content);
         if (!Validator.validateEvent(content)) {
-            commandResult.setResponsePage(ConfigurationManager2.NEW_EVENT_PAGE_PATH.getProperty());
+            commandResult.setResponsePage(ConfigurationManager.NEW_EVENT_PAGE_PATH.getProperty());
             commandResult.setResponseType(CommandResult.ResponseType.FORWARD);
             return commandResult;
         }
@@ -57,7 +57,7 @@ public class NewEventCommand extends AbstractCommand {
         try {
             event = ((EventServiceImpl) service).findEventByName(name);
             if (event != null) {
-                commandResult.setResponsePage(ConfigurationManager2.NEW_EVENT_PAGE_PATH.getProperty());
+                commandResult.setResponsePage(ConfigurationManager.NEW_EVENT_PAGE_PATH.getProperty());
                 commandResult.setResponseType(CommandResult.ResponseType.FORWARD);
                 content.setRequestAttribute(AttributeName.ERROR_EVENT_NAME_MESSSAGE, MessageManager.INSTANCE.getProperty(MessageType.EVENT_EXISTS));
                 return commandResult;
@@ -65,7 +65,7 @@ public class NewEventCommand extends AbstractCommand {
         } catch (ServiceLevelException e) {
             log.error(e);
             content.setRequestAttribute(AttributeName.COMMAND, CommandType.HOME.toString());
-            commandResult.setResponsePage(ConfigurationManager2.ERROR_PAGE_PATH.getProperty());
+            commandResult.setResponsePage(ConfigurationManager.ERROR_PAGE_PATH.getProperty());
             commandResult.setResponseType(CommandResult.ResponseType.FORWARD);
             return commandResult;
         }
@@ -97,13 +97,13 @@ public class NewEventCommand extends AbstractCommand {
             ((EventServiceImpl) service).createTicket(ticketStd);
             ((EventServiceImpl) service).createTicket(ticketVip);
             content.setSessionAttribute(AttributeName.HOME_MESSAGE, MessageManager.INSTANCE.getProperty(MessageManager.INSTANCE.EVENT_CREATED_MESSAGE));
-            commandResult.setResponsePage(ConfigurationManager2.HOME_PAGE_PATH.getProperty());
+            commandResult.setResponsePage(ConfigurationManager.HOME_PAGE_PATH.getProperty());
             commandResult.setResponseType(CommandResult.ResponseType.REDIRECT);
             InputKeeper.getInstance().clearEvent(content);
         } catch (ServiceLevelException e) {
             log.error(e);
             content.setRequestAttribute(AttributeName.COMMAND, CommandType.HOME.toString());
-            commandResult.setResponsePage(ConfigurationManager2.ERROR_PAGE_PATH.getProperty());
+            commandResult.setResponsePage(ConfigurationManager.ERROR_PAGE_PATH.getProperty());
             commandResult.setResponseType(CommandResult.ResponseType.FORWARD);
             return commandResult;
         }

@@ -1,11 +1,10 @@
 package epam.pratsaunik.tickets.filter;
 
-import epam.pratsaunik.tickets.command.CommandResult;
 import epam.pratsaunik.tickets.command.CommandType;
 import epam.pratsaunik.tickets.entity.Role;
 import epam.pratsaunik.tickets.servlet.AttributeName;
 import epam.pratsaunik.tickets.servlet.ParameterName;
-import epam.pratsaunik.tickets.util.ConfigurationManager2;
+import epam.pratsaunik.tickets.util.ConfigurationManager;
 import epam.pratsaunik.tickets.util.MessageManager;
 import epam.pratsaunik.tickets.util.MessageType;
 import org.apache.logging.log4j.LogManager;
@@ -137,7 +136,7 @@ public class AuthorizationFilter implements Filter {
                         } else {
                             log.info("Command is not available for User!");
                             try {
-                                res.sendRedirect(req.getContextPath() + ConfigurationManager2.LOGIN_PAGE_PATH.getProperty());
+                                res.sendRedirect(req.getContextPath() + ConfigurationManager.LOGIN_PAGE_PATH.getProperty());
                             } catch (Exception e) {
                                 log.debug(e);
                             }
@@ -149,7 +148,7 @@ public class AuthorizationFilter implements Filter {
                         } else {
                             log.info("Command is not available for ADMIN!");
                             req.getSession().setAttribute(AttributeName.HOME_MESSAGE, MessageManager.INSTANCE.getProperty(MessageType.COMMAND_IS_NOT_AVAILABLE));
-                            req.getRequestDispatcher(ConfigurationManager2.HOME_PAGE_PATH.getProperty()).forward(request,response);
+                            req.getRequestDispatcher(ConfigurationManager.HOME_PAGE_PATH.getProperty()).forward(request,response);
                         }
                         break;
                     case HOST:
@@ -158,7 +157,7 @@ public class AuthorizationFilter implements Filter {
                         } else {
                             log.info("Command is not available for HOST!");
                             req.getSession().setAttribute(AttributeName.HOME_MESSAGE, MessageManager.INSTANCE.getProperty(MessageType.COMMAND_IS_NOT_AVAILABLE));
-                            req.getRequestDispatcher(ConfigurationManager2.HOME_PAGE_PATH.getProperty()).forward(request,response);
+                            req.getRequestDispatcher(ConfigurationManager.HOME_PAGE_PATH.getProperty()).forward(request,response);
                         }
                         break;
                     case GUEST:
@@ -167,13 +166,13 @@ public class AuthorizationFilter implements Filter {
                         } else {
                             log.info("Command is not available for GUEST!");
                             req.getSession().setAttribute(AttributeName.HOME_MESSAGE, MessageManager.INSTANCE.getProperty(MessageType.COMMAND_IS_NOT_AVAILABLE));
-                            req.getRequestDispatcher(ConfigurationManager2.HOME_PAGE_PATH.getProperty()).forward(request,response);
+                            req.getRequestDispatcher(ConfigurationManager.HOME_PAGE_PATH.getProperty()).forward(request,response);
                         }
                         break;
                     default:
                         log.info("Role is undefined");
                         req.getSession().setAttribute(AttributeName.HOME_MESSAGE, MessageManager.INSTANCE.getProperty(MessageType.COMMAND_IS_NOT_AVAILABLE));
-                        req.getRequestDispatcher(ConfigurationManager2.HOME_PAGE_PATH.getProperty()).forward(request,response);
+                        req.getRequestDispatcher(ConfigurationManager.HOME_PAGE_PATH.getProperty()).forward(request,response);
                         break;
                 }
             }
@@ -186,10 +185,10 @@ public class AuthorizationFilter implements Filter {
             if (CommandType.valueOf(command.toUpperCase()) == CommandType.LOGIN) {
                 chain.doFilter(request, response);
             } else {
-                res.sendRedirect(req.getContextPath() + ConfigurationManager2.LOGIN_PAGE_PATH.getProperty());
+                res.sendRedirect(req.getContextPath() + ConfigurationManager.LOGIN_PAGE_PATH.getProperty());
             }
         } else {
-            res.sendRedirect(req.getContextPath() + ConfigurationManager2.LOGIN_PAGE_PATH.getProperty());
+            res.sendRedirect(req.getContextPath() + ConfigurationManager.LOGIN_PAGE_PATH.getProperty());
         }
     }
 

@@ -13,7 +13,7 @@ import epam.pratsaunik.tickets.service.Service;
 import epam.pratsaunik.tickets.service.impl.UserServiceImpl;
 import epam.pratsaunik.tickets.servlet.AttributeName;
 import epam.pratsaunik.tickets.servlet.ParameterName;
-import epam.pratsaunik.tickets.util.ConfigurationManager2;
+import epam.pratsaunik.tickets.util.ConfigurationManager;
 import epam.pratsaunik.tickets.util.InputKeeper;
 import epam.pratsaunik.tickets.util.MessageManager;
 import epam.pratsaunik.tickets.util.MessageType;
@@ -48,7 +48,7 @@ public class RegisterCommand extends AbstractCommand {
         CommandResult commandResult = new CommandResult();
         InputKeeper.getInstance().keepUser(content);
         if (!Validator.validateUser(content)) {
-            commandResult.setResponsePage(ConfigurationManager2.REGISTRATION_PAGE_PATH.getProperty());
+            commandResult.setResponsePage(ConfigurationManager.REGISTRATION_PAGE_PATH.getProperty());
             commandResult.setResponseType(CommandResult.ResponseType.FORWARD);
             return commandResult;
         }
@@ -64,12 +64,12 @@ public class RegisterCommand extends AbstractCommand {
             }else{
                 content.setRequestAttribute(AttributeName.COMMAND, CommandType.LOGIN_PAGE.toString());
             }
-            commandResult.setResponsePage(ConfigurationManager2.ERROR_PAGE_PATH.getProperty());
+            commandResult.setResponsePage(ConfigurationManager.ERROR_PAGE_PATH.getProperty());
             commandResult.setResponseType(CommandResult.ResponseType.FORWARD);
             return commandResult;
         }
         if (!users.isEmpty()) {
-            commandResult.setResponsePage(ConfigurationManager2.REGISTRATION_PAGE_PATH.getProperty());
+            commandResult.setResponsePage(ConfigurationManager.REGISTRATION_PAGE_PATH.getProperty());
             commandResult.setResponseType(CommandResult.ResponseType.FORWARD);
             content.setRequestAttribute(AttributeName.ERROR_USER_LOGIN_MESSAGE, MessageManager.INSTANCE.getProperty(MessageType.USER_EXISTS));
             return commandResult;
@@ -98,7 +98,7 @@ public class RegisterCommand extends AbstractCommand {
                 content.setSessionAttribute(AttributeName.LOCALE, Locale.getDefault());
             }
             content.setSessionAttribute(AttributeName.HOME_MESSAGE, MessageManager.INSTANCE.getProperty(MessageManager.INSTANCE.ACCOUNT_CREATED_MESSAGE));
-            commandResult.setResponsePage(ConfigurationManager2.HOME_PAGE_PATH.getProperty());
+            commandResult.setResponsePage(ConfigurationManager.HOME_PAGE_PATH.getProperty());
             commandResult.setResponseType(CommandResult.ResponseType.REDIRECT);
         } catch (ServiceLevelException e) {
             log.error(e);
@@ -107,7 +107,7 @@ public class RegisterCommand extends AbstractCommand {
             }else{
                 content.setRequestAttribute(AttributeName.COMMAND, CommandType.LOGIN_PAGE.toString());
             }
-            commandResult.setResponsePage(ConfigurationManager2.ERROR_PAGE_PATH.getProperty());
+            commandResult.setResponsePage(ConfigurationManager.ERROR_PAGE_PATH.getProperty());
             commandResult.setResponseType(CommandResult.ResponseType.FORWARD);
             return commandResult;
         }

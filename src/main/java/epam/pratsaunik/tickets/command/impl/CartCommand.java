@@ -5,7 +5,7 @@ import epam.pratsaunik.tickets.command.CommandResult;
 import epam.pratsaunik.tickets.command.RequestContent;
 import epam.pratsaunik.tickets.service.Service;
 import epam.pratsaunik.tickets.servlet.AttributeName;
-import epam.pratsaunik.tickets.util.ConfigurationManager2;
+import epam.pratsaunik.tickets.util.ConfigurationManager;
 
 /**
  * Class{@code CartCommand} is used to forward request to shopping cart jsp page
@@ -28,7 +28,7 @@ public class CartCommand extends AbstractCommand {
     @Override
     public CommandResult execute(RequestContent content) {
         CommandResult commandResult = new CommandResult();
-        commandResult.setResponsePage(ConfigurationManager2.CART_PAGE_PATH.getProperty());
+        commandResult.setResponsePage(ConfigurationManager.CART_PAGE_PATH.getProperty());
         commandResult.setResponseType(CommandResult.ResponseType.FORWARD);
         content.setSessionAttribute(AttributeName.HOME_MESSAGE, null);
         return commandResult;

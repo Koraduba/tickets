@@ -1,6 +1,6 @@
 package epam.pratsaunik.tickets.servlet;
 
-import epam.pratsaunik.tickets.util.ConfigurationManager2;
+import epam.pratsaunik.tickets.util.ConfigurationManager;
 import epam.pratsaunik.tickets.util.MessageManager;
 import epam.pratsaunik.tickets.util.MessageType;
 import org.apache.logging.log4j.LogManager;
@@ -28,10 +28,10 @@ public class UploadServlet extends HttpServlet {
 
         switch ((String) req.getSession().getAttribute(AttributeName.MODE)) {
             case NEW_UPLOAD:
-                getServletContext().getRequestDispatcher(ConfigurationManager2.NEW_EVENT_PAGE_PATH.getProperty()).forward(req, resp);
+                getServletContext().getRequestDispatcher(ConfigurationManager.NEW_EVENT_PAGE_PATH.getProperty()).forward(req, resp);
                 break;
             case EDIT_UPLOAD:
-                getServletContext().getRequestDispatcher(ConfigurationManager2.EDIT_EVENT_PAGE_PATH.getProperty()).forward(req, resp);
+                getServletContext().getRequestDispatcher(ConfigurationManager.EDIT_EVENT_PAGE_PATH.getProperty()).forward(req, resp);
                 break;
             default:
                 throw new ServletException();
@@ -56,7 +56,7 @@ public class UploadServlet extends HttpServlet {
             }
         } catch (IOException e) {
             req.setAttribute(AttributeName.ERROR_UPLOAD_MESSAGE, MessageManager.INSTANCE.getProperty(MessageType.NO_CHOSEN_FILE));
-            getServletContext().getRequestDispatcher(ConfigurationManager2.UPLOAD_PAGE_PATH.getProperty()).forward(req, resp);
+            getServletContext().getRequestDispatcher(ConfigurationManager.UPLOAD_PAGE_PATH.getProperty()).forward(req, resp);
             return;
         }
         req.removeAttribute(AttributeName.ERROR_UPLOAD_MESSAGE);

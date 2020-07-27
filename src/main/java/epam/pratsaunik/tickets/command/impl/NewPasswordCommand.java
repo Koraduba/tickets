@@ -11,7 +11,7 @@ import epam.pratsaunik.tickets.service.Service;
 import epam.pratsaunik.tickets.service.impl.UserServiceImpl;
 import epam.pratsaunik.tickets.servlet.AttributeName;
 import epam.pratsaunik.tickets.servlet.ParameterName;
-import epam.pratsaunik.tickets.util.ConfigurationManager2;
+import epam.pratsaunik.tickets.util.ConfigurationManager;
 import epam.pratsaunik.tickets.util.MessageManager;
 import epam.pratsaunik.tickets.validator.Validator;
 import org.apache.logging.log4j.LogManager;
@@ -50,13 +50,13 @@ public class NewPasswordCommand extends AbstractCommand {
         boolean hasAccess = userService.checkUser(login, oldPassword, user);
         if (!hasAccess) {
             content.setSessionAttribute(AttributeName.ERROR_CHANGE_PASSWORD_MESSAGE, MessageManager.INSTANCE.getProperty("message.wrongpassword"));
-            commandResult.setResponsePage(ConfigurationManager2.CHANGE_PASSWORD_PAGE_PATH.getProperty());
+            commandResult.setResponsePage(ConfigurationManager.CHANGE_PASSWORD_PAGE_PATH.getProperty());
             commandResult.setResponseType(CommandResult.ResponseType.FORWARD);
             return commandResult;
         }
 
         if (!Validator.validatePassword(content)) {
-            commandResult.setResponsePage(ConfigurationManager2.CHANGE_PASSWORD_PAGE_PATH.getProperty());
+            commandResult.setResponsePage(ConfigurationManager.CHANGE_PASSWORD_PAGE_PATH.getProperty());
             commandResult.setResponseType(CommandResult.ResponseType.FORWARD);
             return commandResult;
         }
@@ -72,13 +72,13 @@ public class NewPasswordCommand extends AbstractCommand {
         } catch (ServiceLevelException e) {
             log.error(e);
             content.setRequestAttribute(AttributeName.COMMAND, CommandType.HOME.toString());
-            commandResult.setResponsePage(ConfigurationManager2.ERROR_PAGE_PATH.getProperty());
+            commandResult.setResponsePage(ConfigurationManager.ERROR_PAGE_PATH.getProperty());
             commandResult.setResponseType(CommandResult.ResponseType.FORWARD);
             return commandResult;
         }
 
         content.setSessionAttribute("HomeMessage", MessageManager.INSTANCE.getProperty("message.passwordchanged"));
-        commandResult.setResponsePage(ConfigurationManager2.HOME_PAGE_PATH.getProperty());
+        commandResult.setResponsePage(ConfigurationManager.HOME_PAGE_PATH.getProperty());
         commandResult.setResponseType(CommandResult.ResponseType.FORWARD);
         return commandResult;
     }
