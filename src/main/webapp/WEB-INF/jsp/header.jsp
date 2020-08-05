@@ -19,7 +19,7 @@
     src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.18/jquery-ui.min.js"></script>
   <body>
 
-  <ctg:info-time/>
+  <ctg:simple-custom/>
   <form action="mainservlet">
   <input type="hidden" name="command" value="change_locale">
   <input type="submit" value="EN/RU"/>

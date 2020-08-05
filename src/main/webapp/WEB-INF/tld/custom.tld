@@ -20,5 +20,10 @@
         <tag-class>epam.pratsaunik.tickets.tag.ClassicTag</tag-class>
         <body-content>tagdependent</body-content>
     </tag>
+    <tag>
+        <name>simple-custom</name>
+        <tag-class>epam.pratsaunik.tickets.tag.SimpleCustomTag</tag-class>
+        <body-content>tagdependent</body-content>
+    </tag>
 
 </taglib>
